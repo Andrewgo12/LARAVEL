@@ -1,19 +1,23 @@
 <?php
 
-defined('BASEPATH') or exit('El acceso directo no esta permitido');
-/**
- *
- */
-class Cempresas extends CI_Controller
+namespace App\Http\Controllers\administrador;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Models\Mempresas;
+use Illuminate\Http\JsonResponse;
+
+class Cempresas extends Controller
 {
   private $permisos;
-  function __construct()
+  private Mempresas $Mempresas;
+  
+  public function __construct()
   {
-    parent::__construct();
-    $this->load->model('Mempresas');
-    //$this->permisos=$this->backend_lib->control();
-
+    $this->Mempresas = new Mempresas();
+    //$this->permisos = app('backend_lib')->control();
   }
+  
   public function index()
   {
   }
@@ -21,19 +25,22 @@ class Cempresas extends CI_Controller
   public function add()
   {
   }
+  
   public function update()
   {
   }
+  
   public function delete()
   {
   }
 
-  public function getAll()
+  public function getAll(): JsonResponse
   {
-    echo json_encode($this->Mempresas->getAll());
+    return response()->json($this->Mempresas->getAll());
   }
 
   public function getOne()
   {
   }
 }
+

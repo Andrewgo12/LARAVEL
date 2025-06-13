@@ -1,206 +1,261 @@
 <?php
 
-defined('BASEPATH') or exit('El acceso directo no esta permitido');
-class Cusuarios extends CI_Controller
+namespace App\Http\Controllers\administrador;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Models\Musuarios;
+use App\Models\Musuarios_zonas;
+use App\Models\Mcentros;
+use App\Models\Macciones;
+use App\Models\Mmodulos;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
+use Illuminate\Http\JsonResponse;
+
+class Cusuarios extends Controller
 {
-  function __construct()
+  private Musuarios $Musuarios;
+  private Musuarios_zonas $Musuarios_zonas;
+  private Mcentros $Mcentros;
+  private Macciones $Macciones;
+  private Mmodulos $Mmodulos;
+  
+  public function __construct()
   {
-    parent::__construct();
-    $this->load->model('Musuarios');
-    $this->load->model('Musuarios_zonas');
-    $this->load->model('Mcentros');
-    $this->load->model('Macciones');
-    $this->load->model('Mmodulos');
+    $this->Musuarios = new Musuarios();
+    $this->Musuarios_zonas = new Musuarios_zonas();
+    $this->Mcentros = new Mcentros();
+    $this->Macciones = new Macciones();
+    $this->Mmodulos = new Mmodulos();
   }
+  
   public function index()
   {
-    if ($this->session->userdata('login')) {
-    } else {
-      redirect(base_url('Cauth'));
+    if (!Session::has('login')) {
+      return redirect('Cauth');
     }
-    $this->session->set_userdata('controlador', $this->uri->segment(2));
-    $this->load->view("layouts/header");
-    $this->load->view("layouts/aside");
-    $this->load->view('usuarios/list', array("modulos" => $this->Mmodulos->getWithAccount()));
-    $this->load->view('usuarios/modal_add');
-    $this->load->view('usuarios/modal_edit');
-    $this->load->view('usuarios/modal_show');
-    $this->load->view('usuarios/modal_add_usuario_zona');
-    $this->load->view('layouts/footer');
+    
+    Session::put('controlador', request()->segment(2));
+    
+    return view('usuarios.list', [
+      'modulos' => $this->Mmodulos->getWithAccount()
+    ]);
   }
-  public function ServiceGetAll()
+  
+  public function ServiceGetAll(): JsonResponse
   {
-    echo json_encode($this->Musuarios->getAllUsers());
+    return response()->json($this->Musuarios->getAllUsers());
   }
-  public function ServiceGetOne($id)
+  
+  public function ServiceGetOne($id): JsonResponse
   {
-    echo json_encode($this->Musuarios->getOneUser($id));
+    return response()->json($this->Musuarios->getOneUser($id));
   }
 
-  public function getAll()
+  public function getAll(): JsonResponse
   {
-    echo json_encode($this->Musuarios->getAll());
+    return response()->json($this->Musuarios->getAll());
   }
-  public function get_server_side()
+  
+  public function get_server_side(Request $request): JsonResponse
   {
-    $vector = $this->Musuarios->get_server_side($_POST);
-    $respuesta = array(
-      'draw' => intval($this->input->post('draw')),
+    $vector = $this->Musuarios->get_server_side($request->all());
+    $respuesta = [
+      'draw' => intval($request->input('draw')),
       'recordsTotal' => $vector['num_filas_limit'],
       'recordsFiltered' => $vector['num_filas'],
       'data' => $vector['datos']
-    );
-    echo json_encode($respuesta);
+    ];
+    
+    return response()->json($respuesta);
   }
-  public function getRoles()
+  
+  public function getRoles(): JsonResponse
   {
-    echo json_encode($this->Musuarios->getRoles());
+    return response()->json($this->Musuarios->getRoles());
   }
-  public function add()
+  
+  public function add(Request $request): JsonResponse
   {
-    $this->form_validation->set_rules("username", "Nombre de usuario", "required|is_unique[usuarios.username]");
-    $this->form_validation->set_rules("email", "Correo electronico", "required|is_unique[usuarios.email]|valid_email");
-    $this->form_validation->set_rules("password", "Contraseña", "required|min_length[4]");
-    if ($this->form_validation->run()) {
-      echo json_encode(1);
-      $_POST["password"] = sha1(md5($_POST["password"]));
-      $this->Musuarios->add($_POST);
+    $validator = Validator::make($request->all(), [
+      'username' => 'required|unique:usuarios,username',
+      'email' => 'required|unique:usuarios,email|email',
+      'password' => 'required|min:4',
+    ]);
+    
+    if (!$validator->fails()) {
+      $data = $request->all();
+      $data['password'] = sha1(md5($data['password']));
+      $this->Musuarios->add($data);
+      return response()->json(1);
     } else {
-      $error = array(
-        'username' => form_error('username'),
-        'email' => form_error('email'),
-        'password' => form_error('password'),
-      );
-      echo json_encode($error);
+      $error = [
+        'username' => $validator->errors()->first('username'),
+        'email' => $validator->errors()->first('email'),
+        'password' => $validator->errors()->first('password'),
+      ];
+      return response()->json($error);
     }
   }
-  public function update()
+  
+  public function update(Request $request): JsonResponse
   {
-    $usuarioActual = $this->Musuarios->getOne($_POST['id']);
-    if ($usuarioActual->username == $_POST["username"]) { //username unico
-      $username_is_unique = "";
-    } else {
-      $username_is_unique = "|is_unique[usuarios.username]";
+    $usuarioActual = $this->Musuarios->getOne($request->input('id'));
+    
+    $rules = [
+      'username' => [
+        'required',
+        Rule::unique('usuarios')->ignore($request->input('id'))
+      ],
+      'email' => [
+        'required',
+        'email',
+        Rule::unique('usuarios')->ignore($request->input('id'))
+      ]
+    ];
+    
+    if ($request->input('password') != '') {
+      $rules['password'] = 'min:4';
     }
-    if ($usuarioActual->email == $_POST['email']) {
-      $email_is_unique = "";
-    } else {
-      $email_is_unique = "|is_unique[usuarios.email]";
-    }
-    if ($_POST['password'] == '') { // Si usuario no escribe un password
-      unset($_POST['password']);
-      $this->form_validation->set_rules("username", "username", "required" . $username_is_unique);
-      $this->form_validation->set_rules("email", "Correo electronico", "required" . $email_is_unique . "|valid_email");
-      if ($this->form_validation->run()) {
-        echo json_encode(1);
-        $this->Musuarios->update($_POST);
+    
+    $validator = Validator::make($request->all(), $rules);
+    
+    if (!$validator->fails()) {
+      $data = $request->all();
+      
+      if ($request->input('password') != '') {
+        $data['password'] = sha1(md5($data['password']));
       } else {
-        $error = array(
-          'username' => form_error('username'),
-          'email' => form_error('email'),
-        );
-        echo json_encode($error);
+        unset($data['password']);
       }
+      
+      $this->Musuarios->update($data);
+      return response()->json(1);
     } else {
-      $this->form_validation->set_rules('password', 'Constraseña', 'min_length[4]');
-      $this->form_validation->set_rules("username", "username", "required" . $username_is_unique);
-      $this->form_validation->set_rules("email", "Correo electronico", "required" . $email_is_unique . "|valid_email");
-      if ($this->form_validation->run()) {
-        echo json_encode(1);
-        $_POST['password'] = sha1(md5($_POST["password"]));
-        $this->Musuarios->update($_POST);
-      } else {
-        $error = array(
-          'username' => form_error('username'),
-          'email' => form_error('email'),
-          'password' => form_error('password'),
-        );
-        echo json_encode($error);
+      $error = [
+        'username' => $validator->errors()->first('username'),
+        'email' => $validator->errors()->first('email')
+      ];
+      
+      if ($request->input('password') != '') {
+        $error['password'] = $validator->errors()->first('password');
       }
+      
+      return response()->json($error);
     }
   }
-  public function delete()
+  
+  public function delete(Request $request)
   {
-    $array = array('estado' => 0);
-    $this->Musuarios->delete($_POST, $array);
+    $array = ['estado' => 0];
+    $this->Musuarios->delete($request->all(), $array);
+    
+    return response()->json(['success' => true]);
   }
-  public function show()
+  
+  public function show(Request $request)
   {
-    $result = $this->Musuarios->getOne($_POST['id']);
-    $param = array(
+    $result = $this->Musuarios->getOne($request->input('id'));
+    $param = [
       'usuario' => $result
-    );
-    $this->load->view('usuarios/detail', $param);
+    ];
+    
+    return view('usuarios.detail', $param);
   }
-  public function getOne()
+  
+  public function getOne(Request $request): JsonResponse
   {
-    echo json_encode($this->Musuarios->getOne($_POST["id"]));
+    return response()->json($this->Musuarios->getOne($request->input('id')));
   }
-  public function getOneWithActions()
+  
+  public function getOneWithActions(Request $request): JsonResponse
   {
-    $usuario = $this->Musuarios->getOne($_POST["id"]);
-    $acciones = $this->Macciones->getByUser($_POST["id"]);
-    $vector = array(
-      "usuario" => $usuario,
-      "acciones" => $acciones
-    );
-    echo json_encode($vector);
+    $usuario = $this->Musuarios->getOne($request->input('id'));
+    $acciones = $this->Macciones->getByUser($request->input('id'));
+    $vector = [
+      'usuario' => $usuario,
+      'acciones' => $acciones
+    ];
+    
+    return response()->json($vector);
   }
-  public function getCentros()
+  
+  public function getCentros(): JsonResponse
   {
-    echo json_encode($this->Mcentros->get());
+    return response()->json($this->Mcentros->get());
   }
-  public function CambiarSede()
+  
+  public function CambiarSede(Request $request): JsonResponse
   {
-    $usuario = $this->Musuarios->getOne($_POST["id"]);
+    $usuario = $this->Musuarios->getOne($request->input('id'));
+    
     if ($usuario->sede_id == 1) {
-      $param = array(
-        "id" => $_POST["id"],
-        "caso" => 1
-      );
+      $param = [
+        'id' => $request->input('id'),
+        'caso' => 1
+      ];
     } else {
-      $param = array(
-        "id" => $_POST["id"],
-        "caso" => 2
-      );
+      $param = [
+        'id' => $request->input('id'),
+        'caso' => 2
+      ];
     }
+    
     $this->Musuarios->CambiarSede($param);
-    $usuario = "";
-    $usuario = $this->Musuarios->getOne($_POST["id"]);
-    $this->session->set_userdata('sede_id', $usuario->sede_id);
-    echo json_encode($usuario->sede);
+    $usuario = $this->Musuarios->getOne($request->input('id'));
+    Session::put('sede_id', $usuario->sede_id);
+    
+    return response()->json($usuario->sede);
   }
-  public function cambiar_sede_general()
+  
+  public function cambiar_sede_general(Request $request): JsonResponse
   {
-    $this->Musuarios->update(array("id" => $_POST["usuario_id"], "sede_id" => $_POST["sede_id"]));
-    $this->session->set_userdata("sede_id", $_POST["sede_id"]);
-    echo json_encode("");
+    $this->Musuarios->update([
+      'id' => $request->input('usuario_id'), 
+      'sede_id' => $request->input('sede_id')
+    ]);
+    
+    Session::put('sede_id', $request->input('sede_id'));
+    
+    return response()->json('');
   }
 
-  public function getUsuarios_zonas()
+  public function getUsuarios_zonas(): JsonResponse
   {
-    echo json_encode($this->Musuarios->getUsuarios_zonas());
+    return response()->json($this->Musuarios->getUsuarios_zonas());
   }
-  public function delete_usuario_zona()
+  
+  public function delete_usuario_zona(Request $request): JsonResponse
   {
-    echo json_encode($this->Musuarios->delete_usuario_zona($_POST));
+    return response()->json($this->Musuarios->delete_usuario_zona($request->all()));
   }
-  public function add_usuario_zona()
+  
+  public function add_usuario_zona(Request $request): JsonResponse
   {
-    echo json_encode($this->Musuarios_zonas->add($_POST));
+    return response()->json($this->Musuarios_zonas->add($request->all()));
   }
-  public function getUsuariosFromEmpresa()
+  
+  public function getUsuariosFromEmpresa(Request $request): JsonResponse
   {
-    echo json_encode($this->Musuarios->getUsuariosFromEmpresa($_POST));
+    return response()->json($this->Musuarios->getUsuariosFromEmpresa($request->all()));
   }
-  public function CambiarAnio()
+  
+  public function CambiarAnio(Request $request): JsonResponse
   {
-    $usuario_id = $_POST["id"];
+    $usuario_id = $request->input('id');
     $usuario = $this->Musuarios->getOne($usuario_id);
-    $this->Musuarios->CambiarAnio(array("id" => $usuario->id, "anio_plan" => $_POST["anio"]));
-    $usuario = "";
+    
+    $this->Musuarios->CambiarAnio([
+      'id' => $usuario->id, 
+      'anio_plan' => $request->input('anio')
+    ]);
+    
     $usuario = $this->Musuarios->getOne($usuario_id);
-    $this->session->set_userdata('anio_plan', $usuario->anio_plan);
-    echo json_encode($usuario->anio_plan);
+    Session::put('anio_plan', $usuario->anio_plan);
+    
+    return response()->json($usuario->anio_plan);
   }
 }
+

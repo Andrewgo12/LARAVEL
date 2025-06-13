@@ -1,0 +1,836 @@
+[2025-06-13 16:49:45] 🔍 Buscando archivos PHP en: C:\xampp\htdocs\LARAVEL\new_eva/resources/views
+[2025-06-13 16:49:45] 📊 Encontrados 826 archivos PHP para migrar
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\admin\charts.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\admin\dashboard.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\admin\forbidden.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\admin\forbidden.blade.php
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\admin\home.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\admin\login.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\admin\login.blade.php
+[2025-06-13 16:49:45] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\admin\modal_reg.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\admin\modal_reg.blade.php
+[2025-06-13 16:49:45] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\admin\modules_index.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\admin\modules_index.blade.php
+[2025-06-13 16:49:45] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\admin\ventas\add.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\admin\ventas\add.blade.php
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\app.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\archivos\modal_add_archivo_observacion.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\archivos\modal_add_archivo_observacion.blade.php
+[2025-06-13 16:49:45] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\archivos\modal_compartir.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\archivos\modal_compartir.blade.php
+[2025-06-13 16:49:45] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\areas\list.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\areas\list.blade.php
+[2025-06-13 16:49:45] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\areas\modal_add.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\areas\modal_add.blade.php
+[2025-06-13 16:49:45] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\areas\modal_edit.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\areas\modal_edit.blade.php
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\auth\login.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\avances_correctivos\modal_add.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\avances_correctivos\modal_add.blade.php
+[2025-06-13 16:49:45] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\bajas\detalle_consulta.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\bajas\detalle_consulta.blade.php
+[2025-06-13 16:49:45] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\bajas\list.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\bajas\list.blade.php
+[2025-06-13 16:49:45] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\bajas\modal_add.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\bajas\modal_add.blade.php
+[2025-06-13 16:49:45] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\bajas\modal_add_equipo_baja.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\bajas\modal_add_equipo_baja.blade.php
+[2025-06-13 16:49:45] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\bajas\modal_asociacion_baja.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\bajas\modal_asociacion_baja.blade.php
+[2025-06-13 16:49:45] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\bajas\modal_asociacion_baja_detail.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\bajas\modal_asociacion_baja_detail.blade.php
+[2025-06-13 16:49:45] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\bajas\modal_asociacion_baja_detail_especifico.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\bajas\modal_asociacion_baja_detail_especifico.blade.php
+[2025-06-13 16:49:45] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\bajas\modal_asociacion_baja_especifico.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\bajas\modal_asociacion_baja_especifico.blade.php
+[2025-06-13 16:49:45] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\bajas\modal_consulta.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\bajas\modal_consulta.blade.php
+[2025-06-13 16:49:45] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\bajas\modal_edit.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\bajas\modal_edit.blade.php
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\admin\charts.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\admin\dashboard.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\admin\forbidden.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\admin\home.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\admin\login.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\admin\modal_reg.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\admin\modules_index.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\archivos\modal_add_archivo_observacion.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\archivos\modal_compartir.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\areas\list.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\areas\modal_add.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\areas\modal_edit.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\avances_correctivos\modal_add.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\bajas\detalle_consulta.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\bajas\list.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\bajas\modal_add.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\bajas\modal_add_equipo_baja.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\bajas\modal_asociacion_baja.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\bajas\modal_asociacion_baja_detail.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\bajas\modal_asociacion_baja_detail_especifico.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\bajas\modal_asociacion_baja_especifico.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\bajas\modal_consulta.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\bajas\modal_edit.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\calibraciones\detail.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\calibraciones\modal_add.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\calibraciones\modal_edit.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\calibraciones\modal_show.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\cambios_ubicaciones\modal_detail.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\cambios_ubicaciones\modal_show.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\capacitaciones\list.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\categorias\detail.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\categorias\list.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\categorias\modal_add.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\categorias\modal_edit.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\categorias\modal_show.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\compiled\2d6202f114e3e48e7bb191da7cf9585d9f1a804d_0.file.main.html.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\compiled\36ad147a5f7bd9aa37f7798c38233e4ab31d53fb_0.file.main_template.html.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\compiled\42ea37467697179fd8c8cc54d0cbd5298a220730_0.file.index.tpl.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\compiled\42ea37467697179fd8c8cc54d0cbd5298a220730_0.file.index.tpl.cache.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\compiled\700d6f59afcdfcfe78746096eb4e6b67b5b5586c_0.file.main.tpl.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\compiled\700d6f59afcdfcfe78746096eb4e6b67b5b5586c_0.file.main.tpl.cache.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\compiled\a71a49c2b4804d4f0b5c4a1c8ffa49f54f6b4f2d_0.file.list.tpl.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\compiled\c92aaa3540f4f86e34a6b6421e50e43736d3e872_0.file.list2.tpl.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\contactos\list.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\contingencias\list.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\contingencias\modal_add.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\contingencias\modal_edit.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\correctivos_generales\detail.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\correctivos_generales\detail_single.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\correctivos_generales\modal_add.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\correctivos_generales\modal_edit.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\correctivos_generales\modal_show.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\correctivos_generales\modal_show_single.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\detalle\detalle.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\equipos\detail.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\equipos\detail3.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\equipos\detail_archivos.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\equipos\detail_calibraciones.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\equipos\detail_correctivos.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\equipos\detail_file.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\equipos\detail_last_get.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\equipos\detail_obsoletos.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\equipos\detail_preventivos.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\equipos\detalle_listado_compartir_archivos.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\equipos\detalle_listado_compartir_especificaciones.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\equipos\detalle_listado_compartir_repeticiones.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\equipos\list.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\equipos\list2.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\equipos\modal_add.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\equipos\modal_add_archivos.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\equipos\modal_add_archivo_correctivo.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\equipos\modal_add_calibracion.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\equipos\modal_add_correctivo_general.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\equipos\modal_add_equipo_contacto.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\equipos\modal_add_equipo_especificacion.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\equipos\modal_add_observacion.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\equipos\modal_add_preventivo.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\equipos\modal_add_repuesto.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\equipos\modal_add_repuesto_correctivo_general.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\equipos\modal_asociacion.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\equipos\modal_asociacion_detail.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\equipos\modal_asociacion_invima.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\equipos\modal_asociacion_invima_detail.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\equipos\modal_asociacion_invima_detail_especifico.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\equipos\modal_asociacion_invima_especifico.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\equipos\modal_asociacion_orden_compra.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\equipos\modal_asociacion_orden_compra_detail.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\equipos\modal_asociacion_orden_compra_especifico.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\equipos\modal_asociacion_orden_compra_especifico_detail.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\equipos\modal_calibraciones.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\equipos\modal_compartir_especificaciones.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\equipos\modal_copy.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\equipos\modal_correctivos.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\equipos\modal_depurar_nombres.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\equipos\modal_depurar_nombres_detail.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\equipos\modal_detail_adquisicion.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\equipos\modal_detail_instalacion.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\equipos\modal_edit.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\equipos\modal_edit_calibracion.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\equipos\modal_edit_correctivo_general.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\equipos\modal_edit_equipo_repuesto.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\equipos\modal_edit_observacion.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\equipos\modal_edit_preventivo.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\equipos\modal_filter.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\equipos\modal_multiple.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\equipos\modal_obsoletos.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\equipos\modal_preventivos.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\equipos\modal_show.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\equipos\modal_show_adquisicion.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\equipos\modal_show_archivos.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\equipos\modal_show_file.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\equipos\modal_show_garantiaCasiVencida.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\equipos\modal_show_garantiaVencida.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\equipos\modal_show_instalacion.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\equipos\modal_show_last_get.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\equipos_industriales\list.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\estadoequipos\list.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\guias\detalle_consulta.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\guias\list.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\guias\modal_add.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\guias\modal_consulta.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\guias\modal_edit_guia.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\guias\modal_link.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\guias\modal_link_detail.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\guias\modal_show_relacionar_guia.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\guias\modal_show_relacionar_guia_equipos.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\guias\modal_show_relacionar_guia_equipos_detail.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\invimas\detalle_consulta.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\invimas\list.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\invimas\modal_add.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\invimas\modal_consulta.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\invimas\modal_edit.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\layout\datatable.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\layout\footer.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\layout\formulario.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\layout\formulario_update.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\layout\header.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\layout\imagen.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\layout\menu.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\layout\modal_add_calibracion.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\layout\modal_add_correctivo_general.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\layout\modal_add_preventivo_ind.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\layout\modal_edit_calibracion.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\layout\modal_edit_correctivo_general.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\layout\modal_edit_preventivo.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\layout\reporte.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\layout\tablaexcel.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\layouts\admin_aside.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\layouts\advance_aside.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\layouts\aside.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\layouts\aside3.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\layouts\basic_aside.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\layouts\baxter_aside.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\layouts\footer.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\layouts\footer3.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\layouts\footer_qr.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\layouts\header.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\layouts\header3.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\layouts\header_qr.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\layouts\login_body.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\layouts\login_footer.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\layouts\login_header.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\layouts\prueba.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\mantenimientos\list.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\mantenimientos\modal_cambios.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\mantenimientos\modal_edit.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\manuales\detalle_consulta.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\manuales\list.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\manuales\modal_add.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\manuales\modal_consulta.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\manuales\modal_edit.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\ordenes\cierre_email.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\ordenes\cierre_totalemail.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\ordenes\detail.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\ordenes\detail_ordenes_activas.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\ordenes\diagnostico_email.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\ordenes\email_actualizacion.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\ordenes\email_asignacion_usuario.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\ordenes\email_creacion.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\ordenes\list.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\ordenes\list_active.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\ordenes\list_closed.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\ordenes\modal_add.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\ordenes\modal_add_biomedicos.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\ordenes\modal_add_diagnostico_from_timeline.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\ordenes\modal_add_industriales.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\ordenes\modal_add_otros.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\ordenes\modal_add_retro.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\ordenes\modal_add_solicitud_cierre_from_timeline.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\ordenes\modal_archivo_diagnose.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\ordenes\modal_archivo_solicitud_cierre.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\ordenes\modal_asignar.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\ordenes\modal_asignar_otro.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\ordenes\modal_asignar_usuario.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\ordenes\modal_close.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\ordenes\modal_consulta_biomedicos.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\ordenes\modal_diagnose.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\ordenes\modal_edit.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\ordenes\modal_edit_orden_activa.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\ordenes\modal_listado_biomedicos.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\ordenes\modal_show.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\ordenes\modal_show_ordenes_activas.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\ordenes\modal_solicitud_cierre.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\ordenes\modal_timeline.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\ordenes\solicitud_cierre_email.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\ordenes\tikect_email.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\ordenes\timeline_detail.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\ordenes_compra\detalle_consulta.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\ordenes_compra\list.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\ordenes_compra\modal_add.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\ordenes_compra\modal_api.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\ordenes_compra\modal_api_detalle.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\ordenes_compra\modal_consulta.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\ordenes_compra\modal_edit.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\permisos\add.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\permisos\detail.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\permisos\edit.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\permisos\list.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\permisos\modal_add.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\permisos\modal_edit.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\permisos\modal_show.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\preventivos\detail.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\preventivos\modal_add.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\preventivos\modal_edit.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\preventivos\modal_show.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\propietarios\list.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\propietarios\modal_add.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\propietarios\modal_edit.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\reportes\list.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\repuestos\detail.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\repuestos\list.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\repuestos\modal_detail_repuestos_instalados.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\repuestos\modal_detail_repuestos_pendientes.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\repuestos\modal_detail_resumen_general.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\repuestos\modal_detail_resumen_inversion_repuestos_equipo.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\repuestos\modal_detail_resumen_inversion_repuestos_servicio.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\repuestos\modal_detail_resumen_por_repuesto.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\repuestos\modal_show.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\repuestos\modal_show_movimientos.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\repuestos_pendientes\modal_add.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\servicios\list.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\servicios\list2.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\servicios\modal_add.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\servicios\modal_edit.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\tecnicos\list.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\usuarios\cuenta.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\usuarios\detail.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\usuarios\email_creacion.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\usuarios\email_reg.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\usuarios\list.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\usuarios\modal_add.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\usuarios\modal_add_usuario_zona.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\usuarios\modal_edit.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\blade\usuarios\modal_show.blade.php (ya es Blade)
+[2025-06-13 16:49:45] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\calibraciones\detail.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\calibraciones\detail.blade.php
+[2025-06-13 16:49:45] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\calibraciones\modal_add.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\calibraciones\modal_add.blade.php
+[2025-06-13 16:49:45] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\calibraciones\modal_edit.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\calibraciones\modal_edit.blade.php
+[2025-06-13 16:49:45] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\calibraciones\modal_show.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\calibraciones\modal_show.blade.php
+[2025-06-13 16:49:45] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\cambios_ubicaciones\modal_detail.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\cambios_ubicaciones\modal_detail.blade.php
+[2025-06-13 16:49:45] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\cambios_ubicaciones\modal_show.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\cambios_ubicaciones\modal_show.blade.php
+[2025-06-13 16:49:45] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\capacitaciones\list.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\capacitaciones\list.blade.php
+[2025-06-13 16:49:45] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\categorias\detail.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\categorias\detail.blade.php
+[2025-06-13 16:49:45] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\categorias\list.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\categorias\list.blade.php
+[2025-06-13 16:49:45] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\categorias\modal_add.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\categorias\modal_add.blade.php
+[2025-06-13 16:49:45] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\categorias\modal_edit.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\categorias\modal_edit.blade.php
+[2025-06-13 16:49:45] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\categorias\modal_show.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\categorias\modal_show.blade.php
+[2025-06-13 16:49:45] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\compiled\2d6202f114e3e48e7bb191da7cf9585d9f1a804d_0.file.main.html.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\compiled\2d6202f114e3e48e7bb191da7cf9585d9f1a804d_0.file.main.html.blade.php
+[2025-06-13 16:49:45] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\compiled\36ad147a5f7bd9aa37f7798c38233e4ab31d53fb_0.file.main_template.html.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\compiled\36ad147a5f7bd9aa37f7798c38233e4ab31d53fb_0.file.main_template.html.blade.php
+[2025-06-13 16:49:45] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\compiled\42ea37467697179fd8c8cc54d0cbd5298a220730_0.file.index.tpl.cache.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\compiled\42ea37467697179fd8c8cc54d0cbd5298a220730_0.file.index.tpl.cache.blade.php
+[2025-06-13 16:49:45] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\compiled\42ea37467697179fd8c8cc54d0cbd5298a220730_0.file.index.tpl.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\compiled\42ea37467697179fd8c8cc54d0cbd5298a220730_0.file.index.tpl.blade.php
+[2025-06-13 16:49:45] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\compiled\700d6f59afcdfcfe78746096eb4e6b67b5b5586c_0.file.main.tpl.cache.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\compiled\700d6f59afcdfcfe78746096eb4e6b67b5b5586c_0.file.main.tpl.cache.blade.php
+[2025-06-13 16:49:45] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\compiled\700d6f59afcdfcfe78746096eb4e6b67b5b5586c_0.file.main.tpl.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\compiled\700d6f59afcdfcfe78746096eb4e6b67b5b5586c_0.file.main.tpl.blade.php
+[2025-06-13 16:49:45] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\compiled\a71a49c2b4804d4f0b5c4a1c8ffa49f54f6b4f2d_0.file.list.tpl.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\compiled\a71a49c2b4804d4f0b5c4a1c8ffa49f54f6b4f2d_0.file.list.tpl.blade.php
+[2025-06-13 16:49:45] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\compiled\c92aaa3540f4f86e34a6b6421e50e43736d3e872_0.file.list2.tpl.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\compiled\c92aaa3540f4f86e34a6b6421e50e43736d3e872_0.file.list2.tpl.blade.php
+[2025-06-13 16:49:45] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\contactos\list.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\contactos\list.blade.php
+[2025-06-13 16:49:45] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\contingencias\list.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\contingencias\list.blade.php
+[2025-06-13 16:49:45] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\contingencias\modal_add.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\contingencias\modal_add.blade.php
+[2025-06-13 16:49:45] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\contingencias\modal_edit.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\contingencias\modal_edit.blade.php
+[2025-06-13 16:49:45] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\correctivos_generales\detail.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\correctivos_generales\detail.blade.php
+[2025-06-13 16:49:45] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\correctivos_generales\detail_single.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\correctivos_generales\detail_single.blade.php
+[2025-06-13 16:49:45] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\correctivos_generales\detalle\detalle_correctivos_generales_abiertos.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\correctivos_generales\detalle\detalle_correctivos_generales_abiertos.blade.php
+[2025-06-13 16:49:45] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\correctivos_generales\email\email_add_correctivo_general.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\correctivos_generales\email\email_add_correctivo_general.blade.php
+[2025-06-13 16:49:45] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\correctivos_generales\modal_add.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\correctivos_generales\modal_add.blade.php
+[2025-06-13 16:49:45] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\correctivos_generales\modal_edit.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\correctivos_generales\modal_edit.blade.php
+[2025-06-13 16:49:45] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\correctivos_generales\modal_show.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\correctivos_generales\modal_show.blade.php
+[2025-06-13 16:49:45] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\correctivos_generales\modal_show_single.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\correctivos_generales\modal_show_single.blade.php
+[2025-06-13 16:49:45] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\detalle\detalle.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\detalle\detalle.blade.php
+[2025-06-13 16:49:45] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\detail.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\detail.blade.php
+[2025-06-13 16:49:45] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\detail3.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\detail3.blade.php
+[2025-06-13 16:49:45] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\detail_archivos.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\detail_archivos.blade.php
+[2025-06-13 16:49:45] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\detail_calibraciones.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\detail_calibraciones.blade.php
+[2025-06-13 16:49:45] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\detail_correctivos.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\detail_correctivos.blade.php
+[2025-06-13 16:49:45] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\detail_file.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\detail_file.blade.php
+[2025-06-13 16:49:45] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\detail_last_get.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\detail_last_get.blade.php
+[2025-06-13 16:49:45] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\detail_obsoletos.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\detail_obsoletos.blade.php
+[2025-06-13 16:49:45] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\detail_preventivos.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\detail_preventivos.blade.php
+[2025-06-13 16:49:45] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\detalle_listado_compartir_archivos.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\detalle_listado_compartir_archivos.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\detalle_listado_compartir_especificaciones.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\detalle_listado_compartir_especificaciones.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\detalle_listado_compartir_repeticiones.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\detalle_listado_compartir_repeticiones.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\email\email_add_observacion.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\email\email_add_observacion.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\estadoequipos\list.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\estadoequipos\list.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\historial\detail.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\historial\detail.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\historial\modal_show.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\historial\modal_show.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\list.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\list.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\list2.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\list2.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_add.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_add.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_add_archivos.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_add_archivos.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_add_archivo_correctivo.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_add_archivo_correctivo.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_add_calibracion.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_add_calibracion.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_add_correctivo_general.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_add_correctivo_general.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_add_equipo_contacto.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_add_equipo_contacto.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_add_equipo_especificacion.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_add_equipo_especificacion.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_add_observacion.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_add_observacion.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_add_preventivo.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_add_preventivo.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_add_repuesto.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_add_repuesto.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_add_repuesto_correctivo_general.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_add_repuesto_correctivo_general.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_asociacion.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_asociacion.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_asociacion_detail.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_asociacion_detail.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_asociacion_invima.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_asociacion_invima.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_asociacion_invima_detail.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_asociacion_invima_detail.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_asociacion_invima_detail_especifico.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_asociacion_invima_detail_especifico.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_asociacion_invima_especifico.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_asociacion_invima_especifico.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_asociacion_orden_compra.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_asociacion_orden_compra.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_asociacion_orden_compra_detail.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_asociacion_orden_compra_detail.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_asociacion_orden_compra_especifico.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_asociacion_orden_compra_especifico.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_asociacion_orden_compra_especifico_detail.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_asociacion_orden_compra_especifico_detail.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_calibraciones.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_calibraciones.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_compartir_especificaciones.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_compartir_especificaciones.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_copy.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_copy.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_correctivos.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_correctivos.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_depurar_nombres.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_depurar_nombres.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_depurar_nombres_detail.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_depurar_nombres_detail.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_detail_adquisicion.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_detail_adquisicion.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_detail_instalacion.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_detail_instalacion.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_edit.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_edit.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_edit_calibracion.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_edit_calibracion.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_edit_correctivo_general.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_edit_correctivo_general.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_edit_equipo_repuesto.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_edit_equipo_repuesto.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_edit_observacion.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_edit_observacion.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_edit_preventivo.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_edit_preventivo.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_filter.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_filter.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_multiple.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_multiple.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_obsoletos.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_obsoletos.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_preventivos.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_preventivos.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_show.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_show.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_show_adquisicion.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_show_adquisicion.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_show_archivos.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_show_archivos.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_show_file.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_show_file.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_show_garantiaCasiVencida.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_show_garantiaCasiVencida.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_show_garantiaVencida.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_show_garantiaVencida.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_show_instalacion.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_show_instalacion.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_show_last_get.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos\modal_show_last_get.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos_ind.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos_ind.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos_industriales\list.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\equipos_industriales\list.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\errors\cli\error_404.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\errors\cli\error_404.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\errors\cli\error_db.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\errors\cli\error_db.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\errors\cli\error_exception.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\errors\cli\error_exception.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\errors\cli\error_general.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\errors\cli\error_general.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\errors\cli\error_php.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\errors\cli\error_php.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\errors\html\error_404.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\errors\html\error_404.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\errors\html\error_db.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\errors\html\error_db.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\errors\html\error_exception.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\errors\html\error_exception.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\errors\html\error_general.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\errors\html\error_general.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\errors\html\error_php.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\errors\html\error_php.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\estadoequipos\list.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\estadoequipos\list.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\guias\detalle_consulta.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\guias\detalle_consulta.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\guias\list.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\guias\list.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\guias\modal_add.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\guias\modal_add.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\guias\modal_consulta.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\guias\modal_consulta.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\guias\modal_edit_guia.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\guias\modal_edit_guia.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\guias\modal_link.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\guias\modal_link.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\guias\modal_link_detail.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\guias\modal_link_detail.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\guias\modal_show_relacionar_guia.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\guias\modal_show_relacionar_guia.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\guias\modal_show_relacionar_guia_equipos.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\guias\modal_show_relacionar_guia_equipos.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\guias\modal_show_relacionar_guia_equipos_detail.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\guias\modal_show_relacionar_guia_equipos_detail.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\inicio.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\inicio.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\invimas\detalle_consulta.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\invimas\detalle_consulta.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\invimas\list.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\invimas\list.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\invimas\modal_add.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\invimas\modal_add.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\invimas\modal_consulta.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\invimas\modal_consulta.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\invimas\modal_edit.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\invimas\modal_edit.blade.php
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\admin\charts.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\admin\dashboard.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\admin\forbidden.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\admin\home.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\admin\login.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\admin\modal_reg.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\admin\modules_index.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\admin\ventas\add.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\archivos\modal_add_archivo_observacion.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\archivos\modal_compartir.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\areas\list.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\areas\modal_add.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\areas\modal_edit.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\auth\login.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\avances_correctivos\modal_add.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\bajas\detalle_consulta.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\bajas\list.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\bajas\modal_add.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\bajas\modal_add_equipo_baja.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\bajas\modal_asociacion_baja.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\bajas\modal_asociacion_baja_detail.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\bajas\modal_asociacion_baja_detail_especifico.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\bajas\modal_asociacion_baja_especifico.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\bajas\modal_consulta.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\bajas\modal_edit.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\calibraciones\detail.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\calibraciones\modal_add.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\calibraciones\modal_edit.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\calibraciones\modal_show.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\cambios_ubicaciones\modal_detail.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\cambios_ubicaciones\modal_show.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\capacitaciones\list.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\categorias\detail.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\categorias\list.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\categorias\modal_add.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\categorias\modal_edit.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\categorias\modal_show.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\compiled\2d6202f114e3e48e7bb191da7cf9585d9f1a804d_0.file.main.html.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\compiled\36ad147a5f7bd9aa37f7798c38233e4ab31d53fb_0.file.main_template.html.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\compiled\42ea37467697179fd8c8cc54d0cbd5298a220730_0.file.index.tpl.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\compiled\42ea37467697179fd8c8cc54d0cbd5298a220730_0.file.index.tpl.cache.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\compiled\700d6f59afcdfcfe78746096eb4e6b67b5b5586c_0.file.main.tpl.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\compiled\700d6f59afcdfcfe78746096eb4e6b67b5b5586c_0.file.main.tpl.cache.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\compiled\a71a49c2b4804d4f0b5c4a1c8ffa49f54f6b4f2d_0.file.list.tpl.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\compiled\c92aaa3540f4f86e34a6b6421e50e43736d3e872_0.file.list2.tpl.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\contactos\list.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\contingencias\list.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\contingencias\modal_add.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\contingencias\modal_edit.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\correctivos_generales\detail.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\correctivos_generales\detail_single.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\correctivos_generales\detalle\detalle_correctivos_generales_abiertos.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\correctivos_generales\email\email_add_correctivo_general.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\correctivos_generales\modal_add.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\correctivos_generales\modal_edit.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\correctivos_generales\modal_show.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\correctivos_generales\modal_show_single.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\dashboard\home.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\detalle\detalle.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\equipos\detail.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\equipos\detail3.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\equipos\detail_archivos.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\equipos\detail_calibraciones.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\equipos\detail_correctivos.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\equipos\detail_file.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\equipos\detail_last_get.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\equipos\detail_obsoletos.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\equipos\detail_preventivos.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\equipos\detalle_listado_compartir_archivos.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\equipos\detalle_listado_compartir_especificaciones.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\equipos\detalle_listado_compartir_repeticiones.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\equipos\email\email_add_observacion.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\equipos\estadoequipos\list.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\equipos\historial\detail.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\equipos\historial\modal_show.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\equipos\list.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\equipos\list2.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\equipos\modal_add.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\equipos\modal_add_archivos.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\equipos\modal_add_archivo_correctivo.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\equipos\modal_add_calibracion.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\equipos\modal_add_correctivo_general.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\equipos\modal_add_equipo_contacto.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\equipos\modal_add_equipo_especificacion.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\equipos\modal_add_observacion.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\equipos\modal_add_preventivo.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\equipos\modal_add_repuesto.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\equipos\modal_add_repuesto_correctivo_general.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\equipos\modal_asociacion.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\equipos\modal_asociacion_detail.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\equipos\modal_asociacion_invima.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\equipos\modal_asociacion_invima_detail.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\equipos\modal_asociacion_invima_detail_especifico.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\equipos\modal_asociacion_invima_especifico.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\equipos\modal_asociacion_orden_compra.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\equipos\modal_asociacion_orden_compra_detail.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\equipos\modal_asociacion_orden_compra_especifico.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\equipos\modal_asociacion_orden_compra_especifico_detail.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\equipos\modal_calibraciones.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\equipos\modal_compartir_especificaciones.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\equipos\modal_copy.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\equipos\modal_correctivos.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\equipos\modal_depurar_nombres.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\equipos\modal_depurar_nombres_detail.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\equipos\modal_detail_adquisicion.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\equipos\modal_detail_instalacion.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\equipos\modal_edit.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\equipos\modal_edit_calibracion.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\equipos\modal_edit_correctivo_general.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\equipos\modal_edit_equipo_repuesto.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\equipos\modal_edit_observacion.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\equipos\modal_edit_preventivo.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\equipos\modal_filter.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\equipos\modal_multiple.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\equipos\modal_obsoletos.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\equipos\modal_preventivos.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\equipos\modal_show.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\equipos\modal_show_adquisicion.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\equipos\modal_show_archivos.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\equipos\modal_show_file.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\equipos\modal_show_garantiaCasiVencida.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\equipos\modal_show_garantiaVencida.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\equipos\modal_show_instalacion.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\equipos\modal_show_last_get.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\equipos_industriales\list.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\errors\cli\error_404.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\errors\cli\error_db.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\errors\cli\error_exception.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\errors\cli\error_general.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\errors\cli\error_php.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\errors\html\error_404.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\errors\html\error_db.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\errors\html\error_exception.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\errors\html\error_general.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\errors\html\error_php.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\estadoequipos\list.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\guias\detalle_consulta.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\guias\list.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\guias\modal_add.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\guias\modal_consulta.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\guias\modal_edit_guia.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\guias\modal_link.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\guias\modal_link_detail.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\guias\modal_show_relacionar_guia.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\guias\modal_show_relacionar_guia_equipos.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\guias\modal_show_relacionar_guia_equipos_detail.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\invimas\detalle_consulta.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\invimas\list.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\invimas\modal_add.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\invimas\modal_consulta.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\invimas\modal_edit.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\layout\datatable.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\layout\footer.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\layout\formulario.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\layout\formulario_update.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\layout\header.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\layout\imagen.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\layout\menu.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\layout\modal_add_calibracion.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\layout\modal_add_correctivo_general.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\layout\modal_add_preventivo_ind.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\layout\modal_edit_calibracion.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\layout\modal_edit_correctivo_general.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\layout\modal_edit_preventivo.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\layout\reporte.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\layout\tablaexcel.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\layouts\adminlte3\aside.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\layouts\adminlte3\body.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\layouts\adminlte3\completo.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\layouts\adminlte3\footer.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\layouts\adminlte3\header.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\layouts\admin_aside.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\layouts\advance_aside.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\layouts\app.blade.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\layouts\aside.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\layouts\aside3.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\layouts\basic_aside.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\layouts\baxter_aside.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\layouts\footer.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\layouts\footer3.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\layouts\footer_qr.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\layouts\header.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\layouts\header3.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\layouts\header_qr.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\layouts\login_body.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\layouts\login_footer.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\layouts\login_header.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\layouts\prueba.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\mantenimientos\list.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\mantenimientos\modal_cambios.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\mantenimientos\modal_edit.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\mantenimientos\proveedores_mantenimiento\modal_add.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\manuales\detalle_consulta.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\manuales\list.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\manuales\modal_add.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\manuales\modal_consulta.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\manuales\modal_edit.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\ordenes\cierre_email.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\ordenes\cierre_totalemail.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\ordenes\detail.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\ordenes\detail_ordenes_activas.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\ordenes\diagnostico_email.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\ordenes\email_actualizacion.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\ordenes\email_asignacion_usuario.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\ordenes\email_creacion.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\ordenes\list.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\ordenes\list_active.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\ordenes\list_closed.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\ordenes\modal_add.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\ordenes\modal_add_biomedicos.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\ordenes\modal_add_diagnostico_from_timeline.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\ordenes\modal_add_industriales.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\ordenes\modal_add_otros.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\ordenes\modal_add_retro.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\ordenes\modal_add_solicitud_cierre_from_timeline.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\ordenes\modal_archivo_diagnose.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\ordenes\modal_archivo_solicitud_cierre.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\ordenes\modal_asignar.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\ordenes\modal_asignar_otro.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\ordenes\modal_asignar_usuario.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\ordenes\modal_close.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\ordenes\modal_consulta_biomedicos.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\ordenes\modal_diagnose.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\ordenes\modal_edit.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\ordenes\modal_edit_orden_activa.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\ordenes\modal_listado_biomedicos.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\ordenes\modal_show.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\ordenes\modal_show_ordenes_activas.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\ordenes\modal_solicitud_cierre.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\ordenes\modal_timeline.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\ordenes\solicitud_cierre_email.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\ordenes\tikect_email.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\ordenes\timeline_detail.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\ordenes_compra\detalle_consulta.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\ordenes_compra\list.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\ordenes_compra\modal_add.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\ordenes_compra\modal_api.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\ordenes_compra\modal_api_detalle.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\ordenes_compra\modal_consulta.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\ordenes_compra\modal_edit.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\permisos\add.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\permisos\detail.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\permisos\edit.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\permisos\list.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\permisos\modal_add.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\permisos\modal_edit.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\permisos\modal_show.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\preventivos\detail.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\preventivos\email\email_add_preventivo.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\preventivos\modal_add.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\preventivos\modal_edit.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\preventivos\modal_show.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\preventivos\nota\modal_add.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\propietarios\list.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\propietarios\modal_add.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\propietarios\modal_edit.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\reportes\list.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\repuestos\detail.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\repuestos\list.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\repuestos\modal_detail_repuestos_instalados.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\repuestos\modal_detail_repuestos_pendientes.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\repuestos\modal_detail_resumen_general.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\repuestos\modal_detail_resumen_inversion_repuestos_equipo.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\repuestos\modal_detail_resumen_inversion_repuestos_servicio.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\repuestos\modal_detail_resumen_por_repuesto.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\repuestos\modal_show.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\repuestos\modal_show_movimientos.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\repuestos_pendientes\modal_add.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\servicios\list.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\servicios\list2.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\servicios\modal_add.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\servicios\modal_edit.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\tecnicos\list.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\uploads\image.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\uploads\upload.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\usuarios\cuenta.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\usuarios\detail.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\usuarios\email_creacion.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\usuarios\email_reg.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\usuarios\list.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\usuarios\modal_add.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\usuarios\modal_add_usuario_zona.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\usuarios\modal_edit.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\laravel\usuarios\modal_show.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\layout\datatable.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\layout\datatable.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\layout\footer.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\layout\footer.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\layout\formulario.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\layout\formulario.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\layout\formulario_update.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\layout\formulario_update.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\layout\header.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\layout\header.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\layout\imagen.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\layout\imagen.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\layout\menu.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\layout\menu.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\layout\modal_add_calibracion.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\layout\modal_add_calibracion.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\layout\modal_add_correctivo_general.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\layout\modal_add_correctivo_general.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\layout\modal_add_preventivo_ind.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\layout\modal_add_preventivo_ind.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\layout\modal_edit_calibracion.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\layout\modal_edit_calibracion.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\layout\modal_edit_correctivo_general.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\layout\modal_edit_correctivo_general.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\layout\modal_edit_preventivo.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\layout\modal_edit_preventivo.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\layout\reporte.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\layout\reporte.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\layout\tablaexcel.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\layout\tablaexcel.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\layouts\adminlte3\aside.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\layouts\adminlte3\aside.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\layouts\adminlte3\body.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\layouts\adminlte3\body.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\layouts\adminlte3\completo.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\layouts\adminlte3\completo.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\layouts\adminlte3\footer.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\layouts\adminlte3\footer.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\layouts\adminlte3\header.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\layouts\adminlte3\header.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\layouts\admin_aside.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\layouts\admin_aside.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\layouts\advance_aside.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\layouts\advance_aside.blade.php
+[2025-06-13 16:49:46] ⏭️  SALTADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\layouts\app.blade.php (ya es Blade)
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\layouts\aside.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\layouts\aside.blade.php
+[2025-06-13 16:49:46] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\layouts\aside3.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\layouts\aside3.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\layouts\basic_aside.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\layouts\basic_aside.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\layouts\baxter_aside.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\layouts\baxter_aside.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\layouts\footer.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\layouts\footer.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\layouts\footer3.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\layouts\footer3.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\layouts\footer_qr.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\layouts\footer_qr.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\layouts\header.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\layouts\header.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\layouts\header3.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\layouts\header3.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\layouts\header_qr.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\layouts\header_qr.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\layouts\login_body.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\layouts\login_body.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\layouts\login_footer.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\layouts\login_footer.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\layouts\login_header.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\layouts\login_header.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\layouts\prueba.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\layouts\prueba.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\mantenimientos\list.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\mantenimientos\list.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\mantenimientos\modal_cambios.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\mantenimientos\modal_cambios.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\mantenimientos\modal_edit.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\mantenimientos\modal_edit.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\mantenimientos\proveedores_mantenimiento\modal_add.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\mantenimientos\proveedores_mantenimiento\modal_add.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\manuales\detalle_consulta.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\manuales\detalle_consulta.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\manuales\list.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\manuales\list.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\manuales\modal_add.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\manuales\modal_add.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\manuales\modal_consulta.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\manuales\modal_consulta.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\manuales\modal_edit.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\manuales\modal_edit.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes\cierre_email.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes\cierre_email.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes\cierre_totalemail.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes\cierre_totalemail.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes\detail.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes\detail.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes\detail_ordenes_activas.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes\detail_ordenes_activas.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes\diagnostico_email.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes\diagnostico_email.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes\email_actualizacion.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes\email_actualizacion.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes\email_asignacion_usuario.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes\email_asignacion_usuario.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes\email_creacion.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes\email_creacion.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes\list.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes\list.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes\list_active.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes\list_active.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes\list_closed.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes\list_closed.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes\modal_add.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes\modal_add.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes\modal_add_biomedicos.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes\modal_add_biomedicos.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes\modal_add_diagnostico_from_timeline.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes\modal_add_diagnostico_from_timeline.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes\modal_add_industriales.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes\modal_add_industriales.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes\modal_add_otros.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes\modal_add_otros.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes\modal_add_retro.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes\modal_add_retro.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes\modal_add_solicitud_cierre_from_timeline.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes\modal_add_solicitud_cierre_from_timeline.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes\modal_archivo_diagnose.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes\modal_archivo_diagnose.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes\modal_archivo_solicitud_cierre.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes\modal_archivo_solicitud_cierre.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes\modal_asignar.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes\modal_asignar.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes\modal_asignar_otro.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes\modal_asignar_otro.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes\modal_asignar_usuario.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes\modal_asignar_usuario.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes\modal_close.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes\modal_close.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes\modal_consulta_biomedicos.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes\modal_consulta_biomedicos.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes\modal_diagnose.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes\modal_diagnose.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes\modal_edit.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes\modal_edit.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes\modal_edit_orden_activa.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes\modal_edit_orden_activa.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes\modal_listado_biomedicos.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes\modal_listado_biomedicos.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes\modal_show.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes\modal_show.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes\modal_show_ordenes_activas.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes\modal_show_ordenes_activas.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes\modal_solicitud_cierre.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes\modal_solicitud_cierre.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes\modal_timeline.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes\modal_timeline.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes\solicitud_cierre_email.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes\solicitud_cierre_email.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes\tikect_email.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes\tikect_email.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes\timeline_detail.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes\timeline_detail.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes_compra\detalle_consulta.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes_compra\detalle_consulta.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes_compra\list.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes_compra\list.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes_compra\modal_add.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes_compra\modal_add.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes_compra\modal_api.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes_compra\modal_api.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes_compra\modal_api_detalle.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes_compra\modal_api_detalle.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes_compra\modal_consulta.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes_compra\modal_consulta.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes_compra\modal_edit.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\ordenes_compra\modal_edit.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\permisos\add.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\permisos\add.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\permisos\detail.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\permisos\detail.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\permisos\edit.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\permisos\edit.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\permisos\list.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\permisos\list.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\permisos\modal_add.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\permisos\modal_add.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\permisos\modal_edit.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\permisos\modal_edit.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\permisos\modal_show.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\permisos\modal_show.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\preventivos\detail.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\preventivos\detail.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\preventivos\email\email_add_preventivo.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\preventivos\email\email_add_preventivo.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\preventivos\modal_add.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\preventivos\modal_add.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\preventivos\modal_edit.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\preventivos\modal_edit.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\preventivos\modal_show.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\preventivos\modal_show.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\preventivos\nota\modal_add.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\preventivos\nota\modal_add.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\propietarios\list.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\propietarios\list.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\propietarios\modal_add.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\propietarios\modal_add.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\propietarios\modal_edit.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\propietarios\modal_edit.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\reportes\list.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\reportes\list.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\repuestos\detail.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\repuestos\detail.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\repuestos\list.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\repuestos\list.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\repuestos\modal_detail_repuestos_instalados.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\repuestos\modal_detail_repuestos_instalados.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\repuestos\modal_detail_repuestos_pendientes.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\repuestos\modal_detail_repuestos_pendientes.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\repuestos\modal_detail_resumen_general.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\repuestos\modal_detail_resumen_general.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\repuestos\modal_detail_resumen_inversion_repuestos_equipo.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\repuestos\modal_detail_resumen_inversion_repuestos_equipo.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\repuestos\modal_detail_resumen_inversion_repuestos_servicio.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\repuestos\modal_detail_resumen_inversion_repuestos_servicio.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\repuestos\modal_detail_resumen_por_repuesto.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\repuestos\modal_detail_resumen_por_repuesto.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\repuestos\modal_show.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\repuestos\modal_show.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\repuestos\modal_show_movimientos.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\repuestos\modal_show_movimientos.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\repuestos_pendientes\modal_add.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\repuestos_pendientes\modal_add.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\servicios\list.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\servicios\list.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\servicios\list2.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\servicios\list2.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\servicios\modal_add.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\servicios\modal_add.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\servicios\modal_edit.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\servicios\modal_edit.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\tecnicos\list.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\tecnicos\list.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\usuarios\cuenta.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\usuarios\cuenta.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\usuarios\detail.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\usuarios\detail.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\usuarios\email_creacion.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\usuarios\email_creacion.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\usuarios\email_reg.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\usuarios\email_reg.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\usuarios\list.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\usuarios\list.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\usuarios\modal_add.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\usuarios\modal_add.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\usuarios\modal_add_usuario_zona.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\usuarios\modal_add_usuario_zona.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\usuarios\modal_edit.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\usuarios\modal_edit.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\usuarios\modal_show.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\usuarios\modal_show.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\vImagenSubida.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\vImagenSubida.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\Vlogin.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\Vlogin.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\vupload.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\vupload.blade.php
+[2025-06-13 16:49:47] ✅ MIGRADO: C:\xampp\htdocs\LARAVEL\new_eva/resources/views\welcome_message.php → C:\xampp\htdocs\LARAVEL\new_eva/resources/views\welcome_message.blade.php
+[2025-06-13 16:49:47] 
+🎉 MIGRACIÓN COMPLETADA
+[2025-06-13 16:49:47] =====================
+[2025-06-13 16:49:47] 📁 Total archivos: 826
+[2025-06-13 16:49:47] ✅ Migrados: 282
+[2025-06-13 16:49:47] ⏭️  Saltados: 544
+[2025-06-13 16:49:47] ❌ Errores: 0
+[2025-06-13 16:49:47] 📄 Reporte generado: C:\xampp\htdocs\LARAVEL\new_eva/migration-report-laravel11.html

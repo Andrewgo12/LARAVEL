@@ -1,87 +1,91 @@
 <?php
 
-defined('BASEPATH') or exit('El acceso directo no esta permitido');
+namespace App\Http\Controllers\administrador;
 
-/**
- *
- */
-class Cpermisos extends CI_Controller
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Models\Mpermisos;
+use App\Models\Musuarios;
+use Illuminate\Support\Facades\Session;
+
+class Cpermisos extends Controller
 {
   private $permisos;
-  function __construct()
+  private Mpermisos $Mpermisos;
+  private Musuarios $Musuarios;
+  
+  public function __construct()
   {
-    parent::__construct();
-    $this->load->model('Mpermisos');
-    $this->load->model('Musuarios');
-    $this->permisos = $this->backend_lib->control();
+    $this->Mpermisos = new Mpermisos();
+    $this->Musuarios = new Musuarios();
+    // Asumiendo que backend_lib se ha migrado a un servicio de Laravel
+    // $this->permisos = app('backend_lib')->control();
   }
+  
   public function index()
   {
-
-    if ($this->session->userdata('login')) {
-    } else {
-      redirect(base_url('Cauth'));
+    if (!Session::has('login')) {
+      return redirect('Cauth');
     }
+    
     $permisos = $this->Mpermisos->get();
-    $param = array(
+    $param = [
       'permisos_listado' => $permisos
-    );
-    $this->load->view('layouts/header');
-    $this->load->view('layouts/aside');
-    $this->load->view('permisos/list', $param);
-    $this->load->view('layouts/footer');
+    ];
+    
+    return view('permisos.list', $param);
   }
+  
   public function add()
   { // Este add no almacena directamente, lo que hace es llamar un formulario
-    $param = array(
+    $param = [
       'roles' => $this->Musuarios->getRoles(),
       'menus' => $this->Mpermisos->getMenus()
+    ];
 
-    );
-
-    $this->load->view('layouts/header');
-    $this->load->view('layouts/aside');
-    $this->load->view('permisos/add', $param);
-    $this->load->view('layouts/footer');
+    return view('permisos.add', $param);
   }
-  public function save()
+  
+  public function save(Request $request)
   {
-    if ($this->Mpermisos->save($_POST)) {
-      redirect(base_url() . "administrador/Cpermisos/add");
+    if ($this->Mpermisos->save($request->all())) {
+      return redirect()->to("administrador/Cpermisos/add");
     } else {
-      $this->session->set_flashdata("error", "No se pudo guardar la información");
-      redirect(base_url() . "administrador/Cpermisos");
+      Session::flash("error", "No se pudo guardar la información");
+      return redirect()->to("administrador/Cpermisos");
     }
   }
+  
   public function edit($param)
   {
-    $param = array(
+    $param = [
       'roles' => $this->Musuarios->getRoles(),
       'menus' => $this->Mpermisos->getMenus(),
       'permiso' => $this->Mpermisos->getOne($param)
-    );
+    ];
 
-    $this->load->view('layouts/header');
-    $this->load->view('layouts/aside');
-    $this->load->view('permisos/edit', $param);
-    $this->load->view('layouts/footer');
+    return view('permisos.edit', $param);
   }
-  public function update()
+  
+  public function update(Request $request)
   {
-    unset($_POST["menu_id"]);
-    unset($_POST["rol_id"]);
-    print_r($_POST);
-    if ($this->Mpermisos->update($_POST)) {
-      redirect(base_url() . "administrador/Cpermisos/add");
+    $data = $request->except(['menu_id', 'rol_id']);
+    
+    if ($this->Mpermisos->update($data)) {
+      return redirect()->to("administrador/Cpermisos/add");
     } else {
-      $this->session->set_flashdata("error", "No se pudo guardar la información");
-      redirect(base_url() . "administrador/Cpermisos");
+      Session::flash("error", "No se pudo guardar la información");
+      return redirect()->to("administrador/Cpermisos");
     }
   }
+  
   public function delete($param)
   {
     if (!$this->Mpermisos->delete($param)) {
-      redirect(base_url() . "administrador/Cpermisos");
+      return redirect()->to("administrador/Cpermisos");
     }
+    
+    return redirect()->to("administrador/Cpermisos");
   }
 }
+

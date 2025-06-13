@@ -1,38 +1,39 @@
 <?php
-// defined ('BASEPATH') OR exit('El acceso directo no esta permitido');
 
-/**
- * 
- */
-require APPPATH . 'libraries/REST_Controller.php';
+namespace App\Http\Controllers\aplicacion;
 
-class Restserver extends REST_Controller
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Models\Mequipos;
+use Illuminate\Http\JsonResponse;
+
+class Restserver extends Controller
 {
-  function __construct()
+  private Mequipos $Mequipos;
+  
+  public function __construct()
   {
-    parent::__construct();
-    $this->load->model('Mequipos');
-
-    //$this->permisos=$this->backend_lib->control();
+    $this->Mequipos = new Mequipos();
   }
 
-  public function test_get()
+  public function test(): JsonResponse
   {
     $array = $this->Mequipos->get_some();
-    //echo "sdfsd";
     //header("Access-Control-Origin: http://localhost:8100");
     //header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
-    $this->response($array);
+    return response()->json($array);
   }
-  public function user_post()
+  
+  public function user(Request $request): JsonResponse
   {
     $data = "algo";
-    $this->response($data);
+    return response()->json($data);
   }
-  public function indext_get()
+  
+  public function indext(): JsonResponse
   {
     $data = "algo";
-
-    $this->response($data, REST_Controller::HTTP_OK);
+    return response()->json($data, 200);
   }
 }
+

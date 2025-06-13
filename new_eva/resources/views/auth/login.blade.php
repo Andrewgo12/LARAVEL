@@ -7,15 +7,15 @@
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!-- Bootstrap 3.3.7 -->
-  <link rel="stylesheet" href="{{ asset('') }}assets/bower_components/bootstrap/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="{{ asset('assets/bower_components/bootstrap/dist/css/bootstrap.min.css') }}">
   <!-- Font Awesome -->
-  <link rel="stylesheet" href="{{ asset('') }}assets/bower_components/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="{{ asset('assets/bower_components/font-awesome/css/font-awesome.min.css') }}">
   <!-- Ionicons -->
-  <link rel="stylesheet" href="{{ asset('') }}assets/bower_components/Ionicons/css/ionicons.min.css">
+  <link rel="stylesheet" href="{{ asset('assets/bower_components/Ionicons/css/ionicons.min.css') }}">
   <!-- Theme style -->
-  <link rel="stylesheet" href="{{ asset('') }}assets/dist/css/AdminLTE.min.css">
+  <link rel="stylesheet" href="{{ asset('assets/dist/css/AdminLTE.min.css') }}">
   <!-- iCheck -->
-  <link rel="stylesheet" href="{{ asset('') }}assets/plugins/iCheck/square/blue.css">
+  <link rel="stylesheet" href="{{ asset('assets/plugins/iCheck/square/blue.css') }}">
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -54,7 +54,7 @@
     <form action="{{ route('huv.authenticate') }}" method="post">
       @csrf
       <div class="form-group has-feedback">
-        <input type="email" class="form-control" placeholder="Email"name="Email" value="{{ old('Email') }}" required>
+        <input type="email" class="form-control" placeholder="Email" name="Email" value="{{ old('Email') }}" required>
         <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
       </div>
       <div class="form-group has-feedback">
@@ -65,13 +65,13 @@
         <div class="col-xs-8">
           <div class="checkbox icheck">
             <label>
-            <input type="checkbox"style="left: 120px;">Remember Me
+            <input type="checkbox" style="left: 120px;"> Remember Me
             </label>
           </div>
         </div>
         <!-- /.col -->
         <div class="col-xs-4">
-          <button type="submit" class="btn btn-primary btn-block btn-flat"name="ingresar">Sign In</button>
+          <button type="submit" class="btn btn-primary btn-block btn-flat" name="ingresar">Sign In</button>
         </div>
         <!-- /.col -->
       </div>
@@ -95,11 +95,11 @@
 <!-- /.login-box -->
 
 <!-- jQuery 3 -->
-<script src="{{ asset('') }}assets/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="{{ asset('assets/bower_components/jquery/dist/jquery.min.js') }}"></script>
 <!-- Bootstrap 3.3.7 -->
-<script src="{{ asset('') }}assets/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="{{ asset('assets/bower_components/bootstrap/dist/js/bootstrap.min.js') }}"></script>
 <!-- iCheck -->
-<script src="{{ asset('') }}assets/plugins/iCheck/icheck.min.js"></script>
+<script src="{{ asset('assets/plugins/iCheck/icheck.min.js') }}"></script>
 <script>
   $(function () {
     $('input').iCheck({

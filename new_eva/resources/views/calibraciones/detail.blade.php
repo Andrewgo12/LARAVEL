@@ -1,0 +1,37 @@
+<div class="" style="overflow-x: auto;">
+	<a class="btn btn-info" href="{{ url('/') }}calibracion/Ccalibraciones/ExportarExcel" target="_blank">Exportar Consolidado</a><br><br>
+	<table border="1" class="datatable-calibraciones table">
+		<thead>
+
+			<th>codigo</th>
+			<th>fecha ejecución</th>
+			<th>Equipo</th>
+			<th>Marca</th>
+			<th>Modelo</th>
+			<th>Serie</th>
+			<th>Codigo</th>
+			<th>Ubicacion</th>
+			<th>Archivo</th>
+		</thead>
+		<tbody>
+			@foreach($calibraciones as $calibracion)
+				<tr>
+					<td>{{ $calibracion->codigo }}</td>
+					<td>{{ $calibracion->fecha_ejecucion }}</td>
+					<td>{{ $calibracion->equipo }}</td>
+					<td>{{ $calibracion->marca }}</td>
+					<td>{{ $calibracion->modelo }}</td>
+					<td>{{ $calibracion->serial }}</td>
+					<td>{{ $calibracion->code }}</td>
+					<td>{{ $calibracion->ubicacion }}</td>
+					@if($calibracion->archivo!=""&&$calibracion->archivo!=null)
+						<td>{{ "<a target='__blank' class='glyphicon glyphicon-file' href='".url('/')."assets/upload_calibraciones/".$calibracion->archivo."'></a>" }}</td>
+					@else
+						<td></td>
+					<?php endif ?>
+
+				</tr>
+			<?php endforeach ?>
+		</tbody>
+	</table>
+</div>

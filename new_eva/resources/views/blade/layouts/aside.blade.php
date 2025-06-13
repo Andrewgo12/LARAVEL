@@ -3,10 +3,9 @@
         <ul class="sidebar-menu" data-widget="tree">
             <li class="header">NAVEGACIÓN PRINCIPAL</li>
             <li>
-                <a href="<?= base_url(); ?>Home">
+                <a href="{{ route('huv.home') }}">
                     <i class="fa fa-home"></i> <span>Inicio</span>
                 </a>
-                <div></div>
             </li>
             <li class="treeview">
                 <a class="nav-item" href="#">

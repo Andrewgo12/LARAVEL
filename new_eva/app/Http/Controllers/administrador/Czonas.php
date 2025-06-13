@@ -1,28 +1,42 @@
 <?php
-defined('BASEPATH') or exit('El acceso directo no esta permitido');
-class Czonas extends CI_Controller
+
+namespace App\Http\Controllers\administrador;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Models\Mzonas;
+use App\Models\Musuarios;
+use Illuminate\Http\JsonResponse;
+
+class Czonas extends Controller
 {
   private $permisos;
-  function __construct()
+  private Mzonas $Mzonas;
+  private Musuarios $Musuarios;
+  
+  public function __construct()
   {
-    parent::__construct();
-    $this->load->model('Mzonas');
+    $this->Mzonas = new Mzonas();
+    $this->Musuarios = new Musuarios();
   }
+  
   public function index()
   {
   }
 
-  public function ServiceGetAll()
+  public function ServiceGetAll(): JsonResponse
   {
-    echo json_encode($this->Mzonas->getAllZones());
+    return response()->json($this->Mzonas->getAllZones());
   }
-  public function getAll()
+  
+  public function getAll(): JsonResponse
   {
-    echo json_encode($this->Mzonas->getAll());
+    return response()->json($this->Mzonas->getAll());
   }
 
-  public function getOne()
+  public function getOne(Request $request): JsonResponse
   {
-    echo json_encode($this->Musuarios->getOne($_POST["id"]));
+    return response()->json($this->Musuarios->getOne($request->input('id')));
   }
 }
+

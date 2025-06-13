@@ -1,73 +1,79 @@
 <?php
-// defined ('BASEPATH') OR exit('El acceso directo no esta permitido');
 
-/**
- * 
- */
-require APPPATH . 'libraries/REST_Controller.php';
+namespace App\Http\Controllers\aplicacion;
 
-class Requipos extends REST_Controller
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Models\Mequipos;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Http\JsonResponse;
+
+class Requipos extends Controller
 {
-  function __construct()
-  {
-    parent::__construct();
-    $this->load->model('Mequipos');
-  }
+    private Mequipos $Mequipos;
+    
+    public function __construct()
+    {
+        $this->Mequipos = new Mequipos();
+    }
 
-  public function comunicacion_get($id = 0)
-  {
-    header('Access-Control-Allow-Origin: *');
-    /*   
-        if($id!=0){
-            $data = $this->db->get_where("equipos", ['id' => $id])->row_array();
-        }else{
-            $data = $this->db->get("equipos")->result();
-        }
-        */
-    $query = "
-        SELECT
-            e.name AS nombre,
-            e.marca AS marca,
-            e.modelo AS modelo,
-            e.code AS codigo,
-            e.serial AS serie,
-            s.name AS servicio,
-            sed.name AS sede,
-            a.name AS area
-        FROM
-            equipos e
-        LEFT JOIN servicios s ON
-            s.id = e.servicio_id
-        LEFT JOIN sedes sed ON
-            sed.id = s.sede_id
-        LEFT JOIN areas a ON
-            e.area_id = a.id
-        WHERE
-            e.tipo_id = 1
-    ";
-    $datos = $this->db->query($query)->result();
+    public function comunicacion(Request $request, $id = 0)
+    {
+        $method = strtolower($request->method());
+        return $this->{"comunicacion_$method"}($request, $id);
+    }
 
-    $this->response($datos, REST_Controller::HTTP_OK);
-    //$this->response($data, REST_Controller::HTTP_OK);
-  }
-  public function comunicacion_post()
-  {
-    $input = $this->input->post();
-    $this->db->insert('equipos', $input);
+    public function comunicacion_get(Request $request, $id = 0): JsonResponse
+    {
+        header('Access-Control-Allow-Origin: *');
+        
+        $query = "
+            SELECT
+                e.name AS nombre,
+                e.marca AS marca,
+                e.modelo AS modelo,
+                e.code AS codigo,
+                e.serial AS serie,
+                s.name AS servicio,
+                sed.name AS sede,
+                a.name AS area
+            FROM
+                equipos e
+            LEFT JOIN servicios s ON
+                s.id = e.servicio_id
+            LEFT JOIN sedes sed ON
+                sed.id = s.sede_id
+            LEFT JOIN areas a ON
+                e.area_id = a.id
+            WHERE
+                e.tipo_id = 1
+        ";
+        $datos = DB::select($query);
 
-    $this->response(['Pais insertado exitosamente.'], REST_Controller::HTTP_OK);
-  }
-  public function comunicacion_put($id)
-  {
-    $input = $this->put();
-    $this->db->update('equipos', $input, array('id' => $id));
+        return response()->json($datos, 200);
+    }
+    
+    public function comunicacion_post(Request $request): JsonResponse
+    {
+        $input = $request->all();
+        DB::table('equipos')->insert($input);
 
-    $this->response(['Pais actualizado exitosamente.'], REST_Controller::HTTP_OK);
-  }
-  public function comunicacion_delete($id)
-  {
-    $this->db->delete('equipos', array('id' => $id));
+        return response()->json(['Equipo insertado exitosamente.'], 200);
+    }
+    
+    public function comunicacion_put(Request $request, $id): JsonResponse
+    {
+        $input = $request->all();
+        DB::table('equipos')->where('id', $id)->update($input);
 
-    $this->response(['pais eliminado exitosamente.'], REST_Controller::HTTP_OK);
-  }
+        return response()->json(['Equipo actualizado exitosamente.'], 200);
+    }
+    
+    public function comunicacion_delete(Request $request, $id): JsonResponse
+    {
+        DB::table('equipos')->where('id', $id)->delete();
+
+        return response()->json(['Equipo eliminado exitosamente.'], 200);
+    }
 }
+

@@ -60,7 +60,9 @@
   @include('blade.layouts.aside')
 
   <!-- Content Wrapper. Contains page content -->
-  {!! $content !!}
+  <div class="content-wrapper">
+    @yield('content')
+  </div>
 
   <!-- Footer -->
   @include('blade.layouts.footer')
@@ -123,14 +125,14 @@
 <!-- Variables globales para JavaScript -->
 <script>
   // Variables de sesión disponibles para JavaScript
-  var base_url = "{{ asset('') }}";
-  var user_id = "{{ $user['id'] ?? '' }}";
-  var user_name = "{{ $user['nombre'] ?? '' }}";
-  var user_email = "{{ $user['email'] ?? '' }}";
-  var is_logged_in = {{ $session_data['login'] ? 'true' : 'false' }};
-  var user_role = "{{ $session_data['rol_id'] ?? '' }}";
-  var user_sede = "{{ $session_data['sede_id'] ?? '' }}";
-  var current_controller = "{{ $session_data['controlador'] ?? '' }}";
+  var base_url = "{{ url('/') }}";
+  var user_id = "{{ session('user.id', '') }}";
+  var user_name = "{{ session('user.nombre', '') }}";
+  var user_email = "{{ session('user.email', '') }}";
+  var is_logged_in = {{ session('login') ? 'true' : 'false' }};
+  var user_role = "{{ session('rol_id', '') }}";
+  var user_sede = "{{ session('sede_id', '') }}";
+  var current_controller = "{{ session('controlador', '') }}";
   
   // Configuración de DataTables
   $(function () {

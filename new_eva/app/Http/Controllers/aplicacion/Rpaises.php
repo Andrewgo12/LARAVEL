@@ -1,47 +1,54 @@
 <?php
-// defined ('BASEPATH') OR exit('El acceso directo no esta permitido');
 
-/**
- * 
- */
-require APPPATH . 'libraries/REST_Controller.php';
+namespace App\Http\Controllers\aplicacion;
 
-class Rpaises extends REST_Controller
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Models\Mpaises;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Http\JsonResponse;
+
+class Rpaises extends Controller
 {
-  function __construct()
-  {
-    parent::__construct();
-    $this->load->model('Mpaises');
-  }
-
-  public function comunicacion_get($id = 0)
-  {
-    if ($id != 0) {
-      $data = $this->db->get_where("paises", ['id' => $id])->row_array();
-    } else {
-      $data = $this->db->get("paises")->result();
+    private Mpaises $Mpaises;
+    
+    public function __construct()
+    {
+        $this->Mpaises = new Mpaises();
     }
 
-    $this->response($data, REST_Controller::HTTP_OK);
-  }
-  public function comunicacion_post()
-  {
-    $input = $this->input->post();
-    $this->db->insert('paises', $input);
+    public function comunicacion_get($id = 0): JsonResponse
+    {
+        if ($id != 0) {
+            $data = DB::table('paises')->where('id', $id)->first();
+        } else {
+            $data = DB::table('paises')->get();
+        }
 
-    $this->response(['Pais insertado exitosamente.'], REST_Controller::HTTP_OK);
-  }
-  public function comunicacion_put($id)
-  {
-    $input = $this->put();
-    $this->db->update('paises', $input, array('id' => $id));
+        return response()->json($data, 200);
+    }
 
-    $this->response(['Pais actualizado exitosamente.'], REST_Controller::HTTP_OK);
-  }
-  public function comunicacion_delete($id)
-  {
-    $this->db->delete('paises', array('id' => $id));
+    public function comunicacion_post(Request $request): JsonResponse
+    {
+        $input = $request->all();
+        DB::table('paises')->insert($input);
 
-    $this->response(['pais eliminado exitosamente.'], REST_Controller::HTTP_OK);
-  }
+        return response()->json(['Pais insertado exitosamente.'], 200);
+    }
+
+    public function comunicacion_put(Request $request, $id): JsonResponse
+    {
+        $input = $request->all();
+        DB::table('paises')->where('id', $id)->update($input);
+
+        return response()->json(['Pais actualizado exitosamente.'], 200);
+    }
+
+    public function comunicacion_delete($id): JsonResponse
+    {
+        DB::table('paises')->where('id', $id)->delete();
+
+        return response()->json(['pais eliminado exitosamente.'], 200);
+    }
 }
+

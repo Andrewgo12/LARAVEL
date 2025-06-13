@@ -12,13 +12,13 @@
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!-- Bootstrap 3.3.7 -->
-  <!-- <link rel="stylesheet" href="{{ asset('') }}css/normalize.css?n=<?= time(); ?>"> -->
-  <?php if ($this->uri->segment(1) == 'Dashboard') : ?>
-    <link rel="stylesheet" href="<?= base_url(); ?>css/css_error.css?n=<?= time(); ?>">
-  <?php endif ?>
-  <link rel="stylesheet" href="{{ asset('') }}assets/template/bootstrap/css/bootstrap.min.css">
+  <!-- <link rel="stylesheet" href="{{ asset('css/normalize.css') }}"> -->
+  @if(request()->segment(1) == 'Dashboard')
+    <link rel="stylesheet" href="{{ asset('css/css_error.css') }}">
+  @endif
+  <link rel="stylesheet" href="{{ asset('assets/template/bootstrap/css/bootstrap.min.css') }}">
   <!-- Font Awesome -->
-  <link rel="stylesheet" href="{{ asset('') }}assets/template/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="{{ asset('assets/template/font-awesome/css/font-awesome.min.css') }}">
 
   <!-- Own -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -26,76 +26,76 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700;900&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="{{ asset('') }}css/footer.css">
-
-
-  <link rel="stylesheet" href="{{ asset('') }}css/aside.css">
+  <link rel="stylesheet" href="{{ asset('css/footer.css') }}">
+  <link rel="stylesheet" href="{{ asset('css/aside.css') }}">
   <!-- Theme style -->
-  <link rel="stylesheet" href="{{ asset('') }}assets/template/dist/css/AdminLTE.min.css?n=<?= time(); ?>">
+  <link rel="stylesheet" href="{{ asset('assets/template/dist/css/AdminLTE.min.css') }}">
   <!-- daterange picker -->
-  <link rel="stylesheet" href="{{ asset('') }}plugins_old/bootstrap-daterangepicker/daterangepicker.css">
+  <link rel="stylesheet" href="{{ asset('plugins_old/bootstrap-daterangepicker/daterangepicker.css') }}">
   <!-- bootstrap datepicker -->
-  <link rel="stylesheet" href="{{ asset('') }}plugins_old/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
+  <link rel="stylesheet" href="{{ asset('plugins_old/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css') }}">
   <!-- Bootstrap time Picker -->
-  <link rel="stylesheet" href="{{ asset('') }}plugins_old/timepicker/bootstrap-timepicker.min.css">
+  <link rel="stylesheet" href="{{ asset('plugins_old/timepicker/bootstrap-timepicker.min.css') }}">
   <!-- AdminLTE Skins. Choose a skin from the css/skins
       folder instead of downloading all of them to reduce the load. -->
-  <link rel="stylesheet" href="{{ asset('') }}assets/template/dist/css/skins/_all-skins.min.css">
+  <link rel="stylesheet" href="{{ asset('assets/template/dist/css/skins/_all-skins.min.css') }}">
   <!-- DatataTable. -->
-  <link rel="stylesheet" href="{{ asset('') }}assets/template/datatables.net-bs/css/dataTables.bootstrap.min.css">
+  <link rel="stylesheet" href="{{ asset('assets/template/datatables.net-bs/css/dataTables.bootstrap.min.css') }}">
   <!-- Select2. -->
-  <!-- <link rel="stylesheet" href="{{ asset('') }}assets/template/select2/dist/css/select2.min.css"> -->
+  <!-- <link rel="stylesheet" href="{{ asset('assets/template/select2/dist/css/select2.min.css') }}"> -->
 
   <!-- Bootstrap file -->
-  <link rel="stylesheet" href="{{ asset('') }}assets/template/bootstrap-file/css/fileinput.min.css">
+  <link rel="stylesheet" href="{{ asset('assets/template/bootstrap-file/css/fileinput.min.css') }}">
   <!--ligth-box -->
-  <link rel="stylesheet" href="{{ asset('') }}assets/template/lightbox2-master/dist/css/lightbox.min.css">
-  <!--ligth-box -->
-  <link rel="stylesheet" type="text/css" href="{{ asset('') }}assets/template/Carousel/Carousel-Hero.css">
-  <!--ligth-box -->
-  <link rel="stylesheet" type="text/css" href="{{ asset('') }}css/hoja_de_vida/Hoja_de_vida.css">
+  <link rel="stylesheet" href="{{ asset('assets/template/lightbox2-master/dist/css/lightbox.min.css') }}">
+  <!--Carousel -->
+  <link rel="stylesheet" type="text/css" href="{{ asset('assets/template/Carousel/Carousel-Hero.css') }}">
+  <!--Hoja de vida -->
+  <link rel="stylesheet" type="text/css" href="{{ asset('css/hoja_de_vida/Hoja_de_vida.css') }}">
   <!--Summernote -->
-  <link rel="stylesheet" type="text/css" href="{{ asset('') }}assets/template/summernote/summernote.min.css">
-  <?php
+  <link rel="stylesheet" type="text/css" href="{{ asset('assets/template/summernote/summernote.min.css') }}">
+  @if(request()->segment(1) == 'Home')
+    <link rel="stylesheet" href="{{ asset('css/landing_page/header.css') }}">
+  @endif
 
-  if ($this->uri->segment(1) == 'Home') : ?>
-    <link rel="stylesheet" href="/css/landing_page/header.css">
-  <?php endif ?>
-  <?php if ($this->uri->segment(2) == 'Cinvimas') : ?>
-    <link rel="stylesheet" type="text/css" href="{{ asset('') }}css/invimas/Invimas.css?n=<?= time(); ?>">
-  <?php endif ?>
+  @if(request()->segment(2) == 'Cinvimas')
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/invimas/Invimas.css') }}">
+  @endif
 
-  <?php if ($this->uri->segment(2) == 'Cordenes_compra') : ?>
-    <link rel="stylesheet" type="text/css" href="{{ asset('') }}css/ordenes_compra/Ordenes_compra.css?n=<?= time(); ?>">
-  <?php endif ?>
+  @if(request()->segment(2) == 'Cordenes_compra')
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/ordenes_compra/Ordenes_compra.css') }}">
+  @endif
 
-  <?php if ($this->uri->segment(2) == 'Cusuarios') : ?>
-    <link rel="stylesheet" type="text/css" href="{{ asset('') }}css/usuarios/Usuarios.css?n=<?= time(); ?>">
-  <?php endif ?>
-  <?php if ($this->uri->segment(2) == 'Cordenes') : ?>
-    <link rel="stylesheet" type="text/css" href="{{ asset('') }}css/tickets/Tickets.css?n=<?= time(); ?>">
-  <?php endif ?>
-  <?php if ($this->uri->segment(2) == 'Cequipos') : ?>
-    <link rel="stylesheet" type="text/css" href="{{ asset('') }}css/tickets/Tickets.css?n=<?= time(); ?>">
-    <link rel="stylesheet" type="text/css" href="{{ asset('') }}css/equipos/Equipos.css?n=<?= time(); ?>">
-  <?php endif ?>
-  <?php if ($this->uri->segment(2) == 'Cequipos_ind') : ?>
-    <link rel="stylesheet" type="text/css" href="{{ asset('') }}css/tickets/Tickets.css?n=<?= time(); ?>">
-    <link rel="stylesheet" type="text/css" href="{{ asset('') }}css/equipos/Equipos.css?n=<?= time(); ?>">
-  <?php endif ?>
-  <?php if ($this->uri->segment(2) == 'Crepuestos') : ?>
-    <link rel="stylesheet" type="text/css" href="{{ asset('') }}css/repuestos/Repuestos.css?n=<?= time(); ?>">
-  <?php endif ?>
+  @if(request()->segment(2) == 'Cusuarios')
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/usuarios/Usuarios.css') }}">
+  @endif
+  @if(request()->segment(2) == 'Cordenes')
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/tickets/Tickets.css') }}">
+  @endif
 
-  <?php if ($this->uri->segment(1) == 'Forbidden') : ?>
-    <link rel="stylesheet" type="text/css" href="{{ asset('') }}css/Forbidden.css?n=<?= time(); ?>">
-  <?php endif ?>
+  @if(request()->segment(2) == 'Cequipos')
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/tickets/Tickets.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/equipos/Equipos.css') }}">
+  @endif
+  @if(request()->segment(2) == 'Cequipos_ind')
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/tickets/Tickets.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/equipos/Equipos.css') }}">
+  @endif
 
-  <?php if ($this->uri->segment(1) == 'guia') : ?>
-    <link rel="stylesheet" type="text/css" href="{{ asset('') }}css/guias/Guias.css?n=<?= time(); ?>">
-  <?php endif ?>
+  @if(request()->segment(2) == 'Crepuestos')
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/repuestos/Repuestos.css') }}">
+  @endif
 
-  <link rel="stylesheet" href="{{ asset('') }}css/propio.css?n=<?= time(); ?>">
+  @if(request()->segment(1) == 'Forbidden')
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/Forbidden.css') }}">
+  @endif
+
+  @if(request()->segment(1) == 'guia')
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/guias/Guias.css') }}">
+  @endif
+
+  <link rel="stylesheet" href="{{ asset('css/propio.css') }}">
+  <link rel="stylesheet" href="{{ asset('css/theme-sistema.css') }}">
 
 
 </head>
@@ -125,15 +125,15 @@
             <!-- User Account: style can be found in dropdown.less -->
             <li class="dropdown user user-menu">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                <span class="glyphicon glyphicon-user hidden-xs"><?= session('nombre'); ?></span>
+                <span class="glyphicon glyphicon-user hidden-xs">{{ session('nombre', 'Usuario') }}</span>
               </a>
               <ul class="dropdown-menu">
                 <li class="user-footer">
                   <div class="pull-left">
-                    <a href="{{ asset('') }}administrador/Ccuentas" class="btn btn-default btn-flat">Perfil</a>
+                    <a href="{{ route('huv.profile') }}" class="btn btn-default btn-flat">Perfil</a>
                   </div>
                   <div class="pull-right">
-                    <a href="<?= base_url(); ?>Cauth/logout" class="btn btn-default btn-flat">Salir</a>
+                    <a href="{{ route('huv.logout') }}" class="btn btn-default btn-flat">Salir</a>
                   </div>
                 </li>
               </ul>
