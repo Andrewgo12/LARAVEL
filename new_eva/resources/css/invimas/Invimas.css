@@ -1,0 +1,34 @@
+.item-edicion {
+	color: blue;
+	font-size: 15px;
+	font-weight: 500;
+}
+.item-eliminacion {
+	color: red;
+	font-size: 15px;
+	font-weight: 500;
+}
+.item-activacion {
+	color: green;
+	font-size: 15px;
+	font-weight: 500;
+}
+.sangria800 {
+	font-weight: 800;
+}
+.verde {
+	color: green;
+}
+.rojo {
+	color: red;
+}
+.invima_multiple {
+	color: #522015;
+	font-size: 20px;
+}
+.smallmsj {
+	font-size: 9px;
+}
+.centrar-horizontal {
+	text-align: center;
+}

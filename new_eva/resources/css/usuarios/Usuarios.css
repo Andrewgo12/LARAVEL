@@ -1,0 +1,13 @@
+table {
+	width: 100%;
+}
+
+th {
+	height: 25px;
+}
+
+table tr,
+table td,
+table th {
+	padding-left: 10px;
+}

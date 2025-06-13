@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <td>
+    <section class="table-section">
+      <ul class="list-inline">
+        <li class="list-inline-item"><a title="Visualizar hoja de vida" href="#"
+            class="btn btn-info glyphicon glyphicon-search" data-toggle="modal" data-target="#modal_show_equipo"
+            onclick="show_equipo(538,undefined,undefined,undefined)"></a></li>
+        <li class="list-inline-item"><a title="Editar la información del equipo"
+            class="btn btn-primary glyphicon glyphicon-pencil"
+            onclick="recover_modal_edit(538,event,function(){abrir_modal_update_equipo();})"></a></li>
+        <li class="list-inline-item"><a title="Adicionar archivos" href="#"
+            class="btn btn-warning glyphicon glyphicon-paperclip" data-toggle="modal" data-target="#modal_add_archivo"
+            onclick="show_equipo_archivos(538)"></a></li>
+        <li class="list-inline-item"><a title="Consolidado de capacitaciones" href="#"
+            class="btn btn-success glyphicon glyphicon-list-alt" data-toggle="modal" data-target="#modal_show_archivos"
+            onclick="show_capacitaciones(538)"></a></li>
+        <li class="list-inline-item"><a title="Asociar baja del equipo" href="#"
+            class="btn btn-danger glyphicon glyphicon-remove-sign" data-toggle="modal"
+            data-target="#modal_consulta_baja" onclick="show_consulta_baja(event,538)"></a></li>
+        <ul>
+          <li><span class="glyphicon glyphicon-ok"></span></li>
+        </ul>
+      </ul>
+    </section>
+  </td>
+</body>
+
+</html>

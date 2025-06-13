@@ -1,0 +1,26 @@
+<div class="text-center">
+</div>
+
+<table class="table table-stripped">
+	<thead>
+		<tr>
+			<th>Asunto</th>
+			<th>Descripcion</th>
+			<th>Fecha creación</th>
+			<th>Estado</th>
+			<th></th>
+		</tr>
+
+	</thead>
+	<tbody>
+		@foreach($ordenes_activas as $orden_activa)
+			<tr>
+				<td><?php echo $orden_activa->asunto; ?></td>
+				<td><?php echo $orden_activa->descripcion; ?></td>
+				<td><?php echo $orden_activa->fecha_inicio; ?></td>
+				<td><?php echo $orden_activa->estado; ?></td>
+				<td><a href="" class="glyphicon glyphicon-pencil" data-toggle="modal" data-target="#modal_edit_orden_activa" onclick="recover_modal_edit_orden_activa(<?php echo $orden_activa->id; ?>)"></a></td>
+			</tr>
+		<?php endforeach ?>
+	</tbody>
+</table>

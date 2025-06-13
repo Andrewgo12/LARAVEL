@@ -1,0 +1,26 @@
+.dataTables_wrapper .dataTables_paginate {
+	float: left;
+	text-align: right;
+	padding-top: 0.25em;
+}
+
+.btn-personalizado {
+	background-color: #5f686d; /* Blue background */
+	border: none; /* Remove borders */
+	color: white; /* White text */
+	padding: 12px 16px; /* Some padding */
+	font-size: 16px; /* Set a font size */
+	cursor: pointer; /* Mouse pointer on hover */
+	border-radius: 12px;
+}
+.btn-personalizado:hover {
+	background-color: #222d32;
+	color: white; /* White text */
+}
+
+body .modal-dialog,
+body .modal-show {
+	width: 1500px;
+	margin: auto;
+	overflow-x: auto;
+}

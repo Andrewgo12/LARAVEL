@@ -1,0 +1,1230 @@
+.modal .modal-dialog {
+	overflow-x: auto;
+}
+
+.modal .modal-dialog {
+	width: 90%;
+}
+
+.limitado {
+	width: 260px;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+}
+
+.ajustar-texto {
+	white-space: normal;
+}
+
+.xl154158 {
+	padding: 0px;
+	mso-ignore: padding;
+	color: windowtext;
+	font-size: 10pt;
+	font-weight: 400;
+	font-style: normal;
+	text-decoration: none;
+	font-family: 'Trebuchet MS', sans-serif;
+	mso-font-charset: 0;
+	mso-number-format: General;
+	text-align: general;
+	vertical-align: bottom;
+	mso-background-source: auto;
+	mso-pattern: auto;
+	white-space: nowrap;
+}
+
+.xl644158 {
+	padding: 0px;
+	mso-ignore: padding;
+	color: windowtext;
+	font-size: 10pt;
+	font-weight: 400;
+	font-style: normal;
+	text-decoration: none;
+	font-family: 'Trebuchet MS', sans-serif;
+	mso-font-charset: 0;
+	mso-number-format: General;
+	text-align: left;
+	vertical-align: top;
+	border-top: none;
+	border-right: none;
+	border-bottom: 0.5pt dotted #666666;
+	border-left: none;
+	mso-background-source: auto;
+	mso-pattern: auto;
+	mso-protection: unlocked visible;
+	white-space: nowrap;
+}
+
+.xl654158 {
+	padding: 0px;
+	mso-ignore: padding;
+	color: windowtext;
+	font-size: 10pt;
+	font-weight: 400;
+	font-style: normal;
+	text-decoration: none;
+	font-family: 'Trebuchet MS', sans-serif;
+	mso-font-charset: 0;
+	mso-number-format: General;
+	text-align: general;
+	vertical-align: bottom;
+	border-top: none;
+	border-right: none;
+	border-bottom: 0.5pt dotted #666666;
+	border-left: none;
+	mso-background-source: auto;
+	mso-pattern: auto;
+	white-space: nowrap;
+}
+
+.xl664158 {
+	padding: 0px;
+	mso-ignore: padding;
+	color: windowtext;
+	font-size: 10pt;
+	font-weight: 400;
+	font-style: normal;
+	text-decoration: none;
+	font-family: 'Trebuchet MS', sans-serif;
+	mso-font-charset: 0;
+	mso-number-format: General;
+	text-align: right;
+	vertical-align: bottom;
+	mso-background-source: auto;
+	mso-pattern: auto;
+	white-space: nowrap;
+}
+
+.xl674158 {
+	color: windowtext;
+	font-size: 10pt;
+	font-weight: 400;
+	font-style: normal;
+	text-decoration: none;
+	font-family: 'Trebuchet MS', sans-serif;
+	mso-font-charset: 0;
+	mso-number-format: General;
+	text-align: left;
+	vertical-align: top;
+	mso-background-source: auto;
+	mso-pattern: auto;
+	white-space: nowrap;
+	padding-left: 12px;
+	mso-char-indent-count: 1;
+}
+
+.xl684158 {
+	padding: 0px;
+	mso-ignore: padding;
+	color: windowtext;
+	font-size: 10pt;
+	font-weight: 400;
+	font-style: normal;
+	text-decoration: none;
+	font-family: 'Trebuchet MS', sans-serif;
+	mso-font-charset: 0;
+	mso-number-format: General;
+	text-align: center;
+	vertical-align: bottom;
+	mso-background-source: auto;
+	mso-pattern: auto;
+	white-space: normal;
+}
+
+.xl694158 {
+	padding: 0px;
+	mso-ignore: padding;
+	color: windowtext;
+	font-size: 10pt;
+	font-weight: 400;
+	font-style: normal;
+	text-decoration: none;
+	font-family: 'Trebuchet MS', sans-serif;
+	mso-font-charset: 0;
+	mso-number-format: General;
+	text-align: left;
+	vertical-align: bottom;
+	mso-background-source: auto;
+	mso-pattern: auto;
+	mso-protection: unlocked visible;
+	white-space: nowrap;
+}
+
+.xl704158 {
+	padding: 0px;
+	mso-ignore: padding;
+	color: windowtext;
+	font-size: 10pt;
+	font-weight: 400;
+	font-style: normal;
+	text-decoration: none;
+	font-family: 'Trebuchet MS', sans-serif;
+	mso-font-charset: 0;
+	mso-number-format: General;
+	text-align: center;
+	vertical-align: bottom;
+	mso-background-source: auto;
+	mso-pattern: auto;
+	white-space: nowrap;
+}
+
+.xl714158 {
+	color: windowtext;
+	font-size: 10pt;
+	font-weight: 400;
+	font-style: normal;
+	text-decoration: none;
+	font-family: 'Trebuchet MS', sans-serif;
+	mso-font-charset: 0;
+	mso-number-format: General;
+	text-align: left;
+	vertical-align: top;
+	mso-background-source: auto;
+	mso-pattern: auto;
+	white-space: normal;
+	padding-left: 12px;
+	mso-char-indent-count: 1;
+}
+
+.xl724158 {
+	padding: 0px;
+	mso-ignore: padding;
+	color: windowtext;
+	font-size: 10pt;
+	font-weight: 400;
+	font-style: normal;
+	text-decoration: none;
+	font-family: 'Trebuchet MS', sans-serif;
+	mso-font-charset: 0;
+	mso-number-format: General;
+	text-align: general;
+	vertical-align: bottom;
+	border-top: 0.5pt solid windowtext;
+	border-right: none;
+	border-bottom: none;
+	border-left: none;
+	mso-background-source: auto;
+	mso-pattern: auto;
+	white-space: nowrap;
+}
+
+.xl734158 {
+	padding: 0px;
+	mso-ignore: padding;
+	color: windowtext;
+	font-size: 11pt;
+	font-weight: 700;
+	font-style: normal;
+	text-decoration: none;
+	font-family: 'Trebuchet MS', sans-serif;
+	mso-font-charset: 0;
+	mso-number-format: General;
+	text-align: right;
+	vertical-align: bottom;
+	mso-background-source: auto;
+	mso-pattern: auto;
+	white-space: nowrap;
+}
+
+.xl744158 {
+	color: windowtext;
+	font-size: 10pt;
+	font-weight: 400;
+	font-style: normal;
+	text-decoration: none;
+	font-family: 'Trebuchet MS', sans-serif;
+	mso-font-charset: 0;
+	mso-number-format: General;
+	text-align: right;
+	vertical-align: bottom;
+	mso-background-source: auto;
+	mso-pattern: auto;
+	white-space: nowrap;
+	padding-right: 12px;
+	mso-char-indent-count: 1;
+}
+
+.xl754158 {
+	padding: 0px;
+	mso-ignore: padding;
+	color: windowtext;
+	font-size: 10pt;
+	font-weight: 400;
+	font-style: normal;
+	text-decoration: none;
+	font-family: 'Trebuchet MS', sans-serif;
+	mso-font-charset: 0;
+	mso-number-format: General;
+	text-align: general;
+	vertical-align: bottom;
+	border-top: none;
+	border-right: 0.5pt solid windowtext;
+	border-bottom: none;
+	border-left: none;
+	mso-background-source: auto;
+	mso-pattern: auto;
+	white-space: nowrap;
+}
+
+.xl764158 {
+	padding: 0px;
+	mso-ignore: padding;
+	color: windowtext;
+	font-size: 10pt;
+	font-weight: 400;
+	font-style: normal;
+	text-decoration: none;
+	font-family: 'Trebuchet MS', sans-serif;
+	mso-font-charset: 0;
+	mso-number-format: General;
+	text-align: general;
+	vertical-align: bottom;
+	border-top: none;
+	border-right: none;
+	border-bottom: none;
+	border-left: 0.5pt solid windowtext;
+	mso-background-source: auto;
+	mso-pattern: auto;
+	white-space: nowrap;
+}
+
+.xl774158 {
+	padding: 0px;
+	mso-ignore: padding;
+	color: windowtext;
+	font-size: 10pt;
+	font-weight: 400;
+	font-style: normal;
+	text-decoration: none;
+	font-family: 'Trebuchet MS', sans-serif;
+	mso-font-charset: 0;
+	mso-number-format: General;
+	text-align: left;
+	vertical-align: top;
+	mso-background-source: auto;
+	mso-pattern: auto;
+	mso-protection: unlocked visible;
+	white-space: nowrap;
+}
+
+.xl784158 {
+	padding: 0px;
+	mso-ignore: padding;
+	color: windowtext;
+	font-size: 10pt;
+	font-weight: 700;
+	font-style: normal;
+	text-decoration: none;
+	font-family: 'Trebuchet MS', sans-serif;
+	mso-font-charset: 0;
+	mso-number-format: General;
+	text-align: center;
+	vertical-align: top;
+	mso-background-source: auto;
+	mso-pattern: auto;
+	mso-protection: unlocked visible;
+	white-space: nowrap;
+}
+
+.xl794158 {
+	padding: 0px;
+	mso-ignore: padding;
+	color: windowtext;
+	font-size: 10pt;
+	font-weight: 400;
+	font-style: normal;
+	text-decoration: none;
+	font-family: 'Trebuchet MS', sans-serif;
+	mso-font-charset: 0;
+	mso-number-format: General;
+	text-align: right;
+	vertical-align: bottom;
+	mso-background-source: auto;
+	mso-pattern: auto;
+	white-space: normal;
+}
+
+.xl804158 {
+	color: #2c3a65;
+	font-size: 16pt;
+	font-weight: 400;
+	font-style: normal;
+	text-decoration: none;
+	font-family: Arial, sans-serif;
+	mso-font-charset: 0;
+	mso-number-format: General;
+	text-align: left;
+	vertical-align: middle;
+	mso-background-source: auto;
+	mso-pattern: auto;
+	white-space: nowrap;
+	padding-left: 60px;
+	mso-char-indent-count: 5;
+}
+
+.xl814158 {
+	padding: 0px;
+	mso-ignore: padding;
+	color: windowtext;
+	font-size: 20pt;
+	font-weight: 400;
+	font-style: normal;
+	text-decoration: none;
+	font-family: Arial, sans-serif;
+	mso-font-charset: 0;
+	mso-number-format: General;
+	text-align: general;
+	vertical-align: middle;
+	mso-background-source: auto;
+	mso-pattern: auto;
+	white-space: nowrap;
+}
+
+.xl824158 {
+	padding: 0px;
+	mso-ignore: padding;
+	color: windowtext;
+	font-size: 16pt;
+	font-weight: 400;
+	font-style: normal;
+	text-decoration: none;
+	font-family: Arial, sans-serif;
+	mso-font-charset: 0;
+	mso-number-format: General;
+	text-align: general;
+	vertical-align: middle;
+	mso-background-source: auto;
+	mso-pattern: auto;
+	white-space: nowrap;
+}
+
+.xl834158 {
+	padding: 0px;
+	mso-ignore: padding;
+	color: #3a5d9c;
+	font-size: 28pt;
+	font-weight: 400;
+	font-style: normal;
+	text-decoration: none;
+	font-family: Arial, sans-serif;
+	mso-font-charset: 0;
+	mso-number-format: General;
+	text-align: general;
+	vertical-align: middle;
+	mso-background-source: auto;
+	mso-pattern: auto;
+	white-space: nowrap;
+}
+
+.xl844158 {
+	color: windowtext;
+	font-size: 10pt;
+	font-weight: 400;
+	font-style: normal;
+	text-decoration: none;
+	font-family: 'Trebuchet MS', sans-serif;
+	mso-font-charset: 0;
+	mso-number-format: General;
+	text-align: right;
+	vertical-align: bottom;
+	mso-background-source: auto;
+	mso-pattern: auto;
+	mso-protection: unlocked visible;
+	white-space: nowrap;
+	padding-right: 12px;
+	mso-char-indent-count: 1;
+}
+
+.xl854158 {
+	color: windowtext;
+	font-size: 10pt;
+	font-weight: 400;
+	font-style: normal;
+	text-decoration: none;
+	font-family: 'Trebuchet MS', sans-serif;
+	mso-font-charset: 0;
+	mso-number-format: General;
+	text-align: left;
+	vertical-align: bottom;
+	mso-background-source: auto;
+	mso-pattern: auto;
+	white-space: nowrap;
+	padding-left: 12px;
+	mso-char-indent-count: 1;
+}
+
+.xl864158 {
+	padding: 0px;
+	mso-ignore: padding;
+	color: windowtext;
+	font-size: 10pt;
+	font-weight: 400;
+	font-style: normal;
+	text-decoration: none;
+	font-family: 'Trebuchet MS', sans-serif;
+	mso-font-charset: 0;
+	mso-number-format: General;
+	text-align: general;
+	vertical-align: bottom;
+	border-top: 0.5pt solid windowtext;
+	border-right: none;
+	border-bottom: none;
+	border-left: 0.5pt solid windowtext;
+	mso-background-source: auto;
+	mso-pattern: auto;
+	white-space: nowrap;
+}
+
+.xl874158 {
+	padding: 0px;
+	mso-ignore: padding;
+	color: windowtext;
+	font-size: 10pt;
+	font-weight: 400;
+	font-style: normal;
+	text-decoration: none;
+	font-family: 'Trebuchet MS', sans-serif;
+	mso-font-charset: 0;
+	mso-number-format: General;
+	text-align: general;
+	vertical-align: bottom;
+	border-top: 0.5pt solid windowtext;
+	border-right: 0.5pt solid windowtext;
+	border-bottom: none;
+	border-left: none;
+	mso-background-source: auto;
+	mso-pattern: auto;
+	white-space: nowrap;
+}
+
+.xl884158 {
+	padding: 0px;
+	mso-ignore: padding;
+	color: windowtext;
+	font-size: 10pt;
+	font-weight: 400;
+	font-style: normal;
+	text-decoration: none;
+	font-family: 'Trebuchet MS', sans-serif;
+	mso-font-charset: 0;
+	mso-number-format: General;
+	text-align: general;
+	vertical-align: bottom;
+	border-top: none;
+	border-right: none;
+	border-bottom: 0.5pt solid windowtext;
+	border-left: 0.5pt solid windowtext;
+	mso-background-source: auto;
+	mso-pattern: auto;
+	white-space: nowrap;
+}
+
+.xl894158 {
+	padding: 0px;
+	mso-ignore: padding;
+	color: windowtext;
+	font-size: 10pt;
+	font-weight: 400;
+	font-style: normal;
+	text-decoration: none;
+	font-family: 'Trebuchet MS', sans-serif;
+	mso-font-charset: 0;
+	mso-number-format: General;
+	text-align: general;
+	vertical-align: bottom;
+	border-top: none;
+	border-right: 0.5pt solid windowtext;
+	border-bottom: 0.5pt solid windowtext;
+	border-left: none;
+	mso-background-source: auto;
+	mso-pattern: auto;
+	white-space: nowrap;
+}
+
+.xl904158 {
+	padding: 0px;
+	mso-ignore: padding;
+	color: windowtext;
+	font-size: 12pt;
+	font-weight: 700;
+	font-style: italic;
+	text-decoration: none;
+	font-family: 'Trebuchet MS', sans-serif;
+	mso-font-charset: 0;
+	mso-number-format: General;
+	text-align: center;
+	vertical-align: bottom;
+	border-top: none;
+	border-right: none;
+	border-bottom: 0.5pt solid windowtext;
+	border-left: none;
+	mso-background-source: auto;
+	mso-pattern: auto;
+	white-space: nowrap;
+}
+
+.xl914158 {
+	padding: 0px;
+	mso-ignore: padding;
+	color: windowtext;
+	font-size: 10pt;
+	font-weight: 400;
+	font-style: normal;
+	text-decoration: none;
+	font-family: 'Trebuchet MS', sans-serif;
+	mso-font-charset: 0;
+	mso-number-format: General;
+	text-align: center;
+	vertical-align: bottom;
+	border-top: 0.5pt dotted #666666;
+	border-right: none;
+	border-bottom: none;
+	border-left: none;
+	mso-background-source: auto;
+	mso-pattern: auto;
+	white-space: nowrap;
+}
+
+.xl924158 {
+	color: white;
+	font-size: 10pt;
+	font-weight: 700;
+	font-style: normal;
+	text-decoration: none;
+	font-family: Arial, sans-serif;
+	mso-font-charset: 0;
+	mso-number-format: General;
+	text-align: left;
+	vertical-align: bottom;
+	border-top: none;
+	border-right: none;
+	border-bottom: none;
+	border-left: 0.5pt solid windowtext;
+	background: #3b4e87;
+	mso-pattern: black none;
+	white-space: nowrap;
+	padding-left: 12px;
+	mso-char-indent-count: 1;
+}
+
+.xl934158 {
+	color: white;
+	font-size: 10pt;
+	font-weight: 700;
+	font-style: normal;
+	text-decoration: none;
+	font-family: Arial, sans-serif;
+	mso-font-charset: 0;
+	mso-number-format: General;
+	text-align: left;
+	vertical-align: bottom;
+	background: #3b4e87;
+	mso-pattern: black none;
+	white-space: nowrap;
+	padding-left: 12px;
+	mso-char-indent-count: 1;
+}
+
+.xl944158 {
+	padding: 0px;
+	mso-ignore: padding;
+	color: white;
+	font-size: 10pt;
+	font-weight: 700;
+	font-style: normal;
+	text-decoration: none;
+	font-family: Arial, sans-serif;
+	mso-font-charset: 0;
+	mso-number-format: General;
+	text-align: left;
+	vertical-align: bottom;
+	background: #3b4e87;
+	mso-pattern: black none;
+	white-space: nowrap;
+}
+
+.xl954158 {
+	padding: 0px;
+	mso-ignore: padding;
+	color: white;
+	font-size: 10pt;
+	font-weight: 700;
+	font-style: normal;
+	text-decoration: none;
+	font-family: Arial, sans-serif;
+	mso-font-charset: 0;
+	mso-number-format: General;
+	text-align: left;
+	vertical-align: bottom;
+	border-top: none;
+	border-right: 0.5pt solid windowtext;
+	border-bottom: none;
+	border-left: none;
+	background: #3b4e87;
+	mso-pattern: black none;
+	white-space: nowrap;
+}
+
+.xl964158 {
+	padding: 0px;
+	mso-ignore: padding;
+	color: #7a8dc5;
+	font-size: 24pt;
+	font-weight: 400;
+	font-style: normal;
+	text-decoration: none;
+	font-family: Arial, sans-serif;
+	mso-font-charset: 0;
+	mso-number-format: General;
+	text-align: general;
+	vertical-align: middle;
+	mso-background-source: auto;
+	mso-pattern: auto;
+	white-space: nowrap;
+}
+
+.xl974158 {
+	padding: 0px;
+	mso-ignore: padding;
+	color: windowtext;
+	font-size: 10pt;
+	font-weight: 400;
+	font-style: normal;
+	text-decoration: none;
+	font-family: 'Trebuchet MS', sans-serif;
+	mso-font-charset: 0;
+	mso-number-format: General;
+	text-align: center;
+	vertical-align: bottom;
+	border: 0.5pt solid windowtext;
+	mso-background-source: auto;
+	mso-pattern: auto;
+	white-space: normal;
+}
+
+.xl984158 {
+	padding: 0px;
+	mso-ignore: padding;
+	color: windowtext;
+	font-size: 10pt;
+	font-weight: 400;
+	font-style: normal;
+	text-decoration: none;
+	font-family: 'Trebuchet MS', sans-serif;
+	mso-font-charset: 0;
+	mso-number-format: General;
+	text-align: center;
+	vertical-align: bottom;
+	border: 0.5pt solid windowtext;
+	mso-background-source: auto;
+	mso-pattern: auto;
+	white-space: nowrap;
+}
+
+.xl994158 {
+	padding: 0px;
+	mso-ignore: padding;
+	color: white;
+	font-size: 10pt;
+	font-weight: 700;
+	font-style: normal;
+	text-decoration: none;
+	font-family: Arial, sans-serif;
+	mso-font-charset: 0;
+	mso-number-format: General;
+	text-align: left;
+	vertical-align: bottom;
+	border: 0.5pt solid windowtext;
+	background: #3b4e87;
+	mso-pattern: black none;
+	white-space: nowrap;
+}
+
+.xl1004158 {
+	padding: 0px;
+	mso-ignore: padding;
+	color: windowtext;
+	font-size: 11pt;
+	font-weight: 700;
+	font-style: normal;
+	text-decoration: none;
+	font-family: 'Trebuchet MS', sans-serif;
+	mso-font-charset: 0;
+	mso-number-format: General;
+	text-align: center;
+	vertical-align: bottom;
+	border: 0.5pt solid windowtext;
+	mso-background-source: auto;
+	mso-pattern: auto;
+	mso-protection: unlocked visible;
+	white-space: nowrap;
+}
+
+.xl1014158 {
+	padding: 0px;
+	mso-ignore: padding;
+	color: windowtext;
+	font-size: 11pt;
+	font-weight: 400;
+	font-style: normal;
+	text-decoration: none;
+	font-family: 'Trebuchet MS', sans-serif;
+	mso-font-charset: 0;
+	mso-number-format: 'Short Date';
+	text-align: center;
+	vertical-align: bottom;
+	mso-background-source: auto;
+	mso-pattern: auto;
+	mso-protection: unlocked visible;
+	white-space: nowrap;
+	mso-text-control: shrinktofit;
+}
+
+.xl1024158 {
+	padding: 0px;
+	mso-ignore: padding;
+	color: white;
+	font-size: 10pt;
+	font-weight: 700;
+	font-style: normal;
+	text-decoration: none;
+	font-family: Arial, sans-serif;
+	mso-font-charset: 0;
+	mso-number-format: General;
+	text-align: center;
+	vertical-align: bottom;
+	border-top: none;
+	border-right: none;
+	border-bottom: none;
+	border-left: 0.5pt solid windowtext;
+	background: #3b4e87;
+	mso-pattern: black none;
+	white-space: nowrap;
+}
+
+.xl1034158 {
+	padding: 0px;
+	mso-ignore: padding;
+	color: white;
+	font-size: 10pt;
+	font-weight: 700;
+	font-style: normal;
+	text-decoration: none;
+	font-family: Arial, sans-serif;
+	mso-font-charset: 0;
+	mso-number-format: General;
+	text-align: center;
+	vertical-align: bottom;
+	background: #3b4e87;
+	mso-pattern: black none;
+	white-space: nowrap;
+}
+
+.xl1044158 {
+	padding: 0px;
+	mso-ignore: padding;
+	color: windowtext;
+	font-size: 10pt;
+	font-weight: 400;
+	font-style: normal;
+	text-decoration: none;
+	font-family: 'Trebuchet MS', sans-serif;
+	mso-font-charset: 0;
+	mso-number-format: General;
+	text-align: left;
+	vertical-align: bottom;
+	mso-background-source: auto;
+	mso-pattern: auto;
+	white-space: nowrap;
+}
+
+.xl1054158 {
+	padding: 0px;
+	mso-ignore: padding;
+	color: windowtext;
+	font-size: 10pt;
+	font-weight: 400;
+	font-style: normal;
+	text-decoration: none;
+	font-family: 'Trebuchet MS', sans-serif;
+	mso-font-charset: 0;
+	mso-number-format: General;
+	text-align: center;
+	vertical-align: middle;
+	border: 0.5pt solid windowtext;
+	mso-background-source: auto;
+	mso-pattern: auto;
+	white-space: nowrap;
+}
+
+.xl1064158 {
+	padding: 0px;
+	mso-ignore: padding;
+	color: windowtext;
+	font-size: 10pt;
+	font-weight: 400;
+	font-style: normal;
+	text-decoration: none;
+	font-family: 'Trebuchet MS', sans-serif;
+	mso-font-charset: 0;
+	mso-number-format: General;
+	text-align: center;
+	vertical-align: middle;
+	border-top: 0.5pt hairline windowtext;
+	border-right: 0.5pt hairline windowtext;
+	border-bottom: 0.5pt hairline windowtext;
+	border-left: 0.5pt solid windowtext;
+	mso-background-source: auto;
+	mso-pattern: auto;
+	white-space: normal;
+}
+
+.xl1074158 {
+	padding: 0px;
+	mso-ignore: padding;
+	color: windowtext;
+	font-size: 10pt;
+	font-weight: 400;
+	font-style: normal;
+	text-decoration: none;
+	font-family: 'Trebuchet MS', sans-serif;
+	mso-font-charset: 0;
+	mso-number-format: General;
+	text-align: center;
+	vertical-align: middle;
+	border: 0.5pt hairline windowtext;
+	mso-background-source: auto;
+	mso-pattern: auto;
+	white-space: normal;
+}
+
+.xl1084158 {
+	padding: 0px;
+	mso-ignore: padding;
+	color: windowtext;
+	font-size: 10pt;
+	font-weight: 400;
+	font-style: normal;
+	text-decoration: none;
+	font-family: 'Trebuchet MS', sans-serif;
+	mso-font-charset: 0;
+	mso-number-format: General;
+	text-align: center;
+	vertical-align: middle;
+	border-top: 0.5pt hairline windowtext;
+	border-right: none;
+	border-bottom: 0.5pt hairline windowtext;
+	border-left: 0.5pt hairline windowtext;
+	mso-background-source: auto;
+	mso-pattern: auto;
+	white-space: normal;
+}
+
+.xl1094158 {
+	padding: 0px;
+	mso-ignore: padding;
+	color: windowtext;
+	font-size: 10pt;
+	font-weight: 400;
+	font-style: normal;
+	text-decoration: none;
+	font-family: 'Trebuchet MS', sans-serif;
+	mso-font-charset: 0;
+	mso-number-format: General;
+	text-align: center;
+	vertical-align: middle;
+	border-top: 0.5pt hairline windowtext;
+	border-right: 0.5pt hairline windowtext;
+	border-bottom: 0.5pt solid windowtext;
+	border-left: 0.5pt solid windowtext;
+	mso-background-source: auto;
+	mso-pattern: auto;
+	white-space: normal;
+}
+
+.xl1104158 {
+	padding: 0px;
+	mso-ignore: padding;
+	color: windowtext;
+	font-size: 10pt;
+	font-weight: 400;
+	font-style: normal;
+	text-decoration: none;
+	font-family: 'Trebuchet MS', sans-serif;
+	mso-font-charset: 0;
+	mso-number-format: General;
+	text-align: center;
+	vertical-align: middle;
+	border-top: 0.5pt hairline windowtext;
+	border-right: 0.5pt hairline windowtext;
+	border-bottom: 0.5pt solid windowtext;
+	border-left: 0.5pt hairline windowtext;
+	mso-background-source: auto;
+	mso-pattern: auto;
+	white-space: normal;
+}
+
+.xl1114158 {
+	padding: 0px;
+	mso-ignore: padding;
+	color: windowtext;
+	font-size: 10pt;
+	font-weight: 400;
+	font-style: normal;
+	text-decoration: none;
+	font-family: 'Trebuchet MS', sans-serif;
+	mso-font-charset: 0;
+	mso-number-format: General;
+	text-align: center;
+	vertical-align: middle;
+	border-top: 0.5pt hairline windowtext;
+	border-right: none;
+	border-bottom: 0.5pt solid windowtext;
+	border-left: 0.5pt hairline windowtext;
+	mso-background-source: auto;
+	mso-pattern: auto;
+	white-space: normal;
+}
+
+.xl1124158 {
+	padding: 0px;
+	mso-ignore: padding;
+	color: windowtext;
+	font-size: 10pt;
+	font-weight: 400;
+	font-style: normal;
+	text-decoration: none;
+	font-family: 'Trebuchet MS', sans-serif;
+	mso-font-charset: 0;
+	mso-number-format: General;
+	text-align: center;
+	vertical-align: middle;
+	border: 0.5pt solid windowtext;
+	mso-background-source: auto;
+	mso-pattern: auto;
+	white-space: normal;
+}
+
+.xl1134158 {
+	padding: 0px;
+	mso-ignore: padding;
+	color: windowtext;
+	font-size: 10pt;
+	font-weight: 400;
+	font-style: normal;
+	text-decoration: none;
+	font-family: 'Trebuchet MS', sans-serif;
+	mso-font-charset: 0;
+	mso-number-format: General;
+	text-align: left;
+	vertical-align: middle;
+	border-top: 0.5pt solid windowtext;
+	border-right: none;
+	border-bottom: 0.5pt solid windowtext;
+	border-left: 0.5pt solid windowtext;
+	mso-background-source: auto;
+	mso-pattern: auto;
+	white-space: nowrap;
+}
+
+.xl1144158 {
+	padding: 0px;
+	mso-ignore: padding;
+	color: windowtext;
+	font-size: 10pt;
+	font-weight: 400;
+	font-style: normal;
+	text-decoration: none;
+	font-family: 'Trebuchet MS', sans-serif;
+	mso-font-charset: 0;
+	mso-number-format: General;
+	text-align: left;
+	vertical-align: middle;
+	border-top: 0.5pt solid windowtext;
+	border-right: none;
+	border-bottom: 0.5pt solid windowtext;
+	border-left: none;
+	mso-background-source: auto;
+	mso-pattern: auto;
+	white-space: nowrap;
+}
+
+.xl1154158 {
+	padding: 0px;
+	mso-ignore: padding;
+	color: windowtext;
+	font-size: 10pt;
+	font-weight: 400;
+	font-style: normal;
+	text-decoration: none;
+	font-family: 'Trebuchet MS', sans-serif;
+	mso-font-charset: 0;
+	mso-number-format: General;
+	text-align: left;
+	vertical-align: middle;
+	border-top: 0.5pt solid windowtext;
+	border-right: 0.5pt solid windowtext;
+	border-bottom: 0.5pt solid windowtext;
+	border-left: none;
+	mso-background-source: auto;
+	mso-pattern: auto;
+	white-space: nowrap;
+}
+
+.xl1164158 {
+	padding: 0px;
+	mso-ignore: padding;
+	color: windowtext;
+	font-size: 10pt;
+	font-weight: 400;
+	font-style: normal;
+	text-decoration: none;
+	font-family: 'Trebuchet MS', sans-serif;
+	mso-font-charset: 0;
+	mso-number-format: General;
+	text-align: center;
+	vertical-align: middle;
+	border-top: none;
+	border-right: none;
+	border-bottom: 0.5pt solid windowtext;
+	border-left: none;
+	mso-background-source: auto;
+	mso-pattern: auto;
+	white-space: normal;
+}
+
+.xl1174158 {
+	padding: 0px;
+	mso-ignore: padding;
+	color: windowtext;
+	font-size: 10pt;
+	font-weight: 400;
+	font-style: normal;
+	text-decoration: none;
+	font-family: 'Trebuchet MS', sans-serif;
+	mso-font-charset: 0;
+	mso-number-format: General;
+	text-align: center;
+	vertical-align: middle;
+	border-top: none;
+	border-right: none;
+	border-bottom: 0.5pt solid windowtext;
+	border-left: none;
+	mso-background-source: auto;
+	mso-pattern: auto;
+	white-space: nowrap;
+}
+
+.xl1184158 {
+	padding: 0px;
+	mso-ignore: padding;
+	color: windowtext;
+	font-size: 10pt;
+	font-weight: 400;
+	font-style: normal;
+	text-decoration: none;
+	font-family: 'Trebuchet MS', sans-serif;
+	mso-font-charset: 0;
+	mso-number-format: General;
+	text-align: left;
+	vertical-align: middle;
+	border-top: none;
+	border-right: none;
+	border-bottom: 0.5pt solid windowtext;
+	border-left: none;
+	mso-background-source: auto;
+	mso-pattern: auto;
+	mso-protection: unlocked visible;
+	white-space: nowrap;
+}
+
+.xl1194158 {
+	padding: 0px;
+	mso-ignore: padding;
+	color: windowtext;
+	font-size: 10pt;
+	font-weight: 400;
+	font-style: normal;
+	text-decoration: none;
+	font-family: 'Trebuchet MS', sans-serif;
+	mso-font-charset: 0;
+	mso-number-format: General;
+	text-align: left;
+	vertical-align: middle;
+	border-top: 0.5pt solid windowtext;
+	border-right: none;
+	border-bottom: 0.5pt solid windowtext;
+	border-left: none;
+	mso-background-source: auto;
+	mso-pattern: auto;
+	mso-protection: unlocked visible;
+	white-space: nowrap;
+}
+
+.xl1204158 {
+	padding: 0px;
+	mso-ignore: padding;
+	color: windowtext;
+	font-size: 10pt;
+	font-weight: 400;
+	font-style: normal;
+	text-decoration: none;
+	font-family: 'Trebuchet MS', sans-serif;
+	mso-font-charset: 0;
+	mso-number-format: General;
+	text-align: left;
+	vertical-align: middle;
+	border-top: none;
+	border-right: none;
+	border-bottom: 0.5pt solid windowtext;
+	border-left: none;
+	mso-background-source: auto;
+	mso-pattern: auto;
+	white-space: nowrap;
+}
+
+.xl1214158 {
+	padding: 0px;
+	mso-ignore: padding;
+	color: windowtext;
+	font-size: 11pt;
+	font-weight: 400;
+	font-style: normal;
+	text-decoration: none;
+	font-family: 'Trebuchet MS', sans-serif;
+	mso-font-charset: 0;
+	mso-number-format: 'Short Date';
+	text-align: left;
+	vertical-align: middle;
+	border-top: 0.5pt solid windowtext;
+	border-right: none;
+	border-bottom: 0.5pt solid windowtext;
+	border-left: none;
+	mso-background-source: auto;
+	mso-pattern: auto;
+	mso-protection: unlocked visible;
+	white-space: nowrap;
+	mso-text-control: shrinktofit;
+}
+
+.xl1224158 {
+	padding: 0px;
+	mso-ignore: padding;
+	color: windowtext;
+	font-size: 10pt;
+	font-weight: 400;
+	font-style: normal;
+	text-decoration: none;
+	font-family: 'Trebuchet MS', sans-serif;
+	mso-font-charset: 0;
+	mso-number-format: General;
+	text-align: center;
+	vertical-align: middle;
+	border: 1pt solid windowtext;
+	mso-background-source: auto;
+	mso-pattern: auto;
+	white-space: nowrap;
+}
