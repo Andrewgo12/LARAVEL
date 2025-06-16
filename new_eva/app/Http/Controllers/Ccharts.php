@@ -1,114 +1,140 @@
 <?php
 
-defined('BASEPATH') or exit('El acceso directo no esta permitido');
+namespace App\Http\Controllers;
 
-/**
- *
- */
-class Ccharts extends CI_Controller
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Session;
+use App\Models\Mordenes;
+use App\Models\Mcorrectivos_generales;
+use App\Models\Mplanes;
+use App\Models\Mpreventivos;
+use App\Models\Mcbiomedicas;
+use App\Models\Mcriesgos;
+use App\Models\Mequipos;
+use App\Models\Mestadoequipos;
+
+class CchartsController extends Controller
 {
-
-  function __construct()
-  {
-    parent::__construct();
-    if (!$this->session->userdata('id')) {
-      redirect('Cauth');
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->middleware(function ($request, $next) {
+            if (!Session::get('id')) {
+                return redirect()->route('auth.login');
+            }
+            return $next($request);
+        });
     }
-    $this->load->model("Mordenes");
-    $this->load->model("Mcorrectivos_generales");
-    $this->load->model("Mplanes");
-    $this->load->model("Mpreventivos");
-    $this->load->model("Mcbiomedicas");
-    $this->load->model("Mcriesgos");
-    $this->load->model("Mequipos");
-    $this->load->model("Mestadoequipos");
-  }
-  public function index()
-  {
+    public function index()
+    {
+        return view('admin.charts');
+    }
+    /*----------------Pagina 1 Estados---------------------*/
+    public function getGeneratedByDate(Request $request): JsonResponse
+    {
+        $mordenes = app(Mordenes::class);
+        return response()->json($mordenes->getGeneratedByDate($request->all()));
+    }
 
-    $this->load->view("layouts/header");
-    $this->load->view("layouts/aside");
-    $this->load->view('admin/charts');
-    $this->load->view('layouts/footer');
-  }
-  /*----------------Pagina 1 Estados---------------------*/
-  public function getGeneratedByDate()
-  {
-    echo json_encode($this->Mordenes->getGeneratedByDate($_POST));
-  }
-  public function getClosedByDate()
-  {
-    echo json_encode($this->Mordenes->getClosedByDate($_POST));
-  }
-  public function getByStatus()
-  {
-    echo json_encode($this->Mordenes->getByStatus($_POST));
-  }
-  /*----------------Pagina 1 Correctivos generales---------------------*/
+    public function getClosedByDate(Request $request): JsonResponse
+    {
+        $mordenes = app(Mordenes::class);
+        return response()->json($mordenes->getClosedByDate($request->all()));
+    }
 
-  public function getCorrectivosGeneralesGeneratedByDate()
-  {
-    echo json_encode($this->Mcorrectivos_generales->getCorrectivosGeneralesGeneratedByDate($_POST));
-  }
+    public function getByStatus(Request $request): JsonResponse
+    {
+        $mordenes = app(Mordenes::class);
+        return response()->json($mordenes->getByStatus($request->all()));
+    }
+    /*----------------Pagina 1 Correctivos generales---------------------*/
 
-  public function getCorrectivosGeneralesClosedByDate()
-  {
-    echo json_encode($this->Mcorrectivos_generales->getCorrectivosGeneralesClosedByDate($_POST));
-  }
+    public function getCorrectivosGeneralesGeneratedByDate(Request $request): JsonResponse
+    {
+        $mcorrectivos_generales = app(Mcorrectivos_generales::class);
+        return response()->json($mcorrectivos_generales->getCorrectivosGeneralesGeneratedByDate($request->all()));
+    }
 
-  public function getCorrectivosGeneralesByStatus()
-  {
-    echo json_encode($this->Mcorrectivos_generales->getCorrectivosGeneralesByStatus($_POST));
-  }
-  /*----------------Pagina 1 Tickets---------------------*/
+    public function getCorrectivosGeneralesClosedByDate(Request $request): JsonResponse
+    {
+        $mcorrectivos_generales = app(Mcorrectivos_generales::class);
+        return response()->json($mcorrectivos_generales->getCorrectivosGeneralesClosedByDate($request->all()));
+    }
 
-  public function getTicketsIndicador()
-  {
-    echo json_encode($this->Mordenes->getTicketsIndicador($_POST));
-  }
-  public function getCorrectivosGeneralesIndicador()
-  {
-    echo json_encode($this->Mcorrectivos_generales->getCorrectivosGeneralesIndicador($_POST));
-  }
+    public function getCorrectivosGeneralesByStatus(Request $request): JsonResponse
+    {
+        $mcorrectivos_generales = app(Mcorrectivos_generales::class);
+        return response()->json($mcorrectivos_generales->getCorrectivosGeneralesByStatus($request->all()));
+    }
+    /*----------------Pagina 1 Tickets---------------------*/
 
-  /*-----------------Pagina 2--------------------*/
+    public function getTicketsIndicador(Request $request): JsonResponse
+    {
+        $mordenes = app(Mordenes::class);
+        return response()->json($mordenes->getTicketsIndicador($request->all()));
+    }
 
-  public function getPreventivosProgramados()
-  {
-    echo json_encode($this->Mplanes->getPreventivosProgramados($_POST));
-  }
-  public function getPreventivosEjecutados()
-  {
-    echo json_encode($this->Mpreventivos->getPreventivosEjecutados($_POST));
-  }
-  public function getPreventivosIndicador()
-  {
-    echo json_encode($this->Mpreventivos->getPreventivosIndicador($_POST));
-  }
-  /*-----------------Pagina 3--------------------*/
+    public function getCorrectivosGeneralesIndicador(Request $request): JsonResponse
+    {
+        $mcorrectivos_generales = app(Mcorrectivos_generales::class);
+        return response()->json($mcorrectivos_generales->getCorrectivosGeneralesIndicador($request->all()));
+    }
 
-  public function getDistributionCbiomedicaOnDevices()
-  {
-    echo json_encode($this->Mcbiomedicas->getDistributionCbiomedicaOnDevices($_POST));
-  }
-  public function getDistributionCriesgoOnDevices()
-  {
-    echo json_encode($this->Mcriesgos->getDistributionCriesgoOnDevices($_POST));
-  }
-  public function getDistributionEstadosByDevice()
-  {
-    echo json_encode($this->Mestadoequipos->getDistributionEstadosByDevice($_POST));
-  }
-  public function getEquiposAdquisiciones()
-  {
-    echo json_encode($this->Mequipos->getEquiposAdquisiciones($_POST));
-  }
-  public function getEquiposInstalaciones()
-  {
-    echo json_encode($this->Mequipos->getEquiposInstalaciones($_POST));
-  }
-  public function getEquipoInstalacionAdquisicionIndicador()
-  {
-    echo json_encode($this->Mequipos->getEquipoInstalacionAdquisicionIndicador($_POST));
-  }
+    /*-----------------Pagina 2--------------------*/
+
+    public function getPreventivosProgramados(Request $request): JsonResponse
+    {
+        $mplanes = app(Mplanes::class);
+        return response()->json($mplanes->getPreventivosProgramados($request->all()));
+    }
+
+    public function getPreventivosEjecutados(Request $request): JsonResponse
+    {
+        $mpreventivos = app(Mpreventivos::class);
+        return response()->json($mpreventivos->getPreventivosEjecutados($request->all()));
+    }
+
+    public function getPreventivosIndicador(Request $request): JsonResponse
+    {
+        $mpreventivos = app(Mpreventivos::class);
+        return response()->json($mpreventivos->getPreventivosIndicador($request->all()));
+    }
+    /*-----------------Pagina 3--------------------*/
+
+    public function getDistributionCbiomedicaOnDevices(Request $request): JsonResponse
+    {
+        $mcbiomedicas = app(Mcbiomedicas::class);
+        return response()->json($mcbiomedicas->getDistributionCbiomedicaOnDevices($request->all()));
+    }
+
+    public function getDistributionCriesgoOnDevices(Request $request): JsonResponse
+    {
+        $mcriesgos = app(Mcriesgos::class);
+        return response()->json($mcriesgos->getDistributionCriesgoOnDevices($request->all()));
+    }
+
+    public function getDistributionEstadosByDevice(Request $request): JsonResponse
+    {
+        $mestadoequipos = app(Mestadoequipos::class);
+        return response()->json($mestadoequipos->getDistributionEstadosByDevice($request->all()));
+    }
+
+    public function getEquiposAdquisiciones(Request $request): JsonResponse
+    {
+        $mequipos = app(Mequipos::class);
+        return response()->json($mequipos->getEquiposAdquisiciones($request->all()));
+    }
+
+    public function getEquiposInstalaciones(Request $request): JsonResponse
+    {
+        $mequipos = app(Mequipos::class);
+        return response()->json($mequipos->getEquiposInstalaciones($request->all()));
+    }
+
+    public function getEquipoInstalacionAdquisicionIndicador(Request $request): JsonResponse
+    {
+        $mequipos = app(Mequipos::class);
+        return response()->json($mequipos->getEquipoInstalacionAdquisicionIndicador($request->all()));
+    }
 }

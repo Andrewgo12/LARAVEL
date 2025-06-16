@@ -1,211 +1,231 @@
 <?php
 
-defined('BASEPATH') or exit('El acceso directo no esta permitido');
+namespace App\Http\Controllers;
 
-/**
- *
- */
-class Cemail extends CI_Controller
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
+use App\Models\Mequipos;
+use App\Models\Mobservaciones;
+use App\Models\Mservicios;
+use App\Models\Mzonas;
+use App\Models\Mordenes;
+use App\Models\Mempresas;
+use App\Models\Musuarios;
+use App\Models\Mtrabajos;
+use App\Models\Mtecnicos;
+
+class CemailController extends Controller
 {
-  function __construct()
-  {
-    parent::__construct();
-    $this->load->library("email");
-    $this->load->model("Mequipos");
-    $this->load->model("Mobservaciones");
-    $this->load->model("Mservicios");
-    $this->load->model("Mzonas");
-    $this->load->model("Mordenes");
-    $this->load->model("Mempresas");
-    $this->load->model("Musuarios");
-    $this->load->model("Mtrabajos");
-    $this->load->model("Mtecnicos");
-  }
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
 
-  public function email_asignar_empresa()
-  {
-    try {
-      $orden = $this->Mordenes->getOne(array("id" => $_POST["orden_id"]));
-      print_r($orden);
-      $empresa_id = $orden->empresa_id;
-      print_r($empresa_id);
-      $empresa = $this->Mempresas->getOne(array("id" => $empresa_id));
-      print_r($empresa);
-      $correos_empresa = $this->Mempresas->getEmailUsuariosEmpresa(array("id_empresa" => $empresa_id));
-      print_r($correos_empresa);
-      $reportante = $this->Musuarios->getOne($orden->reportante_id);
-      print_r($reportantes);
-      $vector = array(
-        "orden" => $orden,
-        "empresa" => $empresa,
-        "correos_empresa" => $correos_empresa,
-        "reportante" => $reportante
-      );
-      if ($orden->equipo_id != null && $orden->equipo_id != "" && $orden->equipo_id != 0) {
-        $vector["equipo"] = $this->Mequipos->getOne(array("id" => $orden->equipo_id));
-      }
-      $to = "";
-      $contador = 0;
-      $limite = $correos_empresa["cantidad"];
-      $control = TRUE;
-      if ($limite == 1) {
-        $to .= $correos_empresa["correos_empresa"][0]->email;
-      } elseif ($limite > 1) {
-        foreach ($correos_empresa["correos_empresa"] as $correo_empresa) {
-          $contador = $contador + 1;
-          if ($contador != $limite) {
-            $to .= $correo_empresa->email . ",";
-          } else {
-            $to .= $correo_empresa->email;
-          }
+    public function email_asignar_empresa(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+
+            $mordenes = app(Mordenes::class);
+            $mempresas = app(Mempresas::class);
+            $musuarios = app(Musuarios::class);
+            $mequipos = app(Mequipos::class);
+
+            $orden = $mordenes->getOne(["id" => $data["orden_id"]]);
+            $empresa_id = $orden->empresa_id;
+            $empresa = $mempresas->getOne(["id" => $empresa_id]);
+            $correos_empresa = $mempresas->getEmailUsuariosEmpresa(["id_empresa" => $empresa_id]);
+            $reportante = $musuarios->getOne($orden->reportante_id);
+
+            $vector = [
+                "orden" => $orden,
+                "empresa" => $empresa,
+                "correos_empresa" => $correos_empresa,
+                "reportante" => $reportante
+            ];
+
+            if ($orden->equipo_id != null && $orden->equipo_id != "" && $orden->equipo_id != 0) {
+                $vector["equipo"] = $mequipos->getOne(["id" => $orden->equipo_id]);
+            }
+
+            // Construir lista de destinatarios
+            $to = [];
+            $limite = $correos_empresa["cantidad"];
+            $control = true;
+
+            if ($limite == 1) {
+                $to[] = $correos_empresa["correos_empresa"][0]->email;
+            } elseif ($limite > 1) {
+                foreach ($correos_empresa["correos_empresa"] as $correo_empresa) {
+                    $to[] = $correo_empresa->email;
+                }
+            } else {
+                $control = false;
+            }
+
+            if ($control && !empty($to)) {
+                Mail::send('ordenes.tikect_email', $vector, function ($message) use ($to, $reportante, $orden) {
+                    $message->from('evagestionahuv@gmail.com', 'Electromedicina HUV');
+                    $message->to($to);
+                    $message->cc($reportante->email);
+                    $message->subject('Asignación de orden exitosa. Ticket Nro ' . $orden->id);
+                });
+
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Email enviado correctamente'
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No se encontraron destinatarios válidos'
+                ]);
+            }
+        } catch (\Exception $e) {
+            Log::error('Error enviando email asignar empresa: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al enviar el email: ' . $e->getMessage()
+            ], 500);
         }
-      } else {
-        $control = !$control;
-      }
-      if ($control) {
-        $configGmail = array(
-          'protocol' => 'smtp',
-          'smtp_host' => 'ssl://smtp.googlemail.com',
-          'smtp_port' => 465,
-          'smtp_user' => 'evagestionahuv@gmail.com',
-          'smtp_pass' => 'ronrokgffjiurzio',
-          'mailtype' => 'html',
-          'charset' => 'utf-8',
-          'newline' => "\r\n"
-        );
-        $this->email->initialize($configGmail);
-        $this->email->from('evagestionahuv@gmail.com', "Electromedicina");
-        $this->email->to($to);
-        $this->email->cc($reportante->email);
-        $this->email->subject('Asignacion de orden exitosa. Ticket Nro ' . $orden->id);
-        $msj = $this->load->view("ordenes/tikect_email", $vector, TRUE);
-        $this->email->message($msj);
-        $this->email->send();
-      }
-    } catch (Exception $e) {
-      echo json_encode($e);
     }
-  }
-  public function email_asignar_trabajo()
-  {
-    $orden = $this->Mordenes->getOne(array("id" => $_POST["orden_id"]));
-    $trabajo = $this->Mtrabajos->getOne(array("id" => $orden->trabajo_id));
-    $tecnico = $this->Mtecnicos->getOne(array("id" => $orden->tecnico_id));
-    $empresa_id = 4; //Mantenimiento industrial administrativo
-    $empresa = $this->Mempresas->getOne(array("id" => $empresa_id));
-    $correos_empresa = $this->Mempresas->getEmailUsuariosEmpresa(array("id_empresa" => $empresa_id)); // Retorna vector con objeto y cantidad
-    $reportante = $this->Musuarios->getOne($orden->reportante_id);
+    public function email_asignar_trabajo(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
 
-    $vector = array(
-      "orden" => $orden,
-      "empresa" => $empresa,
-      "trabajo" => $trabajo,
-      "tecnico" => $tecnico,
-      "correos_empresa" => $correos_empresa,
-      "reportante" => $reportante
-    );
-    if ($orden->equipo_id != null && $orden->equipo_id != "" && $orden->equipo_id != 0) {
-      $vector["equipo"] = $this->Mequipos->getOne(array("id" => $orden->equipo_id));
-    }
+            $mordenes = app(Mordenes::class);
+            $mtrabajos = app(Mtrabajos::class);
+            $mtecnicos = app(Mtecnicos::class);
+            $mempresas = app(Mempresas::class);
+            $musuarios = app(Musuarios::class);
+            $mequipos = app(Mequipos::class);
 
-    $to = "";
-    $contador = 0;
-    $limite = $correos_empresa["cantidad"];
-    $control = TRUE;
+            $orden = $mordenes->getOne(["id" => $data["orden_id"]]);
+            $trabajo = $mtrabajos->getOne(["id" => $orden->trabajo_id]);
+            $tecnico = $mtecnicos->getOne(["id" => $orden->tecnico_id]);
+            $empresa_id = 4; // Mantenimiento industrial administrativo
+            $empresa = $mempresas->getOne(["id" => $empresa_id]);
+            $correos_empresa = $mempresas->getEmailUsuariosEmpresa(["id_empresa" => $empresa_id]);
+            $reportante = $musuarios->getOne($orden->reportante_id);
 
+            $vector = [
+                "orden" => $orden,
+                "empresa" => $empresa,
+                "trabajo" => $trabajo,
+                "tecnico" => $tecnico,
+                "correos_empresa" => $correos_empresa,
+                "reportante" => $reportante
+            ];
 
+            if ($orden->equipo_id != null && $orden->equipo_id != "" && $orden->equipo_id != 0) {
+                $vector["equipo"] = $mequipos->getOne(["id" => $orden->equipo_id]);
+            }
 
-    if ($limite == 1) { // un solo correo
-      $to .= $correos_empresa["correos_empresa"][0]->email;
-    } elseif ($limite > 1) {
-      foreach ($correos_empresa["correos_empresa"] as $correo_empresa) {
-        $contador = $contador + 1;
-        if ($contador != $limite) {
-          $to .= $correo_empresa->email . ",";
-        } else {
-          $to .= $correo_empresa->email;
+            // Construir lista de destinatarios
+            $to = [];
+            $limite = $correos_empresa["cantidad"];
+            $control = true;
+
+            if ($limite == 1) {
+                $to[] = $correos_empresa["correos_empresa"][0]->email;
+            } elseif ($limite > 1) {
+                foreach ($correos_empresa["correos_empresa"] as $correo_empresa) {
+                    $to[] = $correo_empresa->email;
+                }
+            } else {
+                $control = false;
+            }
+
+            if ($control && !empty($to)) {
+                Mail::send('ordenes.tikect_email', $vector, function ($message) use ($to, $reportante, $orden) {
+                    $message->from('evagestionahuv@gmail.com', 'Electromedicina HUV');
+                    $message->to($to);
+                    $message->cc($reportante->email);
+                    $message->subject('Asignación de orden exitosa. Ticket Nro ' . $orden->id);
+                });
+
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Email enviado correctamente'
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No se encontraron destinatarios válidos'
+                ]);
+            }
+        } catch (\Exception $e) {
+            Log::error('Error enviando email asignar trabajo: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al enviar el email: ' . $e->getMessage()
+            ], 500);
         }
-      }
-    } else {
-      $control = !$control;
     }
 
-    if ($control) {
+    public function send_email_observacion(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
 
-      $configGmail = array(
-        'protocol' => 'smtp',
-        'smtp_host' => 'ssl://smtp.googlemail.com',
-        'smtp_port' => 465,
-        'smtp_user' => 'evagestionahuv@gmail.com',
-        'smtp_pass' => 'ronrokgffjiurzio',
-        'mailtype' => 'html',
-        'charset' => 'utf-8',
-        'newline' => "\r\n"
-      );
+            $mequipos = app(Mequipos::class);
+            $mobservaciones = app(Mobservaciones::class);
+            $mservicios = app(Mservicios::class);
+            $mzonas = app(Mzonas::class);
 
-      $this->email->initialize($configGmail);
-      $this->email->from('evagestionahuv@gmail.com', "Electromedicina");
-      $this->email->to($to);
-      $this->email->cc($reportante->email);
-      $this->email->subject('Asignacion de orden exitosa. Ticket Nro ' . $orden->id);
+            $equipo = $mequipos->getOne(["id" => $data["equipo_id"]]);
+            $observacion = $mobservaciones->getOne(["id" => $data["observacion_id"]]);
+            $servicio = $mservicios->getOne(["id" => $equipo->servicio_id]);
+            $correos = $mzonas->get_emails_with_service(["servicio_id" => $servicio->id]);
 
-      $msj = $this->load->view("ordenes/tikect_email", $vector, TRUE);
+            // Construir lista de destinatarios
+            $to = [];
+            $limite = $correos["cantidad"];
+            $control = true;
 
-      $this->email->message($msj);
-      $this->email->send();
-    }
-  }
+            if ($limite == 1) {
+                $to[] = $correos["correos"][0]->correo_usuario;
+            } elseif ($limite > 1) {
+                foreach ($correos["correos"] as $correo) {
+                    $to[] = $correo->correo_usuario;
+                }
+            } else {
+                $control = false;
+            }
 
-  public function send_email_observacion()
-  {
+            if ($control && !empty($to)) {
+                $vector_correo = [
+                    "equipo" => $equipo,
+                    "observacion" => $observacion,
+                    "correos" => $correos,
+                    "servicio" => $servicio
+                ];
 
-    $equipo = $this->Mequipos->getOne(array("id" => $_POST["equipo_id"]));
-    $observacion = $this->Mobservaciones->getOne(array("id" => $_POST["observacion_id"]));
-    $servicio = $this->Mservicios->getOne(array("id" => $equipo->servicio_id));
-    $correos = $this->Mzonas->get_emails_with_service(array("servicio_id" => $servicio->id));
-    $to = "";
-    $contador = 0;
-    $limite = $correos["cantidad"];
-    $control = TRUE;
+                Mail::send('equipos.email.email_add_observacion', $vector_correo, function ($message) use ($to, $equipo) {
+                    $message->from('evagestionahuv@gmail.com', 'Repuesto pendiente HUV');
+                    $message->to($to);
+                    $message->subject("Notificación de repuesto pendiente del equipo con Id: " . $equipo->id);
+                });
 
-    if ($limite == 1) { // un solo correo
-      $to .= $correos["correos"][0]->correo_usuario;
-    } elseif ($limite > 1) {
-      foreach ($correos["correos"] as $correo) {
-        $contador = $contador + 1;
-        if ($contador != $limite) {
-          $to .= $correo->correo_usuario . ",";
-        } else {
-          $to .= $correo->correo_usuario;
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Email de observación enviado correctamente'
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No se encontraron destinatarios válidos para el servicio'
+                ]);
+            }
+        } catch (\Exception $e) {
+            Log::error('Error enviando email observación: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al enviar el email: ' . $e->getMessage()
+            ], 500);
         }
-      }
-    } else {
-      $control = !$control;
     }
-    if ($control) {
-      $configGmail = array(
-        'protocol' => 'smtp',
-        'smtp_host' => 'ssl://smtp.googlemail.com',
-        'smtp_port' => 465,
-        'smtp_user' => 'evagestionahuv@gmail.com',
-        'smtp_pass' => 'ronrokgffjiurzio',
-        'mailtype' => 'html',
-        'charset' => 'utf-8',
-        'newline' => "\r\n"
-      );
-      $this->email->initialize($configGmail);
-      $this->email->from('evagestionahuv@gmail.com', "Repuesto pendiente");
-      $this->email->to($to);
-      $this->email->subject("Notificación de repuesto pendiente del equipo con Id :" . $equipo->id);
-      $vector_correo = array(
-        "equipo" => $equipo,
-        "observacion" => $observacion,
-        "correos" => $correos,
-        "servicio" => $servicio
-      );
-      $msj = $this->load->view("equipos/email/email_add_observacion", $vector_correo, TRUE); //Vista
-      $this->email->message($msj);
-      $this->email->send();
-    }
-  }
 }

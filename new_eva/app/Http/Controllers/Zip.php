@@ -1,90 +1,254 @@
 <?php
-// application/controllers/Zip.php
-defined('BASEPATH') or exit('No direct script access allowed');
 
-class Zip extends CI_Controller
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
+use App\Models\Mpreventivos;
+use ZipArchive;
+
+/**
+ * Zip Controller - Migrated from CodeIgniter to Laravel 11
+ * Handles ZIP file creation and download functionality
+ * Manages compression of preventive maintenance files and other documents
+ */
+class ZipController extends Controller
 {
-  function __construct()
-  {
-    parent::__construct();
-    $this->load->model("Mpreventivos");
-  }
-  private function _load_zip_lib()
-  {
-    $this->load->library('zip');
-  }
+    protected $mpreventivos;
 
-  private function _archieve_and_download($filename)
-  {
-    // create zip file on server
-    $this->zip->archive(FCPATH . '/assets/zips/' . $filename);
-
-    // prompt user to download the zip file
-    $this->zip->download($filename);
-  }
-
-  public function data()
-  {
-    $this->_load_zip_lib();
-
-    $this->zip->add_data('name.txt', 'Sajal Soni');
-    $this->zip->add_data('profile.txt', 'Web Developer');
-
-    $this->_archieve_and_download('my_info.zip');
-  }
-
-  public function data_array()
-  {
-    $this->_load_zip_lib();
-
-    $files = array(
-      'name.txt' => 'Sajal Soni',
-      'profile.txt' => 'Web Developer'
-    );
-
-    $this->zip->add_data($files);
-
-    $this->_archieve_and_download('my_info.zip');
-  }
-
-  public function data_with_subdirs()
-  {
-    $this->_load_zip_lib();
-
-    $this->zip->add_data('info/name.txt', 'Sajal Soni');
-    $this->zip->add_data('info/profile.txt', 'Web Developer');
-
-    $this->_archieve_and_download('my_info.zip');
-  }
-
-  public function files()
-  {
-    if (isset($_POST)) {
-      $vector = $this->Mpreventivos->DecodificarParaZip($_POST);
-
-      // print_r($vector);
-
-      $this->_load_zip_lib();
-      foreach ($vector as $registro) {
-        $this->zip->read_file(FCPATH . '/assets/upload_preventivos/' . $registro->codificado, FALSE, $registro->nuevo . ".pdf");
-      }
-
-      // pass second argument as TRUE if want to preserve dir structure
-      // $this->zip->read_file(FCPATH.'/assets/upload_preventivos/00eef48dc0cceca26832811f3a1c2862.pdf',FALSE,"55764.pdf");
-      // $this->zip->read_file(FCPATH.'/assets/upload_preventivos/0c7808a78a05da1053e024ac8413786a.pdf',FALSE,"59319.pdf");
-      // $this->zip->read_file(FCPATH.'/assets/zips/2.jpg');
-
-      $this->_archieve_and_download('archivos.zip'); // La carpeta donde guarda el zip
+    public function __construct()
+    {
+        $this->mpreventivos = new Mpreventivos();
     }
-  }
 
-  public function dir()
-  {
-    $this->_load_zip_lib();
+    /**
+     * Create ZIP archive and prepare for download
+     */
+    private function createAndDownloadZip($filename, $files = [])
+    {
+        $zipPath = public_path('assets/zips/' . $filename);
 
-    // pass second argument as FALSE if want to ignore preceding directories
-    $this->zip->read_dir(FCPATH . '/assets/zips/images/');
+        // Ensure the zips directory exists
+        if (!File::exists(public_path('assets/zips'))) {
+            File::makeDirectory(public_path('assets/zips'), 0755, true);
+        }
 
-    $this->_archieve_and_download('dir_images.zip');
-  }
+        $zip = new ZipArchive();
+
+        if ($zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE) === TRUE) {
+            // Add files to zip
+            foreach ($files as $file) {
+                if (isset($file['data'])) {
+                    // Add data directly to zip
+                    $zip->addFromString($file['name'], $file['data']);
+                } elseif (isset($file['path'])) {
+                    // Add file from path
+                    if (File::exists($file['path'])) {
+                        $zip->addFile($file['path'], $file['name']);
+                    }
+                }
+            }
+
+            $zip->close();
+
+            // Download the zip file
+            return Response::download($zipPath, $filename)->deleteFileAfterSend(true);
+        } else {
+            abort(500, 'No se pudo crear el archivo ZIP');
+        }
+    }
+
+    /**
+     * Create ZIP with simple data files
+     */
+    public function data()
+    {
+        $files = [
+            [
+                'name' => 'name.txt',
+                'data' => 'Sajal Soni'
+            ],
+            [
+                'name' => 'profile.txt',
+                'data' => 'Web Developer'
+            ]
+        ];
+
+        return $this->createAndDownloadZip('my_info.zip', $files);
+    }
+
+    /**
+     * Create ZIP with data from array
+     */
+    public function dataArray()
+    {
+        $filesData = [
+            'name.txt' => 'Sajal Soni',
+            'profile.txt' => 'Web Developer'
+        ];
+
+        $files = [];
+        foreach ($filesData as $filename => $content) {
+            $files[] = [
+                'name' => $filename,
+                'data' => $content
+            ];
+        }
+
+        return $this->createAndDownloadZip('my_info.zip', $files);
+    }
+
+    /**
+     * Create ZIP with subdirectories
+     */
+    public function dataWithSubdirs()
+    {
+        $files = [
+            [
+                'name' => 'info/name.txt',
+                'data' => 'Sajal Soni'
+            ],
+            [
+                'name' => 'info/profile.txt',
+                'data' => 'Web Developer'
+            ]
+        ];
+
+        return $this->createAndDownloadZip('my_info.zip', $files);
+    }
+
+    /**
+     * Create ZIP with files from preventive maintenance
+     * Migrated from CodeIgniter POST handling to Laravel Request
+     */
+    public function files(Request $request)
+    {
+        if ($request->isMethod('post') && $request->has('data')) {
+            try {
+                $vector = $this->mpreventivos->DecodificarParaZip($request->all());
+
+                $files = [];
+                foreach ($vector as $registro) {
+                    $filePath = public_path('assets/upload_preventivos/' . $registro->codificado);
+                    if (File::exists($filePath)) {
+                        $files[] = [
+                            'path' => $filePath,
+                            'name' => $registro->nuevo . ".pdf"
+                        ];
+                    }
+                }
+
+                if (!empty($files)) {
+                    return $this->createAndDownloadZip('archivos.zip', $files);
+                } else {
+                    return response()->json(['error' => 'No se encontraron archivos para comprimir'], 404);
+                }
+
+            } catch (\Exception $e) {
+                return response()->json(['error' => 'Error al procesar archivos: ' . $e->getMessage()], 500);
+            }
+        }
+
+        return response()->json(['error' => 'Datos no válidos'], 400);
+    }
+
+    /**
+     * Create ZIP with all files from a directory
+     */
+    public function dir()
+    {
+        $directoryPath = public_path('assets/zips/images/');
+
+        if (!File::exists($directoryPath)) {
+            return response()->json(['error' => 'Directorio no encontrado'], 404);
+        }
+
+        try {
+            $files = [];
+            $allFiles = File::allFiles($directoryPath);
+
+            foreach ($allFiles as $file) {
+                $files[] = [
+                    'path' => $file->getPathname(),
+                    'name' => $file->getFilename()
+                ];
+            }
+
+            if (!empty($files)) {
+                return $this->createAndDownloadZip('dir_images.zip', $files);
+            } else {
+                return response()->json(['error' => 'No se encontraron archivos en el directorio'], 404);
+            }
+
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al procesar directorio: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /**
+     * Create ZIP with specific files by their paths
+     */
+    public function createZipFromPaths(Request $request)
+    {
+        $request->validate([
+            'files' => 'required|array',
+            'files.*' => 'string',
+            'filename' => 'required|string'
+        ]);
+
+        try {
+            $files = [];
+            foreach ($request->input('files') as $filePath) {
+                $fullPath = public_path($filePath);
+                if (File::exists($fullPath)) {
+                    $files[] = [
+                        'path' => $fullPath,
+                        'name' => basename($filePath)
+                    ];
+                }
+            }
+
+            if (!empty($files)) {
+                return $this->createAndDownloadZip($request->input('filename'), $files);
+            } else {
+                return response()->json(['error' => 'No se encontraron archivos válidos'], 404);
+            }
+
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al crear ZIP: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /**
+     * Get ZIP file information
+     */
+    public function getZipInfo($filename)
+    {
+        $zipPath = public_path('assets/zips/' . $filename);
+
+        if (!File::exists($zipPath)) {
+            return response()->json(['error' => 'Archivo ZIP no encontrado'], 404);
+        }
+
+        $zip = new ZipArchive();
+        if ($zip->open($zipPath) === TRUE) {
+            $info = [
+                'filename' => $filename,
+                'num_files' => $zip->numFiles,
+                'size' => File::size($zipPath),
+                'files' => []
+            ];
+
+            for ($i = 0; $i < $zip->numFiles; $i++) {
+                $info['files'][] = $zip->getNameIndex($i);
+            }
+
+            $zip->close();
+            return response()->json($info);
+        } else {
+            return response()->json(['error' => 'No se pudo abrir el archivo ZIP'], 500);
+        }
+    }
 }

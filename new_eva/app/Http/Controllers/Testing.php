@@ -1,25 +1,22 @@
 <?php
 
-defined('BASEPATH') or exit('El acceso directo no esta permitido');
+namespace App\Http\Controllers;
 
-/**
- * 
- */
-class Testing extends CI_Controller
+class TestingController extends Controller
 {
-
-  function __construct()
-  {
-    parent::__construct();
-  }
-  public function index()
-  {
-
-    $this->load->view('layouts/adminlte3/header');
-    $this->load->view('layouts/adminlte3/aside');
-    $this->load->view('layouts/adminlte3/body');
-    $this->load->view('layouts/adminlte3/footer');
-
-    // $this->load->view('layouts/adminlte3/completo');
-  }
+    public function __construct()
+    {
+        // No se requiere autenticación ni otras verificaciones
+    }
+    
+    public function index()
+    {
+        return view('layouts.adminlte3.header')
+            ->nest('aside', 'layouts.adminlte3.aside')
+            ->nest('content', 'layouts.adminlte3.body')
+            ->nest('footer', 'layouts.adminlte3.footer');
+            
+        // Alternativa usando una vista completa:
+        // return view('layouts.adminlte3.completo');
+    }
 }

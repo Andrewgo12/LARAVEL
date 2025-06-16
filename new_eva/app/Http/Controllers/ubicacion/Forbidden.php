@@ -1,26 +1,26 @@
-<?php 
+<?php
 
-defined ('BASEPATH') OR exit('El acceso directo no esta permitido');
+namespace App\Http\Controllers\ubicacion;
 
-/**
-* 
-*/
-class Forbidden extends CI_Controller
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Session;
+
+class ForbiddenController extends Controller
 {
-	function __construct()
-	{
-		parent::__construct();
-		if (!$this->session->userdata('id')) {
-			redirect('Cauth');
-		}
-
-	}
-	public function index(){
-		$this->load->view('layouts/header');
-		$this->load->view("layouts/aside");
-		$this->load->view("admin/forbidden");
-		$this->load->view("layouts/footer");
-
-	}
+    public function __construct()
+    {
+        $this->middleware('auth');
+        
+        if (!Session::has('id')) {
+            redirect('auth');
+        }
+    }
+    
+    public function index()
+    {
+        return view('layouts.header')
+            ->nest('aside', 'layouts.aside')
+            ->nest('content', 'admin.forbidden')
+            ->nest('footer', 'layouts.footer');
+    }
 }
-?>

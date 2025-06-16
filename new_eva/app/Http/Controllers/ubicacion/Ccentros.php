@@ -1,23 +1,33 @@
 <?php
-defined('BASEPATH') or exit('El acceso directo no esta permitido');
-class Ccentros extends CI_Controller
-{
-	function __construct()
-	{
-		parent::__construct();
-		$this->load->model("Mcentros");
-	}
-	public function index()
-	{
-	}
 
-	// Refactoring
-	public function ServiceGetAll()
-	{
-		echo json_encode($this->Mcentros->getAllCentros());
-	}
-	public function ServiceGetOne($id)
-	{
-		echo json_encode($this->Mcentros->getOneCentro($id));
-	}
+namespace App\Http\Controllers\ubicacion;
+
+use App\Http\Controllers\Controller;
+use App\Models\Mcentros;
+use Illuminate\Http\JsonResponse;
+
+class CentrosController extends Controller
+{
+    private Mcentros $Mcentros;
+    
+    public function __construct()
+    {
+        $this->Mcentros = new Mcentros();
+    }
+    
+    public function index()
+    {
+        // Implementación según necesidad
+    }
+
+    // Refactoring
+    public function ServiceGetAll(): JsonResponse
+    {
+        return response()->json($this->Mcentros->getAllCentros());
+    }
+    
+    public function ServiceGetOne($id): JsonResponse
+    {
+        return response()->json($this->Mcentros->getOneCentro($id));
+    }
 }

@@ -348,3 +348,4 @@ class ModulosController extends Controller
             return collect([]);
         }
     }
+}

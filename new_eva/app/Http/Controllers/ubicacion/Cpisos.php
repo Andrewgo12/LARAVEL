@@ -1,41 +1,49 @@
 <?php
-defined('BASEPATH') or exit('El acceso directo no esta permitido');
 
-class Cpisos extends CI_Controller
+namespace App\Http\Controllers\ubicacion;
+
+use App\Http\Controllers\Controller;
+use App\Models\Mpisos;
+use Illuminate\Http\JsonResponse;
+
+class PisosController extends Controller
 {
-	private $pisos;
-	function __construct()
-	{
-		parent::__construct();
-		$this->load->model("Mpisos");
-	}
-	public function index()
-	{
-		/* 		if ($this->session->userdata('login')) {
-		} else {
-			redirect(base_url('Cauth'));
-		} */
-		/* 
-		$acciones = $this->session->userdata("acciones");
-		$this->session->set_userdata('controlador', $this->uri->segment(2));
+    private $pisos;
+    private Mpisos $Mpisos;
+    
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->Mpisos = new Mpisos();
+    }
+    
+    public function index()
+    {
+        /* if (!session('login')) {
+            return redirect('auth');
+        }
+        
+        $acciones = session('acciones');
+        session(['controlador' => request()->segment(2)]);
 
-		foreach ($acciones as $accion) {
-			if ($accion->modulo == "contactos") {
-				if ($accion->leer != 1) {
-					redirect(base_url('Forbidden'));
-				}
-			}
-		} */
+        foreach ($acciones as $accion) {
+            if ($accion->modulo == "contactos") {
+                if ($accion->leer != 1) {
+                    return redirect('forbidden');
+                }
+            }
+        }
 
-		/* 		$this->load->view("layouts/header");
-		$this->load->view("layouts/aside");
-		$this->load->view("areas/list");
-		$this->load->view("areas/modal_add");
-		$this->load->view("areas/modal_edit");
-		$this->load->view("layouts/footer"); */
-	}
-	public function ServiceGetAll()
-	{
-		echo json_encode($this->Mpisos->getAllPisos());
-	}
+        return view('layouts.header')
+            ->nest('aside', 'layouts.aside')
+            ->nest('content', 'areas.list')
+            ->nest('modal_add', 'areas.modal_add')
+            ->nest('modal_edit', 'areas.modal_edit')
+            ->nest('footer', 'layouts.footer'); */
+    }
+    
+    public function ServiceGetAll(): JsonResponse
+    {
+        return response()->json($this->Mpisos->getAllPisos());
+    }
 }

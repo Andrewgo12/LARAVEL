@@ -1,33 +1,46 @@
-<?php 
-defined ('BASEPATH') OR exit('El acceso directo no esta permitido');
-class Csedes extends CI_Controller
+<?php
+
+namespace App\Http\Controllers\ubicacion;
+
+use App\Http\Controllers\Controller;
+use App\Models\Msedes;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+
+class SedesController extends Controller
 {
-	private $servicios;
-	function __construct()
-	{
-		parent::__construct();
-		$this->load->model("Msedes");
-		
-	}
-	public function index(){
-		$this->session->set_userdata('controlador', $this->uri->segment(2));
-	}
+    private $servicios;
+    private Msedes $Msedes;
+    
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->Msedes = new Msedes();
+    }
+    
+    public function index()
+    {
+        session(['controlador' => request()->segment(2)]);
+    }
 
-	/* Refactoring */
-	public function ServiceGetAll()
-	{
-		echo json_encode($this->Msedes->getAllServices());
-	}
-	public function ServiceGetOne($id)
-	{
-		echo json_encode($this->Msedes->getOneService($id));
-	}
+    /* Refactoring */
+    public function ServiceGetAll(): JsonResponse
+    {
+        return response()->json($this->Msedes->getAllServices());
+    }
+    
+    public function ServiceGetOne($id): JsonResponse
+    {
+        return response()->json($this->Msedes->getOneService($id));
+    }
 
-
-	public function getAll(){
-		echo json_encode($this->Msedes->getAll());
-	}
-	public function cambiar_sesion_sede(){
-		$this->session->set_userdata("sede_id",$_POST["sede_seleccionada"]);
-	}
-	}
+    public function getAll(): JsonResponse
+    {
+        return response()->json($this->Msedes->getAll());
+    }
+    
+    public function cambiar_sesion_sede(Request $request)
+    {
+        session(['sede_id' => $request->input('sede_seleccionada')]);
+    }
+}

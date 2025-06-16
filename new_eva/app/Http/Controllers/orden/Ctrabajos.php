@@ -1,17 +1,22 @@
 <?php
-defined('BASEPATH') or exit('El acceso directo no esta permitido');
-/**
- *
- */
-class Ctrabajos extends CI_Controller
+
+namespace App\Http\Controllers\orden;
+
+use App\Http\Controllers\Controller;
+use App\Models\Mtrabajos;
+use Illuminate\Http\JsonResponse;
+
+class TrabajosController extends Controller
 {
-  function __construct()
-  {
-    parent::__construct();
-    $this->load->model("Mtrabajos");
-  }
-  public function getAll()
-  {
-    echo json_encode($this->Mtrabajos->getAll());
-  }
+    private Mtrabajos $Mtrabajos;
+    
+    public function __construct()
+    {
+        $this->Mtrabajos = new Mtrabajos();
+    }
+    
+    public function getAll(): JsonResponse
+    {
+        return response()->json($this->Mtrabajos->getAll());
+    }
 }

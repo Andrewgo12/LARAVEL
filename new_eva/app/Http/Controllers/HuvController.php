@@ -7,15 +7,22 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View as ViewContract;
+use Carbon\Carbon;
 
 /**
- * Controlador Principal del Sistema HUV
+ * Controlador Principal del Sistema HUV - Laravel 11
  * Hospital Universitario del Valle - Gestión de Tecnología Biomédica
  *
  * Maneja todos los módulos del sistema:
  * - 86 tablas en base de datos
  * - 254 vistas Blade migradas
  * - 40+ módulos especializados
+ *
+ * Migrado completamente a Laravel 11 con mejoras de rendimiento y seguridad
  */
 class HuvController extends Controller
 {
@@ -27,9 +34,10 @@ class HuvController extends Controller
         // Configurar datos globales del sistema
         View::share('sistema', [
             'nombre' => 'Sistema HUV',
-            'version' => '2.5.0',
+            'version' => '3.0.0', // Actualizado para Laravel 11
             'hospital' => 'Hospital Universitario del Valle',
-            'modulo' => 'Gestión de Tecnología Biomédica'
+            'modulo' => 'Gestión de Tecnología Biomédica',
+            'laravel_version' => app()->version()
         ]);
     }
 
@@ -159,8 +167,47 @@ class HuvController extends Controller
      */
     public function logout()
     {
+        // Log de cierre de sesión para auditoría
+        if (Session::get('login')) {
+            Log::info('Usuario cerró sesión', [
+                'user_id' => Session::get('id'),
+                'email' => Session::get('email'),
+                'fecha_logout' => now()
+            ]);
+        }
+
         Session::flush();
         return redirect()->route('huv.login')->with('success', 'Sesión cerrada correctamente');
+    }
+
+    /**
+     * Verificar si el usuario está autenticado
+     */
+    private function checkAuth()
+    {
+        if (!Session::get('login')) {
+            return redirect()->route('huv.login');
+        }
+        return null;
+    }
+
+    /**
+     * Obtener información del usuario actual
+     */
+    public function getCurrentUser()
+    {
+        return [
+            'id' => Session::get('id'),
+            'nombre' => Session::get('nombre'),
+            'apellido' => Session::get('apellido'),
+            'email' => Session::get('email'),
+            'rol_id' => Session::get('rol_id'),
+            'rol_nombre' => Session::get('rol_nombre'),
+            'servicio_id' => Session::get('servicio_id'),
+            'servicio_nombre' => Session::get('servicio_nombre'),
+            'sede_id' => Session::get('sede_id'),
+            'sede_nombre' => Session::get('sede_nombre')
+        ];
     }
 
     /**
@@ -182,7 +229,7 @@ class HuvController extends Controller
             'session_data' => Session::all(),
             'sistema' => [
                 'nombre' => 'Sistema HUV',
-                'version' => '2.5.0',
+                'version' => '3.0.0',
                 'hospital' => 'Hospital Universitario del Valle'
             ]
         ];

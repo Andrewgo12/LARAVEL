@@ -1,27 +1,39 @@
 <?php
-defined('BASEPATH') or exit('El acceso directo no esta permitido');
 
-/**
- *
- */
-class Cmodulos extends CI_Controller
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use App\Models\Mmodulos;
+use App\Models\Macciones;
+
+class CmodulosController extends Controller
 {
-  function __construct()
-  {
-    parent::__construct();
-    $this->load->model('Mmodulos');
-    $this->load->model('Macciones');
-  }
-  public function getAll()
-  {
-    echo json_encode($this->Mmodulos->getAll());
-  }
-  public function getWithAccount()
-  {
-    echo json_encode($this->Mmodulos->getWithAccount());
-  }
-  public function setear_acciones()
-  {
-    $this->Macciones->setear_acciones($_POST);
-  }
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+    public function getAll(): JsonResponse
+    {
+        $mmodulos = app(Mmodulos::class);
+        return response()->json($mmodulos->getAll());
+    }
+
+    public function getWithAccount(): JsonResponse
+    {
+        $mmodulos = app(Mmodulos::class);
+        return response()->json($mmodulos->getWithAccount());
+    }
+
+    public function setear_acciones(Request $request): JsonResponse
+    {
+        $macciones = app(Macciones::class);
+        $macciones->setear_acciones($request->all());
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Acciones configuradas correctamente'
+        ]);
+    }
 }

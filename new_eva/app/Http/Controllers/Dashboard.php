@@ -1,26 +1,25 @@
 <?php
 
-defined('BASEPATH') or exit('El acceso directo no esta permitido');
+namespace App\Http\Controllers;
 
-/**
- * 
- */
-class Dashboard extends CI_Controller
+use Illuminate\Support\Facades\Session;
+
+class DashboardController extends Controller
 {
-
-  function __construct()
-  {
-    parent::__construct();
-    if (!$this->session->userdata('id')) {
-      redirect('Cauth');
+    public function __construct()
+    {
+        $this->middleware('auth');
+        
+        if (!Session::has('id')) {
+            redirect('auth');
+        }
     }
-  }
-  public function index()
-  {
-
-    $this->load->view("layouts/header");
-    $this->load->view("layouts/aside");
-    $this->load->view('admin/dashboard');
-    $this->load->view('layouts/footer');
-  }
+    
+    public function index()
+    {
+        return view('layouts.header')
+            ->nest('aside', 'layouts.aside')
+            ->nest('content', 'admin.dashboard')
+            ->nest('footer', 'layouts.footer');
+    }
 }

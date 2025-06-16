@@ -1,114 +1,122 @@
 <?php
-defined('BASEPATH') or exit('El acceso directo no esta permitido');
 
-/**
- *
- */
-class Careas extends CI_Controller
+namespace App\Http\Controllers\ubicacion;
+
+use App\Http\Controllers\Controller;
+use App\Models\Mareas;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+
+class AreasController extends Controller
 {
-  private $servicios;
-  function __construct()
-  {
-    parent::__construct();
-    $this->load->model("Mareas");
-  }
-  public function index()
-  {
-    if ($this->session->userdata('login')) {
-    } else {
-      redirect(base_url('Cauth'));
+    private $servicios;
+    private Mareas $Mareas;
+    
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->Mareas = new Mareas();
     }
-
-    $acciones = $this->session->userdata("acciones");
-    $this->session->set_userdata('controlador', $this->uri->segment(2));
-
-    foreach ($acciones as $accion) {
-      if ($accion->modulo == "contactos") {
-        if ($accion->leer != 1) {
-          redirect(base_url('Forbidden'));
+    
+    public function index()
+    {
+        if (!session('login')) {
+            return redirect('auth');
         }
-      }
+
+        $acciones = session('acciones');
+        session(['controlador' => request()->segment(2)]);
+
+        foreach ($acciones as $accion) {
+            if ($accion->modulo == "contactos") {
+                if ($accion->leer != 1) {
+                    return redirect('forbidden');
+                }
+            }
+        }
+
+        return view('layouts.header')
+            ->nest('aside', 'layouts.aside')
+            ->nest('content', 'areas.list')
+            ->nest('modal_add', 'areas.modal_add')
+            ->nest('modal_edit', 'areas.modal_edit')
+            ->nest('footer', 'layouts.footer');
     }
 
-    $this->load->view("layouts/header");
-    $this->load->view("layouts/aside");
-    $this->load->view("areas/list");
-    $this->load->view("areas/modal_add");
-    $this->load->view("areas/modal_edit");
-    $this->load->view("layouts/footer");
-  }
-
-  // Refactoring
-  public function ServiceGetAll()
-  {
-    echo json_encode($this->Mareas->getAllAreas());
-  }
-  public function ServiceGetOne($id)
-  {
-    echo json_encode($this->Mareas->getOneArea($id));
-  }
-  public function ServiceGetByService($id)
-  {
-    echo json_encode($this->Mareas->getByService($id));
-  }
-  public function delete($id)
-  {
-    return $this->Mareas->delete(array('id' => $id));
-  }
-
-
-
-  public function getAll()
-  {
-    echo json_encode($this->Mareas->getAll());
-  }
-  public function getOne()
-  {
-    echo json_encode($this->Mareas->getOne($_POST));
-  }
-  public function getAreaByservicio()
-  {
-    echo json_encode($this->Mareas->getAreaByservicio($_POST));
-  }
-  public function add()
-  {
-    $this->form_validation->set_rules("name", "Nombre del area", "is_unique[areas.name]|required|min_length[4]");
-    if ($this->form_validation->run()) {
-      if ($result = $this->Mareas->add($_POST)) {
-        echo json_encode(array('result' => $result));
-        return;
-      }
-    } else {
-      echo json_encode(array('error' => validation_errors()));
-      return;
+    // Refactoring
+    public function serviceGetAll(): JsonResponse
+    {
+        return response()->json($this->Mareas->getAllAreas());
     }
-  }
-  public function update()
-  {
-
-    if ($this->Mareas->getOne($_POST)->name == $_POST["name"]) {
-      $this->form_validation->set_rules("name", "Nombre del area", "required|min_length[4]");
-    } else {
-      $this->form_validation->set_rules("name", "Nombre del area", "is_unique[areas.name]|required|min_length[4]");
+    
+    public function serviceGetOne($id): JsonResponse
+    {
+        return response()->json($this->Mareas->getOneArea($id));
+    }
+    
+    public function serviceGetByService($id): JsonResponse
+    {
+        return response()->json($this->Mareas->getByService($id));
+    }
+    
+    public function delete($id)
+    {
+        return $this->Mareas->delete(['id' => $id]);
     }
 
-    if ($this->form_validation->run()) {
-
-      if ($this->Mareas->update($_POST)) {
-      } else {
-      }
-
-      $vector_respuesta = array(
-        "caso" => 1
-      );
-    } else {
-      $informacion_error = validation_errors();
-      $vector_respuesta = array(
-
-        "caso" => 2,
-        "informacion_error" => $informacion_error
-      );
+    public function getAll(): JsonResponse
+    {
+        return response()->json($this->Mareas->getAll());
     }
-    echo json_encode($vector_respuesta);
-  }
+    
+    public function getOne(Request $request): JsonResponse
+    {
+        return response()->json($this->Mareas->getOne($request->all()));
+    }
+    
+    public function getAreaByservicio(Request $request): JsonResponse
+    {
+        return response()->json($this->Mareas->getAreaByservicio($request->all()));
+    }
+    
+    public function add(Request $request): JsonResponse
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|min:4|unique:areas,name'
+        ]);
+
+        if ($validator->passes()) {
+            $result = $this->Mareas->add($request->all());
+            return response()->json(['result' => $result]);
+        } else {
+            return response()->json(['error' => $validator->errors()->first()]);
+        }
+    }
+    
+    public function update(Request $request): JsonResponse
+    {
+        $area = $this->Mareas->getOne($request->all());
+        
+        $rules = [];
+        if ($area->name == $request->name) {
+            $rules['name'] = 'required|min:4';
+        } else {
+            $rules['name'] = 'required|min:4|unique:areas,name';
+        }
+        
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->passes()) {
+            $this->Mareas->update($request->all());
+            return response()->json([
+                'caso' => 1
+            ]);
+        } else {
+            return response()->json([
+                'caso' => 2,
+                'informacion_error' => $validator->errors()->first()
+            ]);
+        }
+    }
 }

@@ -1,50 +1,58 @@
 <?php
-defined('BASEPATH') or exit('El acceso directo no esta permitido');
 
-/**
- * 
- */
-class Ctecnicos extends CI_Controller
+namespace App\Http\Controllers\tecnico;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Session;
+use App\Models\Mtecnicos;
+
+class CtecnicosController extends Controller
 {
-  private $permisos;
-  function __construct()
-  {
-    parent::__construct();
-    $this->load->model('Mtecnicos');
-  }
-  public function index()
-  {
-    if ($this->session->userdata('login')) {
-    } else {
-      redirect(base_url('Cauth'));
+    private $permisos;
+
+    public function __construct()
+    {
+        $this->middleware('auth');
     }
-    $data = array(
-      "tecnicos" => $this->Mtecnicos->get()
-    );
 
-    $this->load->view("layouts/header");
-    $this->load->view("layouts/aside");
-    $this->load->view("tecnicos/list", $data);
-    $this->load->view("layouts/footer");
-  }
-  public function get()
-  {
+    public function index()
+    {
+        if (!Session::get('login')) {
+            return redirect()->route('auth.login');
+        }
 
-    echo json_encode($this->Mtecnicos->get());
-  }
+        $mtecnicos = app(Mtecnicos::class);
 
-  public function getFromTrabajos()
-  {
-    echo json_encode($this->Mtecnicos->getFromTrabajos($_POST));
-  }
+        $data = [
+            "tecnicos" => $mtecnicos->get()
+        ];
 
-  public function show()
-  {
+        return view("tecnicos.list", $data);
+    }
 
-    $result = $this->Mtecnicos->getOne($_POST['id']);
-    $param = array(
-      'categoria' => $result
-    );
-    $this->load->view('categorias/detail', $param);
-  }
+    public function get(): JsonResponse
+    {
+        $mtecnicos = app(Mtecnicos::class);
+        return response()->json($mtecnicos->get());
+    }
+
+    public function getFromTrabajos(Request $request): JsonResponse
+    {
+        $mtecnicos = app(Mtecnicos::class);
+        return response()->json($mtecnicos->getFromTrabajos($request->all()));
+    }
+
+    public function show(Request $request)
+    {
+        $mtecnicos = app(Mtecnicos::class);
+        $result = $mtecnicos->getOne($request->input('id'));
+
+        $param = [
+            'categoria' => $result
+        ];
+
+        return view('categorias.detail', $param);
+    }
 }

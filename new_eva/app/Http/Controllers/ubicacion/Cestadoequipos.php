@@ -1,126 +1,157 @@
-<?php 
-defined ('BASEPATH') OR exit('El acceso directo no esta permitido');
+<?php
 
-/**
-* 
-*/
-class Cestadoequipos extends CI_Controller
+namespace App\Http\Controllers\equipos;
+
+use App\Http\Controllers\Controller;
+use App\Models\Mestadoequipos;
+use App\Models\Mtipos_estados;
+use App\Services\BackendLibrary;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+
+class EstadoEquiposController extends Controller
 {
-	private $estadoequipos;
-	function __construct()
-	{
-		parent::__construct();
-		$this->load->model("Mestadoequipos");
-		$this->load->model("Mtipos_estados");
-		$this->permisos=$this->backend_lib->control();
-		
-	}
-	public function index(){
-		if($this->session->userdata('login')){
-
-		}else{
-			redirect(base_url('Cauth'));
-		}			
-		$acciones=$this->session->userdata("acciones");
-		$this->session->set_userdata('controlador', $this->uri->segment(2));
-
-		
-		foreach ($acciones as $accion) {
-			if ($accion->modulo=="estado equipos") {
-				if ($accion->leer!=1) {
-					redirect(base_url('Forbidden'));
-				}
-			}
-		}
-
-		$this->load->view("layouts/header");
-		if ($this->session->userdata("rol_id")==1) {
-			$this->load->view("layouts/aside");
-		}elseif($this->session->userdata("rol_id")==2){
-			$this->load->view("layouts/admin_aside");
-		}elseif($this->session->userdata("rol_id")==3){
-			$this->load->view("layouts/advance_aside");
-		}else{
-			$this->load->view("layouts/basic_aside");
-		}
-		
-		$this->load->view("estadoequipos/list");
-		$this->load->view("layouts/footer");
-	}
-	public function get_datatable(){
-		echo json_encode($this->Mestadoequipos->get_datatable());
-	}
-	public function get(){
-		echo json_encode($this->Mestadoequipos->get());
-	}
-	public function get_usados(){
-		echo json_encode($this->Mestadoequipos->get_usados());
-	}	
-	public function getOne(){
-		echo json_encode($this->Mestadoequipos->getOne($_POST));
-	}
-
-	public function update(){
-		$estado = $this->Mestadoequipos->getOne($_POST);
-		if ($estado->name == $_POST["name"]) {
-			$this->form_validation->set_rules("name","Nombre del estado","required|min_length[3]");
-		}else{
-			$this->form_validation->set_rules("name","Nombre del estado","required|min_length[3]|is_unique[estadoequipos.name]");
-		}
-		if ($this->form_validation->run()) {
-			$this->Mestadoequipos->update($_POST);
-			$vector=array(
-				'respuesta'=>1,
-				'informacion'=>""
-			);	
-		}else{
-			$vector=array(
-				'respuesta'=>2,
-				'informacion'=>validation_errors()
-			);
-		}
-		echo json_encode($vector);
-	}
-	public function add(){
-
-		if (isset($_POST["id"])) {
-			unset($_POST["id"]);
-		}
-		$this->form_validation->set_rules("name","Nombre del estado","is_unique[estadoequipos.name]|required|min_length[3]");
-
-		if ($this->form_validation->run()) {
-			$vector=array(
-				'respuesta'=>1,
-				'informacion'=>""
-			);
-			$this->Mestadoequipos->add($_POST);
-		}else{
-			$vector=array(
-				'respuesta'=>2,
-				'informacion'=>validation_errors()
-			);
-		}
-		echo json_encode($vector);
-	}
-	public function delete(){
-		$_POST["status"]=2;
-		$this->Mestadoequipos->delete($_POST);
-	}
-	public function active(){
-		$_POST["status"]=1;
-		$this->Mestadoequipos->active($_POST);
-	}
-	public function getFuncionalidad(){
-		echo json_encode($this->Mestadoequipos->getFuncionalidad());
-	}
-	public function getDisponibilidad(){
-
-		echo json_encode($this->Mestadoequipos->getDisponibilidad());
-	}
-	public function getTipoEstado(){
-		echo json_encode($this->Mtipos_estados->get());
-	}
-
+    private $permisos;
+    private Mestadoequipos $Mestadoequipos;
+    private Mtipos_estados $Mtipos_estados;
+    
+    public function __construct(BackendLibrary $backendLib)
+    {
+        $this->middleware('auth');
+        $this->Mestadoequipos = new Mestadoequipos();
+        $this->Mtipos_estados = new Mtipos_estados();
+        $this->permisos = $backendLib->control();
+    }
+    
+    public function index()
+    {
+        if (!session('login')) {
+            return redirect('auth');
+        }
+        
+        $acciones = session('acciones');
+        session(['controlador' => request()->segment(2)]);
+        
+        foreach ($acciones as $accion) {
+            if ($accion->modulo == "estado equipos") {
+                if ($accion->leer != 1) {
+                    return redirect('forbidden');
+                }
+            }
+        }
+        
+        $view = view('layouts.header');
+        
+        if (session('rol_id') == 1) {
+            $view->nest('aside', 'layouts.aside');
+        } elseif (session('rol_id') == 2) {
+            $view->nest('aside', 'layouts.admin_aside');
+        } elseif (session('rol_id') == 3) {
+            $view->nest('aside', 'layouts.advance_aside');
+        } else {
+            $view->nest('aside', 'layouts.basic_aside');
+        }
+        
+        return $view->nest('content', 'estadoequipos.list')
+                   ->nest('footer', 'layouts.footer');
+    }
+    
+    public function get_datatable(): JsonResponse
+    {
+        return response()->json($this->Mestadoequipos->get_datatable());
+    }
+    
+    public function get(): JsonResponse
+    {
+        return response()->json($this->Mestadoequipos->get());
+    }
+    
+    public function get_usados(): JsonResponse
+    {
+        return response()->json($this->Mestadoequipos->get_usados());
+    }
+    
+    public function getOne(Request $request): JsonResponse
+    {
+        return response()->json($this->Mestadoequipos->getOne($request->all()));
+    }
+    
+    public function update(Request $request): JsonResponse
+    {
+        $estado = $this->Mestadoequipos->getOne($request->all());
+        
+        $rules = [];
+        if ($estado->name == $request->name) {
+            $rules['name'] = 'required|min:3';
+        } else {
+            $rules['name'] = 'required|min:3|unique:estadoequipos,name';
+        }
+        
+        $validator = Validator::make($request->all(), $rules);
+        
+        if ($validator->passes()) {
+            $this->Mestadoequipos->update($request->all());
+            return response()->json([
+                'respuesta' => 1,
+                'informacion' => ""
+            ]);
+        } else {
+            return response()->json([
+                'respuesta' => 2,
+                'informacion' => $validator->errors()->first()
+            ]);
+        }
+    }
+    
+    public function add(Request $request): JsonResponse
+    {
+        if ($request->has('id')) {
+            $request->request->remove('id');
+        }
+        
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|min:3|unique:estadoequipos,name'
+        ]);
+        
+        if ($validator->passes()) {
+            $this->Mestadoequipos->add($request->all());
+            return response()->json([
+                'respuesta' => 1,
+                'informacion' => ""
+            ]);
+        } else {
+            return response()->json([
+                'respuesta' => 2,
+                'informacion' => $validator->errors()->first()
+            ]);
+        }
+    }
+    
+    public function delete(Request $request)
+    {
+        $request->merge(['status' => 2]);
+        $this->Mestadoequipos->delete($request->all());
+    }
+    
+    public function active(Request $request)
+    {
+        $request->merge(['status' => 1]);
+        $this->Mestadoequipos->active($request->all());
+    }
+    
+    public function getFuncionalidad(): JsonResponse
+    {
+        return response()->json($this->Mestadoequipos->getFuncionalidad());
+    }
+    
+    public function getDisponibilidad(): JsonResponse
+    {
+        return response()->json($this->Mestadoequipos->getDisponibilidad());
+    }
+    
+    public function getTipoEstado(): JsonResponse
+    {
+        return response()->json($this->Mtipos_estados->get());
+    }
 }
-
-?>

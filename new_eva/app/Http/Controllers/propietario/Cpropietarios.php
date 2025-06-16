@@ -1,134 +1,220 @@
 <?php
-defined('BASEPATH') or exit('El acceso directo no esta permitido');
 
-/**
- *
- */
-class Cpropietarios extends CI_Controller
+namespace App\Http\Controllers\propietario;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
+use App\Models\Mpropietarios;
+
+class CpropietariosController extends Controller
 {
-  function __construct()
-  {
-    parent::__construct();
-    $this->load->model('Mpropietarios');
-  }
-  public function index()
-  {
-    if ($this->session->userdata('login')) {
-    } else {
-      redirect(base_url('Cauth'));
+    public function __construct()
+    {
+        $this->middleware('auth');
     }
-    $acciones = $this->session->userdata("acciones");
-    $this->session->set_userdata('controlador', $this->uri->segment(2));
-    foreach ($acciones as $accion) {
-      if ($accion->modulo == "propietarios") {
-        if ($accion->leer != 1) {
-          redirect(base_url('Forbidden'));
+    public function index()
+    {
+        if (!Session::get('login')) {
+            return redirect()->route('auth.login');
         }
-      }
-    }
 
-    $data = array(
-      "propietarios" => $this->Mpropietarios->getAll()
-    );
-    $this->load->view("layouts/header");
-    $this->load->view("layouts/aside");
-    $this->load->view("propietarios/list", $data);
-    $this->load->view("propietarios/modal_edit");
-    $this->load->view("propietarios/modal_add");
-    $this->load->view("layouts/footer");
-  }
-  public function getAll()
-  {
-    echo json_encode($this->Mpropietarios->getAll());
-  }
-  public function getOne()
-  {
-    echo json_encode($this->Mpropietarios->getOne($_POST));
-  }
-  public function add()
-  {
+        $acciones = Session::get("acciones");
+        Session::put('controlador', 'propietarios');
 
-    $this->form_validation->set_rules("nombre", "Nombre del propietario", "is_unique[propietarios.nombre]|required|min_length[4]");
-    if ($this->form_validation->run()) {
-      $config['upload_path'] = "./assets/upload_imagenes"; //Evaluacion del archivo
-      $config['allowed_types'] = 'gif|jpg|png';
-      $config['encrypt_name'] = TRUE;
-      $this->load->library('upload', $config, 'uploadImage');
-      $this->uploadImage->initialize($config);
-
-      if (!empty($_FILES["logo"]["name"])) {
-        $this->uploadImage->do_upload("logo"); //
-        $data = "";
-        $data = $this->uploadImage->data();
-        $_POST["logo"] = $data["file_name"];
-      }
-      if ($this->Mpropietarios->add($_POST)) {
-      } else {
-        if (isset($_POST["logo"])) {
-          $this->load->helper("file");
-          unlink("./assets/upload_imagenes/" . $_POST["logo"]);
+        if ($acciones) {
+            foreach ($acciones as $accion) {
+                if ($accion->modulo == "propietarios") {
+                    if ($accion->leer != 1) {
+                        return redirect()->route('forbidden');
+                    }
+                }
+            }
         }
-      }
-      $vector_respuesta = array(
-        "caso" => 1
-      );
-    } else {
-      $informacion_error = validation_errors();
-      $vector_respuesta = array(
-        "caso" => 2,
-        "informacion_error" => $informacion_error
-      );
-    }
-    echo json_encode($vector_respuesta);
-  }
-  public function update()
-  {
 
-    if ($this->Mpropietarios->getOne($_POST)->nombre == $_POST["nombre"]) {
-      $this->form_validation->set_rules("nombre", "Nombre del propietario", "required|min_length[4]");
-    } else {
-      $this->form_validation->set_rules("nombre", "Nombre del propietario", "is_unique[propietarios.nombre]|required|min_length[4]");
+        $mpropietarios = app(Mpropietarios::class);
+
+        $data = [
+            "propietarios" => $mpropietarios->getAll()
+        ];
+
+        return view("propietarios.list", $data);
+    }
+    public function getAll(): JsonResponse
+    {
+        $mpropietarios = app(Mpropietarios::class);
+        return response()->json($mpropietarios->getAll());
     }
 
-    if ($this->form_validation->run()) {
-      $config['upload_path'] = "./assets/upload_imagenes"; //Evaluacion del archivo
-      $config['allowed_types'] = 'gif|jpg|png';
-      $config['encrypt_name'] = TRUE;
-      $this->load->library('upload', $config, 'uploadImage');
-      $this->uploadImage->initialize($config);
+    public function getOne(Request $request): JsonResponse
+    {
+        $mpropietarios = app(Mpropietarios::class);
+        return response()->json($mpropietarios->getOne($request->all()));
+    }
+    public function add(Request $request): JsonResponse
+    {
+        $data = $request->all();
 
-      if (!empty($_FILES["logo"]["name"])) {
-        $this->uploadImage->do_upload("logo"); //Esto sube el excel en la carpeta
-        $data = "";
-        $data = $this->uploadImage->data();
-        $_POST["logo"] = $data["file_name"];
-      }
-      if ($this->Mpropietarios->update($_POST)) {
-      } else {
-        if (isset($_POST["logo"])) {
-          $this->load->helper("file");
-          unlink("./assets/upload_imagenes/" . $_POST["logo"]);
+        $rules = [
+            'nombre' => 'required|min:4|unique:propietarios,nombre'
+        ];
+
+        $validator = Validator::make($data, $rules, [
+            'nombre.required' => 'El nombre del propietario es requerido',
+            'nombre.min' => 'El nombre debe tener al menos 4 caracteres',
+            'nombre.unique' => 'Ya existe un propietario con este nombre'
+        ]);
+
+        if ($validator->passes()) {
+            $mpropietarios = app(Mpropietarios::class);
+
+            // Manejo de archivo de logo
+            if ($request->hasFile('logo')) {
+                $file = $request->file('logo');
+
+                // Validar que sea imagen
+                if (in_array($file->getClientOriginalExtension(), ['gif', 'jpg', 'jpeg', 'png'])) {
+                    $filename = Str::random(32) . '.' . $file->getClientOriginalExtension();
+                    $file->move(public_path('assets/upload_imagenes'), $filename);
+                    $data["logo"] = $filename;
+                } else {
+                    return response()->json([
+                        "caso" => 2,
+                        "informacion_error" => "Solo se permiten archivos de imagen (gif, jpg, png)"
+                    ]);
+                }
+            }
+
+            if ($mpropietarios->add($data)) {
+                $vector_respuesta = [
+                    "caso" => 1,
+                    "mensaje" => "Propietario agregado correctamente"
+                ];
+            } else {
+                // Si falla la inserción, eliminar el archivo subido
+                if (isset($data["logo"])) {
+                    if (file_exists(public_path("assets/upload_imagenes/" . $data["logo"]))) {
+                        unlink(public_path("assets/upload_imagenes/" . $data["logo"]));
+                    }
+                }
+                $vector_respuesta = [
+                    "caso" => 2,
+                    "informacion_error" => "Error al guardar el propietario"
+                ];
+            }
+        } else {
+            $vector_respuesta = [
+                "caso" => 2,
+                "informacion_error" => $validator->errors()->all()
+            ];
         }
-      }
-      $vector_respuesta = array(
-        "caso" => 1
-      );
-    } else {
-      $informacion_error = validation_errors();
-      $vector_respuesta = array(
 
-        "caso" => 2,
-        "informacion_error" => $informacion_error
-      );
+        return response()->json($vector_respuesta);
     }
-    echo json_encode($vector_respuesta);
-  }
-  public function delete()
-  {
-    // $this->Minvimas->delete($_POST);
-  }
-  public function activate()
-  {
-    // $this->Minvimas->activate($_POST);
-  }
+    public function update(Request $request): JsonResponse
+    {
+        $data = $request->all();
+        $mpropietarios = app(Mpropietarios::class);
+
+        // Verificar si el nombre cambió para aplicar validación de unicidad
+        $propietario_actual = $mpropietarios->getOne($data);
+
+        if ($propietario_actual->nombre == $data["nombre"]) {
+            $rules = [
+                'nombre' => 'required|min:4'
+            ];
+        } else {
+            $rules = [
+                'nombre' => 'required|min:4|unique:propietarios,nombre'
+            ];
+        }
+
+        $validator = Validator::make($data, $rules, [
+            'nombre.required' => 'El nombre del propietario es requerido',
+            'nombre.min' => 'El nombre debe tener al menos 4 caracteres',
+            'nombre.unique' => 'Ya existe un propietario con este nombre'
+        ]);
+
+        if ($validator->passes()) {
+            // Manejo de archivo de logo
+            if ($request->hasFile('logo')) {
+                $file = $request->file('logo');
+
+                // Validar que sea imagen
+                if (in_array($file->getClientOriginalExtension(), ['gif', 'jpg', 'jpeg', 'png'])) {
+                    $filename = Str::random(32) . '.' . $file->getClientOriginalExtension();
+                    $file->move(public_path('assets/upload_imagenes'), $filename);
+                    $data["logo"] = $filename;
+                } else {
+                    return response()->json([
+                        "caso" => 2,
+                        "informacion_error" => "Solo se permiten archivos de imagen (gif, jpg, png)"
+                    ]);
+                }
+            }
+
+            if ($mpropietarios->update($data)) {
+                $vector_respuesta = [
+                    "caso" => 1,
+                    "mensaje" => "Propietario actualizado correctamente"
+                ];
+            } else {
+                // Si falla la actualización, eliminar el archivo subido
+                if (isset($data["logo"])) {
+                    if (file_exists(public_path("assets/upload_imagenes/" . $data["logo"]))) {
+                        unlink(public_path("assets/upload_imagenes/" . $data["logo"]));
+                    }
+                }
+                $vector_respuesta = [
+                    "caso" => 2,
+                    "informacion_error" => "Error al actualizar el propietario"
+                ];
+            }
+        } else {
+            $vector_respuesta = [
+                "caso" => 2,
+                "informacion_error" => $validator->errors()->all()
+            ];
+        }
+
+        return response()->json($vector_respuesta);
+    }
+    public function delete(Request $request): JsonResponse
+    {
+        $data = $request->all();
+        $mpropietarios = app(Mpropietarios::class);
+
+        if ($mpropietarios->delete($data)) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Propietario eliminado correctamente'
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al eliminar el propietario'
+            ]);
+        }
+    }
+
+    public function activate(Request $request): JsonResponse
+    {
+        $data = $request->all();
+        $mpropietarios = app(Mpropietarios::class);
+
+        if ($mpropietarios->activate($data)) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Propietario activado correctamente'
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al activar el propietario'
+            ]);
+        }
+    }
 }
