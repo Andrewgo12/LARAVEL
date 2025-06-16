@@ -1,49 +1,63 @@
-<?php 
-defined ('BASEPATH') OR exit('El acceso directo no esta permitido');
+<?php
 
-/**
-* 
-*/
-class Cproveedores_mantenimiento extends CI_Controller
+namespace App\Http\Controllers\mantenimiento;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Models\Mproveedores_mantenimiento;
+use Illuminate\Http\JsonResponse;
+
+class ProveedoresMantenimientoController extends Controller
 {
-	function __construct()
-	{
-		parent::__construct();
-		$this->load->model('Mproveedores_mantenimiento');
-	}
-	public function index(){
-		if($this->session->userdata('login')){
-
-		}else{
-			redirect(base_url('Cauth'));
-		}
-
-
-	}
-	public function get(){
-		// echo json_encode($this->Minvimas->get());
-	}
-	public function getAll(){
-		echo json_encode($this->Mproveedores_mantenimiento->getAll());
-	}
-	public function getOne(){
-		// echo json_encode($this->Minvimas->getOne($_POST));
-	}
-
-	public function add(){
-
-	}
-	public function update(){
-
-	}
-
-	public function delete(){
-		// $this->Minvimas->delete($_POST);
-	}
-
-	public function show(){
-
-	}
-
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
+    public function index()
+    {
+        if (!session('login')) {
+            return redirect('auth');
+        }
+    }
+    
+    public function get()
+    {
+        // return response()->json(app(Mproveedores_mantenimiento::class)->get());
+    }
+    
+    public function getAll(): JsonResponse
+    {
+        return response()->json(app(Mproveedores_mantenimiento::class)->getAll());
+    }
+    
+    public function getOne(Request $request): JsonResponse
+    {
+        // return response()->json(app(Mproveedores_mantenimiento::class)->getOne($request->all()));
+        return response()->json([]);
+    }
+    
+    public function add(Request $request): JsonResponse
+    {
+        // Implementación pendiente
+        return response()->json(['success' => true]);
+    }
+    
+    public function update(Request $request): JsonResponse
+    {
+        // Implementación pendiente
+        return response()->json(['success' => true]);
+    }
+    
+    public function delete(Request $request): JsonResponse
+    {
+        // app(Mproveedores_mantenimiento::class)->delete($request->all());
+        return response()->json(['success' => true]);
+    }
+    
+    public function show(Request $request): JsonResponse
+    {
+        // Implementación pendiente
+        return response()->json([]);
+    }
 }
-?>

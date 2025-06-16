@@ -95,7 +95,6 @@
   @endif
 
   <link rel="stylesheet" href="{{ asset('css/propio.css') }}">
-  <link rel="stylesheet" href="{{ asset('css/theme-sistema.css') }}">
 
 
 </head>

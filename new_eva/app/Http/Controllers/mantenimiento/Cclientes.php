@@ -1,64 +1,74 @@
 <?php
-defined('BASEPATH') or exit('El acceso directo no esta permitido');
 
-/**
- * 
- */
-class Cclientes extends CI_Controller
+namespace App\Http\Controllers\mantenimiento;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Models\Mclientes;
+use Illuminate\Http\JsonResponse;
+use Illuminate\View\View;
+
+class ClientesController extends Controller
 {
-  private $permisos;
-  function __construct()
-  {
-    parent::__construct();
-    $this->load->model('Mclientes');
-    $this->permisos = $this->backend_lib->control();
-  }
-  public function index()
-  {
-    $this->load->view('layouts/header');
-    $this->load->view('layouts/aside');
-    $this->load->view("clientes/list");
-    $this->load->view("clientes/modal_add");
-    $this->load->view("clientes/modal_edit");
-    $this->load->view("clientes/modal_show");
-    $this->load->view('layouts/footer');
-  }
-  public function get_server_side()
-  {
-    $vector = $this->Mclientes->get_server_side($_POST);
-
-    $respuesta = array(
-
-      'draw' => intval($this->input->post('draw')),
-      'recordsTotal' => $vector['num_filas_limit'],
-      'recordsFiltered' => $vector['num_filas'],
-      'data' => $vector['datos']
-
-    );
-
-    echo json_encode($respuesta);
-  }
-  public function add()
-  {
-
-    $this->Mclientes->add($_POST);
-  }
-  public function update()
-  {
-    $this->Mclientes->update($_POST);
-  }
-  public function delete()
-  {
-    $array = array('estado' => 0);
-    $this->Mclientes->delete($_POST, $array);
-  }
-  public function show()
-  {
-
-    $result = $this->Mclientes->getOne($_POST['id']);
-    $param = array(
-      'cliente' => $result
-    );
-    $this->load->view('clientes/detail', $param);
-  }
+    private $permisos;
+    
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->permisos = app('backend_lib')->control();
+    }
+    
+    public function index(): View
+    {
+        return view('layouts.header')
+            ->nest('aside', 'layouts.aside')
+            ->nest('content', 'clientes.list')
+            ->nest('modal_add', 'clientes.modal_add')
+            ->nest('modal_edit', 'clientes.modal_edit')
+            ->nest('modal_show', 'clientes.modal_show')
+            ->nest('footer', 'layouts.footer');
+    }
+    
+    public function get_server_side(Request $request): JsonResponse
+    {
+        $vector = app(Mclientes::class)->get_server_side($request->all());
+        
+        $respuesta = [
+            'draw' => intval($request->input('draw')),
+            'recordsTotal' => $vector['num_filas_limit'],
+            'recordsFiltered' => $vector['num_filas'],
+            'data' => $vector['datos']
+        ];
+        
+        return response()->json($respuesta);
+    }
+    
+    public function add(Request $request): JsonResponse
+    {
+        app(Mclientes::class)->add($request->all());
+        return response()->json(['success' => true]);
+    }
+    
+    public function update(Request $request): JsonResponse
+    {
+        app(Mclientes::class)->update($request->all());
+        return response()->json(['success' => true]);
+    }
+    
+    public function delete(Request $request): JsonResponse
+    {
+        $array = ['estado' => 0];
+        app(Mclientes::class)->delete($request->all(), $array);
+        return response()->json(['success' => true]);
+    }
+    
+    public function show(Request $request): View
+    {
+        $result = app(Mclientes::class)->getOne($request->input('id'));
+        $param = [
+            'cliente' => $result
+        ];
+        
+        return view('clientes.detail', $param);
+    }
 }

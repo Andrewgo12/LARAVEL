@@ -1,162 +1,183 @@
 <?php
-defined('BASEPATH') or exit('El acceso directo no esta permitido');
 
-/**
- * 
- */
-class Cinvimas extends CI_Controller
+namespace App\Http\Controllers\equipo;
+
+use App\Http\Controllers\Controller;
+use App\Models\Mequipos;
+use App\Models\Minvimas;
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Validator;
+
+class Cinvimas extends Controller
 {
-  function __construct()
-  {
-    parent::__construct();
-    $this->load->model('Mequipos');
-    $this->load->model('Minvimas');
-  }
-  public function index()
-  {
-    if ($this->session->userdata('login')) {
-    } else {
-      redirect(base_url('Cauth'));
+    protected $mequipos;
+    protected $minvimas;
+
+    public function __construct(Mequipos $mequipos, Minvimas $minvimas)
+    {
+        $this->mequipos = $mequipos;
+        $this->minvimas = $minvimas;
     }
-    $acciones = $this->session->userdata("acciones");
-    $this->session->set_userdata('controlador', $this->uri->segment(2));
-    foreach ($acciones as $accion) {
-      if ($accion->modulo == "invimas") {
-        if ($accion->leer != 1) {
-          redirect(base_url('Forbidden'));
+
+    public function index()
+    {
+        if (!auth()->check()) {
+            return redirect()->route('login');
         }
-      }
-    }
 
-    $data = array(
-      "invimas" => $this->Minvimas->getAll()
-    );
-    $this->load->view("layouts/header");
-    $this->load->view("layouts/aside");
-    $this->load->view("invimas/list", $data);
-    $this->load->view("invimas/modal_edit");
-    $this->load->view("invimas/modal_add");
-    $this->load->view("equipos/modal_asociacion_invima");
-    $this->load->view("equipos/modal_asociacion_invima_especifico");
-    $this->load->view("layouts/footer");
-  }
-  public function get()
-  {
-    echo json_encode($this->Minvimas->get());
-  }
-  public function getAll()
-  {
-    echo json_encode($this->Minvimas->getAll());
-  }
-  public function getWithNumberDevices()
-  {
-    echo json_encode($this->Minvimas->getWithNumberDevices());
-  }
+        $acciones = session('acciones');
+        session(['controlador' => request()->segment(2)]);
 
-  public function getOne()
-  {
-    echo json_encode($this->Minvimas->getOne($_POST));
-  }
-  public function getdescriptionlike()
-  {
-    echo json_encode($this->Minvimas->getdescriptionlike($_POST));
-  }
-
-  public function add()
-  {
-
-    $this->form_validation->set_rules("invima", "Registro sanitario", "is_unique[invimas.invima]|required|min_length[4]");
-    if ($this->form_validation->run()) {
-      $config['upload_path'] = "./assets/upload_registros_sanitarios"; //Evaluacion del archivo
-      $config['allowed_types'] = '*';
-      $config['encrypt_name'] = TRUE;
-      $this->load->library('upload', $config, 'uploadFile');
-      $this->uploadFile->initialize($config);
-
-      if (!empty($_FILES["file"]["name"])) {
-        $this->uploadFile->do_upload("file"); //Esto sube el excel en la carpeta
-        $data = "";
-        $data = $this->uploadFile->data();
-        $_POST["file"] = $data["file_name"];
-      }
-      if ($this->Minvimas->add($_POST)) {
-      } else {
-        if (isset($_POST["file"])) {
-          $this->load->helper("file");
-          unlink("./assets/upload_registros_sanitarios/" . $_POST["file"]);
+        foreach ($acciones as $accion) {
+            if ($accion->modulo == "invimas") {
+                if ($accion->leer != 1) {
+                    return redirect()->route('forbidden');
+                }
+            }
         }
-      }
-      $vector_respuesta = array(
-        "caso" => 1
-      );
-    } else {
-      $informacion_error = validation_errors();
-      $vector_respuesta = array(
-        "caso" => 2,
-        "informacion_error" => $informacion_error
-      );
-    }
-    echo json_encode($vector_respuesta);
-  }
-  public function update()
-  {
 
-    if ($this->Minvimas->getOne($_POST)->invima == $_POST["invima"]) {
-      $this->form_validation->set_rules("invima", "Registro sanitario", "required|min_length[4]");
-    } else {
-      $this->form_validation->set_rules("invima", "Registro sanitario", "is_unique[invimas.invima]|required|min_length[4]");
+        $data = [
+            "invimas" => $this->minvimas->getAll()
+        ];
+
+        return view('invimas.list', $data)
+            ->with('header', view('layouts.header'))
+            ->with('aside', view('layouts.aside'))
+            ->with('modal_edit', view('invimas.modal_edit'))
+            ->with('modal_add', view('invimas.modal_add'))
+            ->with('modal_asociacion_invima', view('equipos.modal_asociacion_invima'))
+            ->with('modal_asociacion_invima_especifico', view('equipos.modal_asociacion_invima_especifico'))
+            ->with('footer', view('layouts.footer'));
     }
 
-    if ($this->form_validation->run()) {
-      $config['upload_path'] = "./assets/upload_registros_sanitarios"; //Evaluacion del archivo
-      $config['allowed_types'] = '*';
-      $config['encrypt_name'] = TRUE;
-      $this->load->library('upload', $config, 'uploadFile');
-      $this->uploadFile->initialize($config);
+    public function get(): JsonResponse
+    {
+        return response()->json($this->minvimas->get());
+    }
 
-      if (!empty($_FILES["file"]["name"])) {
-        $this->uploadFile->do_upload("file"); //Esto sube el excel en la carpeta
-        $data = "";
-        $data = $this->uploadFile->data();
-        $_POST["file"] = $data["file_name"];
-      }
-      if ($this->Minvimas->update($_POST)) {
-      } else {
-        if (isset($_POST["file"])) {
-          $this->load->helper("file");
-          unlink("./assets/upload_archivos/" . $_POST["file"]);
+    public function getAll(): JsonResponse
+    {
+        return response()->json($this->minvimas->getAll());
+    }
+
+    public function getWithNumberDevices(): JsonResponse
+    {
+        return response()->json($this->minvimas->getWithNumberDevices());
+    }
+
+    public function getOne(Request $request): JsonResponse
+    {
+        return response()->json($this->minvimas->getOne($request->all()));
+    }
+
+    public function getdescriptionlike(Request $request): JsonResponse
+    {
+        return response()->json($this->minvimas->getdescriptionlike($request->all()));
+    }
+
+    public function add(Request $request): JsonResponse
+    {
+        $validator = Validator::make($request->all(), [
+            'invima' => 'required|min:4|unique:invimas,invima',
+        ]);
+
+        if ($validator->passes()) {
+            $data = $request->all();
+            
+            if ($request->hasFile('file')) {
+                $file = $request->file('file');
+                $fileName = uniqid() . '.' . $file->getClientOriginalExtension();
+                $file->move(public_path('assets/upload_registros_sanitarios'), $fileName);
+                $data['file'] = $fileName;
+            }
+
+            if ($this->minvimas->add($data)) {
+                return response()->json([
+                    "caso" => 1
+                ]);
+            } else {
+                if (isset($data['file'])) {
+                    File::delete(public_path('assets/upload_registros_sanitarios/' . $data['file']));
+                }
+                return response()->json([
+                    "caso" => 2,
+                    "informacion_error" => "Error al agregar el registro"
+                ]);
+            }
+        } else {
+            return response()->json([
+                "caso" => 2,
+                "informacion_error" => $validator->errors()->all()
+            ]);
         }
-      }
-
-      $vector_respuesta = array(
-        "caso" => 1
-      );
-    } else {
-      $informacion_error = validation_errors();
-      $vector_respuesta = array(
-
-        "caso" => 2,
-        "informacion_error" => $informacion_error
-      );
     }
-    echo json_encode($vector_respuesta);
-  }
 
-  public function delete()
-  {
-    $this->Minvimas->delete($_POST);
-  }
-  public function activate()
-  {
-    $this->Minvimas->activate($_POST);
-  }
+    public function update(Request $request): JsonResponse
+    {
+        $data = $request->all();
+        $currentInvima = $this->minvimas->getOne($data);
 
-  public function show()
-  {
-    $invimas_activos = $this->Minvimas->getAll();
-    $vector = array(
-      "invimas" => $invimas_activos
-    );
-    $this->load->view("invimas/detalle_consulta", $vector);
-  }
+        $rules = [
+            'invima' => 'required|min:4',
+        ];
+
+        if ($currentInvima->invima != $data['invima']) {
+            $rules['invima'] = 'required|min:4|unique:invimas,invima';
+        }
+
+        $validator = Validator::make($data, $rules);
+
+        if ($validator->passes()) {
+            if ($request->hasFile('file')) {
+                $file = $request->file('file');
+                $fileName = uniqid() . '.' . $file->getClientOriginalExtension();
+                $file->move(public_path('assets/upload_registros_sanitarios'), $fileName);
+                $data['file'] = $fileName;
+            }
+
+            if ($this->minvimas->update($data)) {
+                return response()->json([
+                    "caso" => 1
+                ]);
+            } else {
+                if (isset($data['file'])) {
+                    File::delete(public_path('assets/upload_archivos/' . $data['file']));
+                }
+                return response()->json([
+                    "caso" => 2,
+                    "informacion_error" => "Error al actualizar el registro"
+                ]);
+            }
+        } else {
+            return response()->json([
+                "caso" => 2,
+                "informacion_error" => $validator->errors()->all()
+            ]);
+        }
+    }
+
+    public function delete(Request $request): JsonResponse
+    {
+        $this->minvimas->delete($request->all());
+        return response()->json(['success' => true]);
+    }
+
+    public function activate(Request $request): JsonResponse
+    {
+        $this->minvimas->activate($request->all());
+        return response()->json(['success' => true]);
+    }
+
+    public function show()
+    {
+        $invimas_activos = $this->minvimas->getAll();
+        $data = [
+            "invimas" => $invimas_activos
+        ];
+        
+        return view('invimas.detalle_consulta', $data);
+    }
 }
+

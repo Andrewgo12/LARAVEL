@@ -1,183 +1,205 @@
 <?php
-defined('BASEPATH') or exit('El acceso directo no esta permitido');
 
-/**
- *
- */
-class Ccalibraciones extends CI_Controller
+namespace App\Http\Controllers\calibracion;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Models\Mequipos;
+use App\Models\Mcalibraciones;
+use App\Models\Mcambios_hdv;
+use App\Models\Mpreventivos;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
+use Symfony\Component\HttpFoundation\StreamedResponse;
+
+class Ccalibraciones extends Controller
 {
-  function __construct()
-  {
-    parent::__construct();
-    $this->load->model('Mequipos');
-    $this->load->model('Mcalibraciones');
-    $this->load->model('Mcambios_hdv');
-  }
-  public function index()
-  {
-  }
-  public function get()
-  {
-    echo json_encode($this->Mcalibraciones->get($_POST));
-  }
-  public function getAll()
-  {
-  }
-  public function getOne()
-  {
-    echo json_encode($this->Mcalibraciones->getOne($_POST));
-  }
-  public function getLast()
-  {
-    echo json_encode($this->Mpreventivos->getLast($_POST));
-  }
-
-  public function add()
-  {
-
-    $config['upload_path'] = "./assets/upload_calibraciones";
-    $config['allowed_types'] = '*';
-    $config['max_size']  = 1000000;
-    $config['encrypt_name'] = TRUE;
-    $this->load->library('upload', $config, 'uploadCalibracion');
-    $this->uploadCalibracion->initialize($config);
-    if (!empty($_FILES["file"]["name"])) {
-      $this->uploadCalibracion->do_upload("file"); //Esto sube el archivo
-      $data = "";
-      $data = $this->uploadCalibracion->data();
-      $_POST["file"] = $data["file_name"];
+    private Mequipos $Mequipos;
+    private Mcalibraciones $Mcalibraciones;
+    private Mcambios_hdv $Mcambios_hdv;
+    private Mpreventivos $Mpreventivos;
+    
+    public function __construct()
+    {
+        $this->Mequipos = new Mequipos();
+        $this->Mcalibraciones = new Mcalibraciones();
+        $this->Mcambios_hdv = new Mcambios_hdv();
+        $this->Mpreventivos = new Mpreventivos();
     }
-    $ultimo_id = $this->Mcalibraciones->add($_POST);
-    ////////////////////////////////////////////////////////////////////////////////
-    $descripcion_historial = "Se agrega calibracion con codigo = " . $this->Mcalibraciones->getOne(array("id" => $ultimo_id))->description;
-    $vector_cambios_hdv = array(
-      "descripcion" => $descripcion_historial,
-      "usuario_id" => $this->session->userdata("id"),
-      "equipo_id" => $_POST["equipo_id"]
-    );
-    $this->Mcambios_hdv->add($vector_cambios_hdv); // Se inserta el registro de cambio de HDV
-    ////////////////////////////////////////////////////////////////////////////////    
-    echo json_encode($_POST["equipo_id"]);
-  }
-  public function update()
-  {
+    
+    public function index()
+    {
+    }
+    
+    public function get(Request $request): JsonResponse
+    {
+        return response()->json($this->Mcalibraciones->get($request->all()));
+    }
+    
+    public function getAll()
+    {
+    }
+    
+    public function getOne(Request $request): JsonResponse
+    {
+        return response()->json($this->Mcalibraciones->getOne($request->all()));
+    }
+    
+    public function getLast(Request $request): JsonResponse
+    {
+        return response()->json($this->Mpreventivos->getLast($request->all()));
+    }
 
-    if (isset($_POST)) {
-      # code...
-      $calibracion = $this->Mcalibraciones->getOne($_POST);
-      $file_anterior = $calibracion->file;
-
-      $config['upload_path'] = "./assets/upload_calibraciones";
-      $config['allowed_types'] = '*';
-      $config['encrypt_name'] = TRUE;
-      $this->load->library('upload', $config, 'uploadCalibracion');
-      $this->uploadCalibracion->initialize($config);
-      if (!empty($_FILES["file"]["name"])) {
-        $this->uploadCalibracion->do_upload("file"); //Esto sube el archivo
-        $data = "";
-        $data = $this->uploadCalibracion->data();
-        $_POST["file"] = $data["file_name"];
-      }
-      if ($this->Mcalibraciones->update($_POST)) {
-
-        ////////////////////////////////////////////////////////////////////////////////
-        $descripcion_historial = "Se actualiza calibracion con codigo = " . $calibracion->description;
-        $vector_cambios_hdv = array(
-          "descripcion" => $descripcion_historial,
-          "usuario_id" => $this->session->userdata("id"),
-          "equipo_id" => $calibracion->equipo_id
-        );
-        $this->Mcambios_hdv->add($vector_cambios_hdv); // Se inserta el registro de cambio de HDV
-        ////////////////////////////////////////////////////////////////////////////////   	    	
-        if (isset($_POST["file"])) {
-          if ($_POST["file"] != $file_anterior) {
-            $this->load->helper("file");
-            unlink("./assets/upload_calibraciones/" . $file_anterior);
-          }
+    public function add(Request $request): JsonResponse
+    {
+        $data = $request->all();
+        
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            $fileName = md5(uniqid()) . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('assets/upload_calibraciones'), $fileName);
+            $data['file'] = $fileName;
         }
-        echo json_encode($_POST["equipo_id"]);
-      } else {
-        if (isset($_POST["file"])) {
-          $this->load->helper("file");
-          unlink("./assets/upload_calibraciones/" . $_POST["file"]);
+        
+        $ultimo_id = $this->Mcalibraciones->add($data);
+        
+        // Se inserta el registro de cambio de HDV
+        $descripcion_historial = "Se agrega calibracion con codigo = " . $this->Mcalibraciones->getOne(["id" => $ultimo_id])->description;
+        $vector_cambios_hdv = [
+            "descripcion" => $descripcion_historial,
+            "usuario_id" => Auth::id(),
+            "equipo_id" => $data["equipo_id"]
+        ];
+        $this->Mcambios_hdv->add($vector_cambios_hdv);
+        
+        return response()->json($data["equipo_id"]);
+    }
+    
+    public function update(Request $request): JsonResponse
+    {
+        $data = $request->all();
+        
+        if (isset($data['id'])) {
+            $calibracion = $this->Mcalibraciones->getOne($data);
+            $file_anterior = $calibracion->file;
+            
+            if ($request->hasFile('file')) {
+                $file = $request->file('file');
+                $fileName = md5(uniqid()) . '.' . $file->getClientOriginalExtension();
+                $file->move(public_path('assets/upload_calibraciones'), $fileName);
+                $data['file'] = $fileName;
+            }
+            
+            if ($this->Mcalibraciones->update($data)) {
+                // Se inserta el registro de cambio de HDV
+                $descripcion_historial = "Se actualiza calibracion con codigo = " . $calibracion->description;
+                $vector_cambios_hdv = [
+                    "descripcion" => $descripcion_historial,
+                    "usuario_id" => Auth::id(),
+                    "equipo_id" => $calibracion->equipo_id
+                ];
+                $this->Mcambios_hdv->add($vector_cambios_hdv);
+                
+                if (isset($data["file"]) && $data["file"] != $file_anterior && !empty($file_anterior)) {
+                    File::delete(public_path('assets/upload_calibraciones/' . $file_anterior));
+                }
+                
+                return response()->json($data["equipo_id"]);
+            } else {
+                if (isset($data["file"])) {
+                    File::delete(public_path('assets/upload_calibraciones/' . $data["file"]));
+                }
+                
+                return response()->json(['error' => 'No se pudo actualizar'], 500);
+            }
         }
-      }
+        
+        return response()->json(['error' => 'ID no proporcionado'], 400);
     }
-  }
 
-  public function delete()
-  {
-
-    $vector = array(
-      "id" => $_POST["id"]
-    );
-    $calibracion = $this->Mcalibraciones->getOne($vector);
-    $file = $calibracion->file;
-    if ($this->Mcalibraciones->delete($_POST)) {
-      ////////////////////////////////////////////////////////////////////////////////
-      $descripcion_historial = "Se elimina calibracion con codigo = " . $calibracion->description;
-      $vector_cambios_hdv = array(
-        "descripcion" => $descripcion_historial,
-        "usuario_id" => $this->session->userdata("id"),
-        "equipo_id" => $calibracion->equipo_id
-      );
-      $this->Mcambios_hdv->add($vector_cambios_hdv); // Se inserta el registro de cambio de HDV
-      ////////////////////////////////////////////////////////////////////////////////   		
-      if ($file != "" && $file != null) {
-        $this->load->helper("file");
-        unlink("./assets/upload_calibraciones/" . $file);
-      }
+    public function delete(Request $request): JsonResponse
+    {
+        $vector = [
+            "id" => $request->input("id")
+        ];
+        
+        $calibracion = $this->Mcalibraciones->getOne($vector);
+        $file = $calibracion->file;
+        
+        if ($this->Mcalibraciones->delete($request->all())) {
+            // Se inserta el registro de cambio de HDV
+            $descripcion_historial = "Se elimina calibracion con codigo = " . $calibracion->description;
+            $vector_cambios_hdv = [
+                "descripcion" => $descripcion_historial,
+                "usuario_id" => Auth::id(),
+                "equipo_id" => $calibracion->equipo_id
+            ];
+            $this->Mcambios_hdv->add($vector_cambios_hdv);
+            
+            if ($file != "" && $file != null) {
+                File::delete(public_path('assets/upload_calibraciones/' . $file));
+            }
+            
+            return response()->json(['success' => true]);
+        }
+        
+        return response()->json(['error' => 'No se pudo eliminar'], 500);
     }
-  }
 
-  public function show()
-  {
-    $vector = array(
-      'calibraciones' => $this->Mcalibraciones->getCalibracionesModal()
-    );
-    $this->load->view("calibraciones/detail", $vector);
-  }
+    public function show(): View
+    {
+        $vector = [
+            'calibraciones' => $this->Mcalibraciones->getCalibracionesModal()
+        ];
+        
+        return view("calibraciones.detail", $vector);
+    }
 
-  public function ExportarExcel()
-  {
-    header("Content-Type: application/vnd.ms-excel charset=iso-8859-1");
-    header('Content-Disposition: attachment;filename=CalibracionesEB.xls');
-    $calibraciones = $this->Mcalibraciones->getCalibracionesAll();
-
-?>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <table border="1">
-      <thead>
-        <tr>
-          <th>Codigo calibracion</th>
-          <th>Fecha de ejecucion</th>
-          <th>Marca</th>
-          <th>Codigo</th>
-          <th>Serie</th>
-          <th>Nombre equipo</th>
-          <th>Id equipo</th>
-          <th>Archivo</th>
-          <th>Ubicación</th>
-        </tr>
-      </thead>
-      <tbody>
-        <?php foreach ($calibraciones as $calibracion) : ?>
-          <tr>
-            <td><?php echo $calibracion->codigo; ?></td>
-            <td><?php echo $calibracion->fecha_ejecucion; ?></td>
-            <td><?php echo $calibracion->marca; ?></td>
-            <td><?php echo $calibracion->code; ?></td>
-            <td>SN:&nbsp;<?php echo $calibracion->serial; ?></td>
-            <td><?php echo $calibracion->name; ?></td>
-            <td><?php echo $calibracion->id; ?></td>
-            <td><?php echo $calibracion->archivocalibracion; ?></td>
-            <td><?php echo $calibracion->ubicacion; ?></td>
-          </tr>
-        <?php endforeach ?>
-
-      </tbody>
-    </table>
-<?php
-
-  }
+    public function ExportarExcel(): StreamedResponse
+    {
+        $calibraciones = $this->Mcalibraciones->getCalibracionesAll();
+        
+        return response()->stream(function() use ($calibraciones) {
+            echo '<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />';
+            echo '<table border="1">';
+            echo '<thead>';
+            echo '<tr>';
+            echo '<th>Codigo calibracion</th>';
+            echo '<th>Fecha de ejecucion</th>';
+            echo '<th>Marca</th>';
+            echo '<th>Codigo</th>';
+            echo '<th>Serie</th>';
+            echo '<th>Nombre equipo</th>';
+            echo '<th>Id equipo</th>';
+            echo '<th>Archivo</th>';
+            echo '<th>Ubicación</th>';
+            echo '</tr>';
+            echo '</thead>';
+            echo '<tbody>';
+            
+            foreach ($calibraciones as $calibracion) {
+                echo '<tr>';
+                echo '<td>' . $calibracion->codigo . '</td>';
+                echo '<td>' . $calibracion->fecha_ejecucion . '</td>';
+                echo '<td>' . $calibracion->marca . '</td>';
+                echo '<td>' . $calibracion->code . '</td>';
+                echo '<td>SN:&nbsp;' . $calibracion->serial . '</td>';
+                echo '<td>' . $calibracion->name . '</td>';
+                echo '<td>' . $calibracion->id . '</td>';
+                echo '<td>' . $calibracion->archivocalibracion . '</td>';
+                echo '<td>' . $calibracion->ubicacion . '</td>';
+                echo '</tr>';
+            }
+            
+            echo '</tbody>';
+            echo '</table>';
+        }, 200, [
+            'Content-Type' => 'application/vnd.ms-excel; charset=iso-8859-1',
+            'Content-Disposition' => 'attachment; filename=CalibracionesEB.xls',
+        ]);
+    }
 }
+

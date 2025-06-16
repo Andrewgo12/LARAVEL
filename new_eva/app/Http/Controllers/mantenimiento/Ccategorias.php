@@ -1,101 +1,123 @@
 <?php
-defined('BASEPATH') or exit('El acceso directo no esta permitido');
-/**
- *
- */
-class Ccategorias extends CI_Controller
+
+namespace App\Http\Controllers\mantenimiento;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Models\Mcategorias;
+use Illuminate\Support\Facades\Validator;
+
+class CategoriasController extends Controller
 {
-  private $permisos;
-  function __construct()
-  {
-    parent::__construct();
-    $this->load->model('Mcategorias');
-    $this->permisos = $this->backend_lib->control();
-  }
-  public function index()
-  {
-    if ($this->session->userdata('login')) {
-    } else {
-      redirect(base_url('Cauth'));
+    private $permisos;
+    
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->permisos = app('backend_lib')->control();
     }
-    $data = array(
-      'permisos' => $this->permisos
-    );
-    $this->load->view('layouts/header');
-    $this->load->view('layouts/aside');
-    $this->load->view('categorias/list', $data);
-    $this->load->view('categorias/modal_add');
-    $this->load->view('categorias/modal_edit');
-    $this->load->view('categorias/modal_show');
-    $this->load->view('layouts/footer');
-  }
-  public function get()
-  {
-    echo json_encode($this->Mcategorias->get());
-  }
-  public function get_server_side()
-  {
-
-    $vector = $this->Mcategorias->get_server_side($_POST);
-
-    $respuesta = array(
-
-      'draw' => intval($this->input->post('draw')),
-      'recordsTotal' => $vector['num_filas_limit'],
-      'recordsFiltered' => $vector['num_filas'],
-      'data' => $vector['datos']
-    );
-    echo json_encode($respuesta);
-  }
-  public function add()
-  {
-    $this->form_validation->set_rules("nombre", "Nombre", "required|is_unique[categorias.nombre]");
-    $this->form_validation->set_rules("descripcion", "Descripcion", "required|is_unique[categorias.descripcion]");
-    if ($this->form_validation->run()) {
-      echo json_encode(1);
-      $this->Mcategorias->add($_POST);
-    } else {
-      $error = array(
-        'nombre' => form_error('nombre'),
-        'descripcion' => form_error('descripcion'),
-      );
-      echo json_encode($error);
+    
+    public function index()
+    {
+        if (!session('login')) {
+            return redirect('auth');
+        }
+        
+        $data = [
+            'permisos' => $this->permisos
+        ];
+        
+        return view('layouts.header')
+            ->nest('aside', 'layouts.aside')
+            ->nest('content', 'categorias.list', $data)
+            ->nest('modal_add', 'categorias.modal_add')
+            ->nest('modal_edit', 'categorias.modal_edit')
+            ->nest('modal_show', 'categorias.modal_show')
+            ->nest('footer', 'layouts.footer');
     }
-  }
-  public function update()
-  {
-    $categoriaActual = $this->Mcategorias->getOne($_POST['id']);
-    if ($_POST['nombre'] == $categoriaActual->nombre) {
-      $unique = "";
-    } else {
-      $unique = "|is_unique[categorias.nombre]";
+    
+    public function get()
+    {
+        return response()->json(app(Mcategorias::class)->get());
     }
-    $this->form_validation->set_rules("nombre", "Nombre", "required" . $unique . "");
-    $this->form_validation->set_rules("descripcion", "Descripcion", "required");
-    if ($this->form_validation->run()) {
-      echo json_encode(1);
-      $this->Mcategorias->update($_POST);
-    } else {
-      $error = array(
-        'nombre' => form_error('nombre'),
-        'descripcion' => form_error('descripcion')
-      );
-      echo json_encode($error);
+    
+    public function get_server_side(Request $request)
+    {
+        $vector = app(Mcategorias::class)->get_server_side($request->all());
+        
+        $respuesta = [
+            'draw' => intval($request->input('draw')),
+            'recordsTotal' => $vector['num_filas_limit'],
+            'recordsFiltered' => $vector['num_filas'],
+            'data' => $vector['datos']
+        ];
+        
+        return response()->json($respuesta);
     }
-  }
-  public function delete()
-  {
-    $array = array('estado' => 0);
-    $this->Mcategorias->delete($_POST, $array);
-    // echo json_encode($_POST['id']);
-  }
-  public function show()
-  {
-
-    $result = $this->Mcategorias->getOne($_POST['id']);
-    $param = array(
-      'categoria' => $result
-    );
-    $this->load->view('categorias/detail', $param);
-  }
+    
+    public function add(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'nombre' => 'required|unique:categorias,nombre',
+            'descripcion' => 'required|unique:categorias,descripcion',
+        ]);
+        
+        if (!$validator->fails()) {
+            app(Mcategorias::class)->add($request->all());
+            return response()->json(1);
+        } else {
+            $error = [
+                'nombre' => $validator->errors()->first('nombre'),
+                'descripcion' => $validator->errors()->first('descripcion'),
+            ];
+            
+            return response()->json($error);
+        }
+    }
+    
+    public function update(Request $request)
+    {
+        $categoriaActual = app(Mcategorias::class)->getOne($request->input('id'));
+        
+        $rules = [
+            'descripcion' => 'required',
+        ];
+        
+        if ($request->input('nombre') == $categoriaActual->nombre) {
+            $rules['nombre'] = 'required';
+        } else {
+            $rules['nombre'] = 'required|unique:categorias,nombre';
+        }
+        
+        $validator = Validator::make($request->all(), $rules);
+        
+        if (!$validator->fails()) {
+            app(Mcategorias::class)->update($request->all());
+            return response()->json(1);
+        } else {
+            $error = [
+                'nombre' => $validator->errors()->first('nombre'),
+                'descripcion' => $validator->errors()->first('descripcion')
+            ];
+            
+            return response()->json($error);
+        }
+    }
+    
+    public function delete(Request $request)
+    {
+        $array = ['estado' => 0];
+        app(Mcategorias::class)->delete($request->all(), $array);
+        return response()->json(['success' => true]);
+    }
+    
+    public function show(Request $request)
+    {
+        $result = app(Mcategorias::class)->getOne($request->input('id'));
+        $param = [
+            'categoria' => $result
+        ];
+        
+        return view('categorias.detail', $param);
+    }
 }

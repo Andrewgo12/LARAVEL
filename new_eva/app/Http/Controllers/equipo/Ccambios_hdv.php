@@ -1,26 +1,40 @@
 <?php
-defined('BASEPATH') or exit('El acceso directo no esta permitido');
 
-/**
- *
- */
-class Ccambios_hdv extends CI_Controller
+namespace App\Http\Controllers\equipo;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Models\Mequipos;
+use App\Models\Mcambios_hdv;
+use Illuminate\Http\JsonResponse;
+
+class Ccambios_hdv extends Controller
 {
-  function __construct()
-  {
-    parent::__construct();
-    $this->load->model('Mequipos');
-    $this->load->model('Mcambios_hdv');
-  }
-  public function index()
-  {
-  }
-  public function get_from_device()
-  {
-    $this->load->view("equipos/historial/detail", array("cambios_hdv" => $this->Mcambios_hdv->get_from_device($_POST)));
-  }
-  public function getOne()
-  {
-    // echo json_encode($this->Mbajas->getOne($_POST));
-  }
+    private $Mequipos;
+    private $Mcambios_hdv;
+    
+    public function __construct()
+    {
+        $this->Mequipos = new Mequipos();
+        $this->Mcambios_hdv = new Mcambios_hdv();
+    }
+    
+    public function index()
+    {
+        // Implementar según necesidad
+    }
+    
+    public function get_from_device(Request $request)
+    {
+        return view("equipos.historial.detail", [
+            "cambios_hdv" => $this->Mcambios_hdv->get_from_device($request->all())
+        ]);
+    }
+    
+    public function getOne(Request $request): JsonResponse
+    {
+        // return response()->json($this->Mbajas->getOne($request->all()));
+        return response()->json([]);
+    }
 }
+

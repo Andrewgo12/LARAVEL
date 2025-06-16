@@ -1,773 +1,789 @@
 <?php
-defined('BASEPATH') or exit('No direct script access allowed');
 
-class Cequipos_ind extends CI_Controller
+namespace App\Http\Controllers\EquiposInd;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\File;
+use App\Models\Mequipos_ind;
+use App\Models\Mequipos;
+use App\Models\Mpreventivos;
+use App\Models\Mcalibraciones;
+use App\Models\Mcorrectivos_generales;
+use App\Models\Mcorrectivos_generales_archivos;
+use App\Models\Mordenes;
+
+class Cequipos_ind extends Controller
 {
   private $permisos;
-  function __construct()
+
+  public function __construct()
   {
-    parent::__construct();
-    $this->load->model('Mequipos_ind');
-    $this->load->model('Mequipos');
-    $this->load->model("Mpreventivos");
-    $this->load->model("Mcalibraciones");
-    $this->load->model("Mcorrectivos_generales");
-    $this->load->model("Mcorrectivos_generales_archivos");
-    $this->load->model("Mordenes");
-    $this->load->helper('download');
-    //$this->permisos=$this->backend_lib->control();
+    $this->permisos = null;
   }
   public function index()
   {
-    if ($this->session->userdata('login')) {
-    } else {
-      redirect(base_url('Cauth'));
+    if (!Session::get('login')) {
+      return redirect()->route('huv.login');
     }
 
-    $this->session->set_userdata('tipo_id', 2);
-    $this->session->set_userdata('controlador', $this->uri->segment(2));
+    Session::put('tipo_id', 2);
+    Session::put('controlador', 'equipos_ind');
 
-
-    $acciones = $this->session->userdata("acciones");
+    $acciones = Session::get("acciones", []);
     foreach ($acciones as $accion) {
-      if ($accion->modulo == "equipos") {
-        if ($accion->leer != 1) {
-          redirect(base_url('Forbidden'));
+      if (is_object($accion) && isset($accion->modulo) && $accion->modulo == "equipos") {
+        if (isset($accion->leer) && $accion->leer != 1) {
+          return redirect()->route('huv.forbidden');
         }
       }
     }
-    $data = array(
+
+    $mequipos = new Mequipos();
+    $data = [
       "permisos" => $this->permisos,
-      "garantia_casi_vencida" => $this->Mequipos->garantia_casi_vencida(),
-      "garantia_vencida" => $this->Mequipos->garantia_vencida(),
-      "equipos_baja" => $this->Mequipos->equipos_baja(),
-      "equipos_pendientes_baja" => $this->Mequipos->equipos_pendientes_baja(),
+      "garantia_casi_vencida" => $mequipos->garantia_casi_vencida(),
+      "garantia_vencida" => $mequipos->garantia_vencida(),
+      "equipos_baja" => $mequipos->equipos_baja(),
+      "equipos_pendientes_baja" => $mequipos->equipos_pendientes_baja(),
       "acciones" => $acciones
-    );
-    $this->Mequipos->updateEstadomAutomatico();
+    ];
+    $mequipos->updateEstadomAutomatico();
 
-    $this->load->view("layouts/header");
-    $this->load->view("layouts/aside");
-    $this->load->view("equipos_industriales/list", $data);
-    /*CRUD EQUIPO*/
-    $this->load->view("equipos/modal_add", array("tipo_id" => 2));
-    $this->load->view("equipos/modal_edit", array("tipo_id" => 2));
-    $this->load->view("equipos/modal_copy", array("tipo_id" => 2));
-    /*DETALLE EQUIPO*/
-    $this->load->view("equipos/modal_show_adquisicion");
-    $this->load->view("equipos/modal_show_instalacion");
-    $this->load->view("equipos/modal_show", array("tipo_id" => 2));/*metodo show en el controlador*/
-    /*CRUD REPUESTOS*/
-    $this->load->view("equipos/modal_add_repuesto");
-    $this->load->view("equipos/modal_edit_equipo_repuesto");
-    //$this->load->view("equipos/modal_edit_calibracion");
-    /*CRUD ESPECIFICACIONES*/
-    $this->load->view("equipos/modal_add_equipo_especificacion");
-    /*CRUD CONTACTOS*/
-    $this->load->view("equipos/modal_add_equipo_contacto");
-    /*CARGA VISTA DEL FILTRO*/
-    $this->load->view("equipos/modal_filter");
-    /*CARGA EL ARCHIVO EXCEL DE HOJA DE VIDA CON PLUGIN GOOGLE*/
-    $this->load->view("equipos/modal_show_file");
-    /*CARGA EL MODAL PARA MOSTRAR DOCUMENTACION DEL EUIPO*/
-    $this->load->view("equipos/modal_show_archivos");
-    /*CARGA EL MODAL PARA GUARDAR ARCHIVOS DE DOCUMENTACION DEL EQUIPO*/
-    $this->load->view("equipos/modal_add_archivos");
-    $this->load->view("archivos/modal_compartir"); // Modal de compartir archivos
-    /*CARGA EL MODAL PARA GUARDAR OBSERVACIONES*/
-    $this->load->view("equipos/modal_add_observacion");
-    /*CARGA EL MODAL PARA editar OBSERVACIONES*/
-    $this->load->view("equipos/modal_edit_observacion");
-    /*CARGA EL MODAL PARA mostrar las garantias proximas a vencer*/
-    $this->load->view("equipos/modal_show_garantiaCasiVencida");
-    /*CARGA EL MODAL PARA mostrar las garantias vencidas receintemente*/
-    $this->load->view("equipos/modal_show_garantiaVencida");
-    /*CARGA EL MODAL PARA insertar multiples registros al tiempo*/
-    $this->load->view("equipos/modal_multiple");
-    /*CARGA EL MODAL PARA visualizar equipos obsoletos*/
-    $this->load->view("equipos/modal_obsoletos");
-    /*CARGA EL MODAL PARA visualizar el formulario de insercion de archivos para correctivos*/
-    $this->load->view("equipos/modal_add_archivo_correctivo");
-    /*CARGA EL MODAL PARA visualizar el formulario de insercion de servicios desde equipos*/
-    $this->load->view("servicios/modal_add");
-
-
-    /*Modal relacionado CORRECTIVOS GENERALES*/
-    $this->load->view("correctivos_generales/modal_add");
-    $this->load->view("correctivos_generales/modal_edit");
-    $this->load->view("correctivos_generales/modal_show");
-    $this->load->view("correctivos_generales/modal_show_single");
-    $this->load->view("avances_correctivos/modal_add"); // Avances de correctivos generales    
-
-    /*Modal relacionado PREVENTIVOS*/
-    $this->load->view("preventivos/modal_add");
-    $this->load->view("preventivos/modal_edit");
-    $this->load->view("preventivos/modal_show");
-
-
-    /*Modal relacionado CALIBRACIONES*/
-    $this->load->view("calibraciones/modal_add");
-    $this->load->view("calibraciones/modal_edit");
-    $this->load->view("calibraciones/modal_show");
-
-    /*Modal relacionado registros sanitarios*/
-    $this->load->view("invimas/modal_add");
-    $this->load->view("invimas/modal_consulta");
-
-    /*Modal relacionado ordenes de compra*/
-    $this->load->view("ordenes_compra/modal_consulta");
-    $this->load->view("ordenes_compra/modal_add");
-
-    /*Modal relacionado bajas*/
-    //$this->load->view("bajas/modal_add_equipo_baja");
-    $this->load->view("bajas/modal_add");
-    $this->load->view("bajas/modal_consulta");
-
-    /*Modal relacionado contingencias*/
-    $this->load->view("contingencias/modal_add");
-
-    /*Modal relacionado guias*/
-    $this->load->view("guias/modal_consulta");
-
-    /*Modal relacionado manuales*/
-    $this->load->view("manuales/modal_consulta");
-
-    /*Modal relacionado con areas*/
-    $this->load->view("areas/modal_add");
-
-    /*Modal para compartir (copiar especificaciones tecnicas)*/
-    $this->load->view("equipos/modal_compartir_especificaciones");
-
-    /*Modal del detalle de movimiento de equipos*/
-    $this->load->view("cambios_ubicaciones/modal_show");
-
-    $this->load->view("ordenes/modal_timeline"); // Se copio de ordenes para tener a disposicion el modal
-
-    /*Modal del historial de la hoja de vida*/
-    $this->load->view("equipos/historial/modal_show");/*metodo show en el controlador*/
-
-    /*Modal de insercion de nuevo propietario*/
-    $this->load->view("propietarios/modal_add");/*metodo show en el controlador*/
-
-
-    $this->load->view("layouts/footer");
+    return view('equipos_industriales.list', $data)
+      ->with('modals', [
+        'modal_add' => view('equipos.modal_add', ["tipo_id" => 2])->render(),
+        'modal_edit' => view('equipos.modal_edit', ["tipo_id" => 2])->render(),
+        'modal_copy' => view('equipos.modal_copy', ["tipo_id" => 2])->render(),
+        'modal_show_adquisicion' => view('equipos.modal_show_adquisicion')->render(),
+        'modal_show_instalacion' => view('equipos.modal_show_instalacion')->render(),
+        'modal_show' => view('equipos.modal_show', ["tipo_id" => 2])->render(),
+        'modal_add_repuesto' => view('equipos.modal_add_repuesto')->render(),
+        'modal_edit_equipo_repuesto' => view('equipos.modal_edit_equipo_repuesto')->render(),
+        'modal_add_equipo_especificacion' => view('equipos.modal_add_equipo_especificacion')->render(),
+        'modal_add_equipo_contacto' => view('equipos.modal_add_equipo_contacto')->render(),
+        'modal_filter' => view('equipos.modal_filter')->render(),
+        'modal_show_file' => view('equipos.modal_show_file')->render(),
+        'modal_show_archivos' => view('equipos.modal_show_archivos')->render(),
+        'modal_add_archivos' => view('equipos.modal_add_archivos')->render(),
+        'modal_compartir' => view('archivos.modal_compartir')->render(),
+        'modal_add_observacion' => view('equipos.modal_add_observacion')->render(),
+        'modal_edit_observacion' => view('equipos.modal_edit_observacion')->render(),
+        'modal_show_garantiaCasiVencida' => view('equipos.modal_show_garantiaCasiVencida')->render(),
+        'modal_show_garantiaVencida' => view('equipos.modal_show_garantiaVencida')->render(),
+        'modal_multiple' => view('equipos.modal_multiple')->render(),
+        'modal_obsoletos' => view('equipos.modal_obsoletos')->render(),
+        'modal_add_archivo_correctivo' => view('equipos.modal_add_archivo_correctivo')->render(),
+        'modal_add_servicios' => view('servicios.modal_add')->render(),
+        'modal_correctivos_add' => view('correctivos_generales.modal_add')->render(),
+        'modal_correctivos_edit' => view('correctivos_generales.modal_edit')->render(),
+        'modal_correctivos_show' => view('correctivos_generales.modal_show')->render(),
+        'modal_correctivos_show_single' => view('correctivos_generales.modal_show_single')->render(),
+        'modal_avances_correctivos_add' => view('avances_correctivos.modal_add')->render(),
+        'modal_preventivos_add' => view('preventivos.modal_add')->render(),
+        'modal_preventivos_edit' => view('preventivos.modal_edit')->render(),
+        'modal_preventivos_show' => view('preventivos.modal_show')->render(),
+        'modal_calibraciones_add' => view('calibraciones.modal_add')->render(),
+        'modal_calibraciones_edit' => view('calibraciones.modal_edit')->render(),
+        'modal_calibraciones_show' => view('calibraciones.modal_show')->render(),
+        'modal_invimas_add' => view('invimas.modal_add')->render(),
+        'modal_invimas_consulta' => view('invimas.modal_consulta')->render(),
+        'modal_ordenes_compra_consulta' => view('ordenes_compra.modal_consulta')->render(),
+        'modal_ordenes_compra_add' => view('ordenes_compra.modal_add')->render(),
+        'modal_bajas_add' => view('bajas.modal_add')->render(),
+        'modal_bajas_consulta' => view('bajas.modal_consulta')->render(),
+        'modal_contingencias_add' => view('contingencias.modal_add')->render(),
+        'modal_guias_consulta' => view('guias.modal_consulta')->render(),
+        'modal_manuales_consulta' => view('manuales.modal_consulta')->render(),
+        'modal_areas_add' => view('areas.modal_add')->render(),
+        'modal_compartir_especificaciones' => view('equipos.modal_compartir_especificaciones')->render(),
+        'modal_cambios_ubicaciones_show' => view('cambios_ubicaciones.modal_show')->render(),
+        'modal_ordenes_timeline' => view('ordenes.modal_timeline')->render(),
+        'modal_historial_show' => view('equipos.historial.modal_show')->render(),
+        'modal_propietarios_add' => view('propietarios.modal_add')->render()
+      ]);
   }
 
-  public function getEquipo()
-  { //server side processing
+  public function getEquipo(Request $request)
+  {
+    $start  = $request->input('start', 0);
+    $length = $request->input('length', 10);
+    $search = $request->input('search.value', '');
+    $draw   = $request->input('draw', 1);
 
+    $mequipos_ind = new Mequipos_ind();
+    $result = $mequipos_ind->getEquipo($start, $length, $search);
 
-    //parametro inicio
-    //parametro final
-    //parametro de busqueda
-
-    $start  = $this->input->post('start');
-    $length = $this->input->post('length');
-    $search = $this->input->post('search')['value'];
-
-    $result = $this->Mequipos_ind->getEquipo($start, $length, $search);
-
-    if ($result = $this->Mequipos_ind->getEquipo($start, $length, $search)) {
-
-      //echo "se realizo la consulta";
+    if ($result) {
       $resultado = $result['datos'];
-      $totalDatos = $result['numDataTotal'];;
+      $totalDatos = $result['numDataTotal'];
 
+      $datos = [];
 
-      $datos = array();
-
-      foreach ($resultado->result_array() as $row) {
-        $array = array();
-        $array['rownum']    = $row['rownum'];
-        $array['imagen']    = $row['imagen'];
-        $array['nombre']    = $row['nombre'];
-        $array['marca']     = $row['marca'];
-        $array['serial']    = $row['serial'];
-        $array['modelo']    = $row['modelo'];
-        $array['codigo_inventario']    = $row['codigo_inventario'];
-        $array['name']      = $row['name'];
-        $array['namem']     = $row['namem'];
-        $array['piso']           = $row['piso'];
-        $array['archivo']        = $row['archivo'];
-        $array['tension']        = $row['tension'];
-        $array['corriente']      = $row['corriente'];
-        $array['potencia']       = $row['potencia'];
-        $array['temperatura']    = $row['temperatura'];
-        $array['estado']                 = $row['estado'];
-        $array['fecha_mantenimiento']    = $row['fecha_mantenimiento'];
-        //$array['estado_mantenimiento']   = $row['estado_mantenimiento'];
-        $datos[]            = $array;
+      if (method_exists($resultado, 'result_array')) {
+        $rows = $resultado->result_array();
+      } else {
+        $rows = $resultado;
       }
 
-      $totalDatoObtenido = $resultado->num_rows();
+      foreach ($rows as $row) {
+        $array = [
+          'rownum' => $row['rownum'],
+          'imagen' => $row['imagen'],
+          'nombre' => $row['nombre'],
+          'marca' => $row['marca'],
+          'serial' => $row['serial'],
+          'modelo' => $row['modelo'],
+          'codigo_inventario' => $row['codigo_inventario'],
+          'name' => $row['name'],
+          'namem' => $row['namem'],
+          'piso' => $row['piso'],
+          'archivo' => $row['archivo'],
+          'tension' => $row['tension'],
+          'corriente' => $row['corriente'],
+          'potencia' => $row['potencia'],
+          'temperatura' => $row['temperatura'],
+          'estado' => $row['estado'],
+          'fecha_mantenimiento' => $row['fecha_mantenimiento']
+        ];
+        $datos[] = $array;
+      }
 
-      $json_data = array(
-        "draw"            => intval($this->input->post('draw')),
-        "recordsTotal"    => intval($totalDatoObtenido),
+      $totalDatoObtenido = method_exists($resultado, 'num_rows') ? $resultado->num_rows() : count($datos);
+
+      $json_data = [
+        "draw" => intval($draw),
+        "recordsTotal" => intval($totalDatoObtenido),
         "recordsFiltered" => intval($totalDatos),
-        "data"            => $datos
-      );
-      //$this->load->view('layout/formulario_update',compact("resultado"));
-      echo json_encode($json_data);
+        "data" => $datos
+      ];
+
+      return response()->json($json_data);
     } else {
-      echo "No se realizo la consulta";
-      $this->load->view('layout/header');
-      $this->load->view('layout/menu');
-      $this->load->view('layout/datatable');
-      $this->load->view('layout/footer');
+      return response()->json([
+        "draw" => intval($draw),
+        "recordsTotal" => 0,
+        "recordsFiltered" => 0,
+        "data" => [],
+        "error" => "No se pudo realizar la consulta"
+      ]);
     }
   }
 
-  public function add()
+  public function add(Request $request)
   {
-    //Validacion del formulario
-    $this->form_validation->set_rules('nombre', 'nombre', 'required');
-    $this->form_validation->set_rules('marca', 'marca', 'required');
-    $this->form_validation->set_rules('serial', 'serial', 'required');
-    $this->form_validation->set_rules('modelo', 'modelo', 'required');
-    $this->form_validation->set_rules('codigo_inventario', 'codigo inventario', 'required');
-    $this->form_validation->set_rules('servicio_id', 'servicio', 'required');
-    $this->form_validation->set_rules('periodicidad_id', 'periodicidad', 'required');
+    $validator = Validator::make($request->all(), [
+      'nombre' => 'required|string|max:255',
+      'marca' => 'required|string|max:255',
+      'serial' => 'required|string|max:255',
+      'modelo' => 'required|string|max:255',
+      'codigo_inventario' => 'required|string|max:255',
+      'servicio_id' => 'required|integer',
+      'periodicidad_id' => 'required|integer',
+      'imagen' => 'nullable|image|mimes:gif,jpg,jpeg,png,jfif|max:4048',
+      'archivo' => 'nullable|file|mimes:pdf,xlsx,docx|max:20048'
+    ]);
 
-    if ($this->form_validation->run()) {
+    if ($validator->fails()) {
+      return response()->json(['error' => $validator->errors()->first()]);
+    }
 
-      $config['upload_path']   = './style/imagenes/';
-      $config['allowed_types'] = 'gif|jpg|png|jfif';
-      $config['max_size']      = '4048';
-      $config['max_width']     = '4024';
-      $config['max_height']    = '4008';
+    try {
+      $data = $request->all();
 
-      $this->load->library('upload', $config, 'uploadImagen');
-      $this->uploadImagen->initialize($config);
-      $this->uploadImagen->do_upload("imagen"); //Esto sube la imagen en la carpeta
-      //$form = $_POST;
-      $data = "";
-      $data = $this->uploadImagen->data();
-      $_POST["imagen"] = $data["file_name"];
-      //echo "Se cargo";
-      //print_r($_POST);
+      if ($request->hasFile('imagen')) {
+        $imagen = $request->file('imagen');
+        $imagenName = time() . '_' . $imagen->getClientOriginalName();
+        $imagen->move(public_path('style/imagenes'), $imagenName);
+        $data['imagen'] = $imagenName;
+      }
 
-      $config1['upload_path'] = './style/archivos/HV';
-      $config1['allowed_types'] = 'pdf|xlsx|docx';
-      $config1['max_size'] = '20048';
+      if ($request->hasFile('archivo')) {
+        $archivo = $request->file('archivo');
+        $archivoName = time() . '_' . $archivo->getClientOriginalName();
+        $archivo->move(public_path('style/archivos/HV'), $archivoName);
+        $data['archivo'] = $archivoName;
+      }
 
-      $this->load->library('upload', $config1, 'uploadFile');
-      $this->uploadFile->initialize($config1);
-      $this->uploadFile->do_upload("archivo"); //Esto sube el excel en la carpeta
-      $data = "";
-      $data = $this->uploadFile->data();
-      $_POST["archivo"] = $data["file_name"];
-
-
-      $result = $this->Mequipos_ind->add($_POST);
+      $mequipos_ind = new Mequipos_ind();
+      $result = $mequipos_ind->add($data);
 
       if ($result) {
-        $msg['success'] = true;
-        //$msg['type'] = 'add';
-        echo json_encode($msg);
-      }
-    } else {
-
-      $error = validation_errors();
-      echo json_encode(['error' => $error]); //['error'=>$error]);
-
-    }
-  }
-
-  public function upd()
-  {
-    $data = $_POST['rownum'];
-    //echo "id=".$data;
-    $actual = $this->Mequipos_ind->actual($data);
-    //$msg['success'] = true;
-    //echo json_encode($msg);
-    if ($actual) {
-
-      echo json_encode($actual);
-      //downloads($actual);
-    }
-  }
-  public function getOne()
-  {
-
-    echo json_encode($this->Mequipos_ind->getOne($_POST));
-  }
-  public function getLikeSerie()
-  {
-    $equipos = $this->Mequipos_ind->getLikeSerie($_POST);
-    echo json_encode($equipos);
-  }
-  public function getLikeCodigo()
-  {
-    $equipos = $this->Mequipos_ind->getLikeCodigo($_POST);
-    echo json_encode($equipos);
-  }
-  public function update()
-  {
-    //Validacion del formulario
-    $this->form_validation->set_rules('nombre', 'nombre', 'required');
-    $this->form_validation->set_rules('marca', 'marca', 'required');
-    $this->form_validation->set_rules('serial', 'serial', 'required');
-    $this->form_validation->set_rules('modelo', 'modelo', 'required');
-    $this->form_validation->set_rules('codigo_inventario', 'codigo inventario', 'required');
-
-
-    if ($this->form_validation->run()) {
-      //print_r($_FILES);
-      $config['upload_path']   = './style/imagenes/';
-      $config['allowed_types'] = 'gif|jpg|png|jfif';
-      //$config['max_size']      = '4048';
-      //$config['max_width']     = '4024';
-      //$config['max_height']    = '4008';
-
-      $this->load->library('upload', $config, 'uploadImagen');
-      $this->uploadImagen->initialize($config);
-
-
-      $this->uploadImagen->do_upload("imagen"); //Esto sube la imagen en la carpeta
-      $data = "";
-      $data = $this->uploadImagen->data();
-      $_POST["imagen"] = $data["file_name"];
-
-
-      $config1['upload_path'] = './style/archivos/HV';
-      $config1['allowed_types'] = 'pdf|xlsx|docx';
-      $config1['max_size'] = '40048';
-
-      $this->load->library('upload', $config1, 'uploadFile');
-      $this->uploadFile->initialize($config1);
-
-      $this->uploadFile->do_upload("archivo"); //Esto sube el excel en la carpeta
-      $data = "";
-      $data = $this->uploadFile->data();
-      $_POST["archivo"] = $data["file_name"];
-
-
-      //actualizacion  sin archivos o imagen
-      $datos  = array(
-        "id_equipos" => $_POST['id_equipos'],
-        "nombre" => $_POST['nombre'],
-        "marca" => $_POST['marca'],
-        "serial" => $_POST['serial'],
-        "modelo" => $_POST['modelo'],
-        "codigo_inventario" => $_POST['codigo_inventario'],
-        "tension" => $_POST['Tension'],
-        "corriente" => $_POST['Corriente'],
-        "potencia" => $_POST['Potencia'],
-        "temperatura" => $_POST['Temperatura'],
-        "servicio_id" => $_POST['servicio_id'],
-        "periodicidad_id" => $_POST['periodicidad_id'],
-        "piso_id" => $_POST['piso_id'],
-        "fecha_mantenimiento" => $_POST['fecha_mantenimiento']
-      );
-
-      //actualizacion de solo imagen
-      $datos1  = array(
-        "id_equipos" => $_POST['id_equipos'],
-        "imagen" => $_POST['imagen'],
-        "nombre" => $_POST['nombre'],
-        "marca" => $_POST['marca'],
-        "serial" => $_POST['serial'],
-        "modelo" => $_POST['modelo'],
-        "codigo_inventario" => $_POST['codigo_inventario'],
-        "tension" => $_POST['Tension'],
-        "corriente" => $_POST['Corriente'],
-        "potencia" => $_POST['Potencia'],
-        "temperatura" => $_POST['Temperatura'],
-        "servicio_id" => $_POST['servicio_id'],
-        "periodicidad_id" => $_POST['periodicidad_id'],
-        "piso_id" => $_POST['piso_id'],
-        "fecha_mantenimiento" => $_POST['fecha_mantenimiento']
-      );
-      //actualizacion de archivo
-      $datos2  = array(
-        "id_equipos" => $_POST['id_equipos'],
-        "nombre" => $_POST['nombre'],
-        "marca" => $_POST['marca'],
-        "serial" => $_POST['serial'],
-        "modelo" => $_POST['modelo'],
-        "codigo_inventario" => $_POST['codigo_inventario'],
-        "archivo" => $_POST['archivo'],
-        "tension" => $_POST['Tension'],
-        "corriente" => $_POST['Corriente'],
-        "potencia" => $_POST['Potencia'],
-        "temperatura" => $_POST['Temperatura'],
-        "servicio_id" => $_POST['servicio_id'],
-        "periodicidad_id" => $_POST['periodicidad_id'],
-        "piso_id" => $_POST['piso_id'],
-        "fecha_mantenimiento" => $_POST['fecha_mantenimiento']
-      );
-
-
-      $valor  =  $_POST['id_equipos'];
-
-
-
-      if (empty($_FILES["imagen"]["name"]) && empty($_FILES["archivo"]["name"])) {
-        $result =  $this->Mequipos_ind->update($datos, $valor);
-        $msg['success'] = true;
-        $msg['type']    = "upd";
-        echo json_encode($msg);
-        //echo "0";
-
-      } elseif (empty($_FILES["imagen"]["name"]) && !empty($_FILES["archivo"]["name"])) {
-        $result =  $this->Mequipos_ind->update($datos2, $valor);
-        $msg['success'] = true;
-        $msg['type']    = "upd";
-        echo json_encode($msg);
-      } elseif (!empty($_FILES["imagen"]["name"]) && empty($_FILES["archivo"]["name"])) {
-        $result =  $this->Mequipos_ind->update($datos1, $valor);
-        $msg['success'] = true;
-        $msg['type']    = "upd";
-        echo json_encode($msg);
+        return response()->json(['success' => true]);
       } else {
-        $result =  $this->Mequipos_ind->update($_POST, $valor);
-        $msg['success'] = true;
-        $msg['type']    = "upd";
-        echo json_encode($msg);
+        return response()->json(['error' => 'Error al guardar el equipo']);
       }
-    } else {
 
-      $error = validation_errors();
-      echo json_encode(['error' => $error]);
+    } catch (\Exception $e) {
+      return response()->json(['error' => 'Error del sistema: ' . $e->getMessage()]);
     }
   }
 
-  public function borrar()
+  public function upd(Request $request)
   {
+    $data = $request->input('rownum');
 
-    $data = $_POST['rownum'];
-    $actual = $this->Mequipos_ind->borrar($data);
+    $mequipos_ind = new Mequipos_ind();
+    $actual = $mequipos_ind->actual($data);
+
     if ($actual) {
-      $msg['success'] = true;
-      $msg['type'] = "delete";
-      echo json_encode($msg);
+      return response()->json($actual);
+    } else {
+      return response()->json(['error' => 'No se encontró el equipo']);
     }
   }
 
-  public function getServicios()
+  public function getOne(Request $request)
   {
-
-    $s  = $this->input->get('q');
-    // echo json_encode($s);
-    $result = $this->Mequipos_ind->getServicios($s);
-    echo json_encode($result);
+    $mequipos_ind = new Mequipos_ind();
+    $result = $mequipos_ind->getOne($request->all());
+    return response()->json($result);
   }
 
-  public function getMantenimiento()
+  public function getLikeSerie(Request $request)
   {
-
-    $s  = $this->input->get('r');
-    $result = $this->Mequipos_ind->getMantenimiento($s);
-    echo json_encode($result);
-  }
-  public function getPiso()
-  {
-
-    $s  = $this->input->get('m');
-    $result = $this->Mequipos_ind->getPiso($s);
-    echo json_encode($result);
+    $mequipos_ind = new Mequipos_ind();
+    $equipos = $mequipos_ind->getLikeSerie($request->all());
+    return response()->json($equipos);
   }
 
-  public function downloads($actual)
+  public function getLikeCodigo(Request $request)
   {
-    $data = file_get_contents('./style/archivos/HV/' . $actual);
-    force_download($name, $data);
+    $mequipos_ind = new Mequipos_ind();
+    $equipos = $mequipos_ind->getLikeCodigo($request->all());
+    return response()->json($equipos);
+  }
+  public function update(Request $request)
+  {
+    $validator = Validator::make($request->all(), [
+      'id_equipos' => 'required|integer',
+      'nombre' => 'required|string|max:255',
+      'marca' => 'required|string|max:255',
+      'serial' => 'required|string|max:255',
+      'modelo' => 'required|string|max:255',
+      'codigo_inventario' => 'required|string|max:255',
+      'imagen' => 'nullable|image|mimes:gif,jpg,jpeg,png,jfif|max:4048',
+      'archivo' => 'nullable|file|mimes:pdf,xlsx,docx|max:40048'
+    ]);
+
+    if ($validator->fails()) {
+      return response()->json(['error' => $validator->errors()->first()]);
+    }
+
+    try {
+      $data = $request->all();
+      $valor = $request->input('id_equipos');
+
+      $hasNewImage = false;
+      if ($request->hasFile('imagen')) {
+        $imagen = $request->file('imagen');
+        $imagenName = time() . '_' . $imagen->getClientOriginalName();
+        $imagen->move(public_path('style/imagenes'), $imagenName);
+        $data['imagen'] = $imagenName;
+        $hasNewImage = true;
+      }
+
+      $hasNewFile = false;
+      if ($request->hasFile('archivo')) {
+        $archivo = $request->file('archivo');
+        $archivoName = time() . '_' . $archivo->getClientOriginalName();
+        $archivo->move(public_path('style/archivos/HV'), $archivoName);
+        $data['archivo'] = $archivoName;
+        $hasNewFile = true;
+      }
+
+
+      $updateData = [
+        "id_equipos" => $data['id_equipos'],
+        "nombre" => $data['nombre'],
+        "marca" => $data['marca'],
+        "serial" => $data['serial'],
+        "modelo" => $data['modelo'],
+        "codigo_inventario" => $data['codigo_inventario'],
+        "tension" => $data['Tension'] ?? null,
+        "corriente" => $data['Corriente'] ?? null,
+        "potencia" => $data['Potencia'] ?? null,
+        "temperatura" => $data['Temperatura'] ?? null,
+        "servicio_id" => $data['servicio_id'] ?? null,
+        "periodicidad_id" => $data['periodicidad_id'] ?? null,
+        "piso_id" => $data['piso_id'] ?? null,
+        "fecha_mantenimiento" => $data['fecha_mantenimiento'] ?? null
+      ];
+
+      if ($hasNewImage) {
+        $updateData['imagen'] = $data['imagen'];
+      }
+
+      if ($hasNewFile) {
+        $updateData['archivo'] = $data['archivo'];
+      }
+
+      $mequipos_ind = new Mequipos_ind();
+      $result = $mequipos_ind->update($updateData, $valor);
+
+      if ($result !== false) {
+        return response()->json([
+          'success' => true,
+          'type' => 'upd'
+        ]);
+      } else {
+        return response()->json(['error' => 'Error al actualizar el equipo']);
+      }
+
+    } catch (\Exception $e) {
+      return response()->json(['error' => 'Error del sistema: ' . $e->getMessage()]);
+    }
+  }
+
+  public function borrar(Request $request)
+  {
+    $data = $request->input('rownum');
+
+    $mequipos_ind = new Mequipos_ind();
+    $actual = $mequipos_ind->borrar($data);
+
+    if ($actual) {
+      return response()->json([
+        'success' => true,
+        'type' => 'delete'
+      ]);
+    } else {
+      return response()->json(['error' => 'Error al eliminar el equipo']);
+    }
+  }
+
+  public function getServicios(Request $request)
+  {
+    $s = $request->input('q', '');
+
+    $mequipos_ind = new Mequipos_ind();
+    $result = $mequipos_ind->getServicios($s);
+
+    return response()->json($result);
+  }
+
+  public function getMantenimiento(Request $request)
+  {
+    $s = $request->input('r', '');
+
+    $mequipos_ind = new Mequipos_ind();
+    $result = $mequipos_ind->getMantenimiento($s);
+
+    return response()->json($result);
+  }
+
+  public function getPiso(Request $request)
+  {
+    $s = $request->input('m', '');
+
+    $mequipos_ind = new Mequipos_ind();
+    $result = $mequipos_ind->getPiso($s);
+
+    return response()->json($result);
+  }
+
+  public function downloads($filename)
+  {
+    $filePath = public_path('style/archivos/HV/' . $filename);
+
+    if (file_exists($filePath)) {
+      return response()->download($filePath);
+    } else {
+      return response()->json(['error' => 'Archivo no encontrado'], 404);
+    }
   }
 
   /*CRUD PREVENTIVO*/
-  public function addPreventivo()
+  public function addPreventivo(Request $request)
   {
+    try {
+      $data = $request->all();
 
-    $config['upload_path'] = "./assets/upload_preventivos";
-    $config['allowed_types'] = '*';
-    $config['max_size']  = 1000000;
-    $config['encrypt_name'] = TRUE;
-    $this->load->library('upload', $config, 'uploadPreventivo');
-    $this->uploadPreventivo->initialize($config);
-    if (!empty($_FILES["file"]["name"])) {
-      $this->uploadPreventivo->do_upload("file"); //Esto sube el archivo
-      $data = "";
-      $data = $this->uploadPreventivo->data();
-      $_POST["file"] = $data["file_name"];
-    }
-
-    $this->Mpreventivos->add_ind($_POST); //Agrego el preventivo  
-    echo json_encode($_POST["equipo_id"]);
-  }
-
-  public function getPreventivos()
-  {
-    if ($this->Mpreventivos->get_ind($_POST) != null) {
-      echo json_encode($this->Mpreventivos->get_ind($_POST));
-    } else {
-      echo 2;
-    }
-  }
-  public function getOnePreventivo()
-  {
-    echo json_encode($this->Mpreventivos->getOne_ind($_POST));
-  }
-  public function updatePreventivo()
-  {
-
-    if (isset($_POST)) {
-      $preventivo = $this->Mpreventivos->getOne_ind($_POST);
-      $file_anterior = $preventivo->file;
-
-      $config['upload_path'] = "./assets/upload_preventivos";
-      $config['allowed_types'] = '*';
-      $config['encrypt_name'] = TRUE;
-      $this->load->library('upload', $config, 'uploadPreventivo');
-      $this->uploadPreventivo->initialize($config);
-      if (!empty($_FILES["file"]["name"])) {
-        $this->uploadPreventivo->do_upload("file"); //Esto sube el archivo
-        $data = "";
-        $data = $this->uploadPreventivo->data();
-        $_POST["file"] = $data["file_name"];
+      if ($request->hasFile('file')) {
+        $file = $request->file('file');
+        $fileName = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+        $file->move(public_path('assets/upload_preventivos'), $fileName);
+        $data['file'] = $fileName;
       }
-      if ($this->Mpreventivos->update_ind($_POST)) {
-        if (isset($_POST["file"])) {
-          if ($_POST["file"] != $file_anterior) {
-            $this->load->helper("file");
-            unlink("./assets/upload_preventivos/" . $file_anterior);
+
+      $mpreventivos = new Mpreventivos();
+      $result = $mpreventivos->add_ind($data);
+
+      return response()->json($request->input('equipo_id'));
+
+    } catch (\Exception $e) {
+      return response()->json(['error' => 'Error al agregar preventivo: ' . $e->getMessage()]);
+    }
+  }
+
+  public function getPreventivos(Request $request)
+  {
+    $mpreventivos = new Mpreventivos();
+    $result = $mpreventivos->get_ind($request->all());
+
+    if ($result != null) {
+      return response()->json($result);
+    } else {
+      return response()->json(2);
+    }
+  }
+
+  public function getOnePreventivo(Request $request)
+  {
+    $mpreventivos = new Mpreventivos();
+    $result = $mpreventivos->getOne_ind($request->all());
+
+    return response()->json($result);
+  }
+  public function updatePreventivo(Request $request)
+  {
+    try {
+      $data = $request->all();
+
+      $mpreventivos = new Mpreventivos();
+      $preventivo = $mpreventivos->getOne_ind($data);
+      $file_anterior = $preventivo->file ?? null;
+
+      if ($request->hasFile('file')) {
+        $file = $request->file('file');
+        $fileName = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+        $file->move(public_path('assets/upload_preventivos'), $fileName);
+        $data['file'] = $fileName;
+      }
+
+      if ($mpreventivos->update_ind($data)) {
+        if (isset($data['file']) && $data['file'] != $file_anterior && $file_anterior) {
+          $oldFilePath = public_path('assets/upload_preventivos/' . $file_anterior);
+          if (file_exists($oldFilePath)) {
+            unlink($oldFilePath);
           }
         }
-        echo json_encode($_POST["equipo_id"]);
+        return response()->json($request->input('equipo_id'));
       } else {
-        if (isset($_POST["file"])) {
-          $this->load->helper("file");
-          unlink("./assets/upload_preventivos/" . $_POST["file"]);
+        if (isset($data['file'])) {
+          $newFilePath = public_path('assets/upload_preventivos/' . $data['file']);
+          if (file_exists($newFilePath)) {
+            unlink($newFilePath);
+          }
         }
+        return response()->json(['error' => 'Error al actualizar preventivo']);
       }
+
+    } catch (\Exception $e) {
+      return response()->json(['error' => 'Error del sistema: ' . $e->getMessage()]);
     }
   }
 
-  public function deletePreventivo()
+  public function deletePreventivo(Request $request)
   {
-    $vector = array("id" => $_POST["id"]);
-    $preventivo = $this->Mpreventivos->getOne_ind($vector);
-    $file = $preventivo->file;
-    if ($this->Mpreventivos->delete_ind($_POST)) {
-      if ($file != "" && $file != null) {
-        $this->load->helper("file");
-        unlink("./assets/upload_preventivos/" . $file);
+    try {
+      $vector = ["id" => $request->input("id")];
+
+      $mpreventivos = new Mpreventivos();
+      $preventivo = $mpreventivos->getOne_ind($vector);
+      $file = $preventivo->file ?? null;
+
+      if ($mpreventivos->delete_ind($request->all())) {
+        if ($file && $file != "") {
+          $filePath = public_path('assets/upload_preventivos/' . $file);
+          if (file_exists($filePath)) {
+            unlink($filePath);
+          }
+        }
+        return response()->json(['success' => true]);
+      } else {
+        return response()->json(['error' => 'Error al eliminar preventivo']);
       }
+
+    } catch (\Exception $e) {
+      return response()->json(['error' => 'Error del sistema: ' . $e->getMessage()]);
     }
   }
 
-  public function getLastPreventivo()
+  public function getLastPreventivo(Request $request)
   {
-    echo json_encode($this->Mpreventivos->getLast_ind($_POST));
+    $mpreventivos = new Mpreventivos();
+    $result = $mpreventivos->getLast_ind($request->all());
+
+    return response()->json($result);
   }
 
   /*CRUD CORRECTIVOS GENERALES*/
 
-  public function getCorrectivos()
+  public function getCorrectivos(Request $request)
   {
-    if ($this->Mordenes->get($_POST) != null) {
-      echo json_encode($this->Mordenes->get($_POST));
+    $mordenes = new Mordenes();
+    $result = $mordenes->get($request->all());
+
+    if ($result != null) {
+      return response()->json($result);
     } else {
-      echo 2;
+      return response()->json(2);
     }
   }
 
-  public function addCorrectivoGeneral()
+  public function addCorrectivoGeneral(Request $request)
   {
-    $config['upload_path'] = "./assets/upload_correctivos_generales";
-    $config['allowed_types'] = '*';
-    $config['encrypt_name'] = TRUE;
-    $this->load->library('upload', $config, 'uploadCorrectivoGeneral');
-    $this->uploadCorrectivoGeneral->initialize($config);
-    if (!empty($_FILES["file"]["name"])) {
-      $this->uploadCorrectivoGeneral->do_upload("file"); //Esto sube el archivo
-      $data = "";
-      $data = $this->uploadCorrectivoGeneral->data();
-      $_POST["file"] = $data["file_name"];
-    }
+    try {
+      $data = $request->all();
+      $titulo = $request->input('titulo');
 
-
-
-    $titulo = $_POST["titulo"];
-    unset($_POST["titulo"]);
-    $ultimo_id = $this->Mcorrectivos_generales->add_ind($_POST); //Agrego el correctivo
-
-    if (isset($_POST["file"])) {
-      $vector = array(
-        "file" => $_POST["file"],
-        "correctivo_general_id" => $ultimo_id,
-        "titulo" => $titulo
-      );
-      $this->Mcorrectivos_generales_archivos->add_ind($vector);
-    } else {
-    }
-    echo json_encode($_POST["equipo_id"]);
-  }
-
-  public function add_archivo_correctivo_general()
-  {
-    $config['upload_path'] = "./assets/upload_correctivos_generales";
-    $config['allowed_types'] = '*';
-    $config['encrypt_name'] = TRUE;
-    $this->load->library('upload', $config, 'uploadCorrectivoGeneral');
-    $this->uploadCorrectivoGeneral->initialize($config);
-
-    if (!empty($_FILES["file"]["name"])) {
-      $this->uploadCorrectivoGeneral->do_upload("file"); //Esto sube el archivo
-      $data = "";
-      $data = $this->uploadCorrectivoGeneral->data();
-      $_POST["file"] = $data["file_name"];
-      unset($_POST["equipo_id"]);
-
-      $this->Mcorrectivos_generales_archivos->add_ind($_POST);
-    }
-  }
-  public function getCorrectivosGenerales()
-  {
-
-    if ($this->Mcorrectivos_generales->get_ind($_POST) != null) {
-      echo json_encode($this->Mcorrectivos_generales->get_ind($_POST));
-    } else {
-      echo 2;
-    }
-  }
-  public function getArchivosCorrectivosGenerales()
-  {
-    echo json_encode($this->Mcorrectivos_generales_archivos->get_ind($_POST));
-  }
-
-  public function getOneCorrectivoGeneral()
-  {
-    echo json_encode($this->Mcorrectivos_generales->getOne_ind($_POST));
-  }
-  public function updateCorrectivoGeneral()
-  {
-
-    if (isset($_POST)) {
-      # code...
-      $correctivo = $this->Mcorrectivos_generales->getOne_ind($_POST);
-      $file_anterior = $correctivo->file;
-
-      $config['upload_path'] = "./assets/upload_correctivos_generales";
-      $config['allowed_types'] = '*';
-      $config['encrypt_name'] = TRUE;
-      $this->load->library('upload', $config, 'uploadCorrectivoGeneral');
-      $this->uploadCorrectivoGeneral->initialize($config);
-
-
-      if (!empty($_FILES["file"]["name"])) {
-        $this->uploadCorrectivoGeneral->do_upload("file"); //Esto sube el archivo
-        $data = "";
-        $data = $this->uploadCorrectivoGeneral->data();
-        $_POST["file"] = $data["file_name"];
+      if ($request->hasFile('file')) {
+        $file = $request->file('file');
+        $fileName = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+        $file->move(public_path('assets/upload_correctivos_generales'), $fileName);
+        $data['file'] = $fileName;
       }
-      if ($this->Mcorrectivos_generales->update_ind($_POST)) {
 
-        if (isset($_POST["file"])) {
-          if ($_POST["file"] != $file_anterior) {
-            $this->load->helper("file");
-            unlink("./assets/upload_correctivos_generales/" . $file_anterior);
+      unset($data['titulo']);
+
+      $mcorrectivos_generales = new Mcorrectivos_generales();
+      $ultimo_id = $mcorrectivos_generales->add_ind($data);
+
+      if (isset($data['file'])) {
+        $vector = [
+          "file" => $data['file'],
+          "correctivo_general_id" => $ultimo_id,
+          "titulo" => $titulo
+        ];
+
+        $mcorrectivos_generales_archivos = new Mcorrectivos_generales_archivos();
+        $mcorrectivos_generales_archivos->add_ind($vector);
+      }
+
+      return response()->json($request->input('equipo_id'));
+
+    } catch (\Exception $e) {
+      return response()->json(['error' => 'Error al agregar correctivo: ' . $e->getMessage()]);
+    }
+  }
+
+  public function add_archivo_correctivo_general(Request $request)
+  {
+    try {
+      $data = $request->all();
+
+      if ($request->hasFile('file')) {
+        $file = $request->file('file');
+        $fileName = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+        $file->move(public_path('assets/upload_correctivos_generales'), $fileName);
+        $data['file'] = $fileName;
+
+        unset($data['equipo_id']);
+
+        $mcorrectivos_generales_archivos = new Mcorrectivos_generales_archivos();
+        $mcorrectivos_generales_archivos->add_ind($data);
+
+        return response()->json(['success' => true]);
+      }
+
+      return response()->json(['error' => 'No se subió ningún archivo']);
+
+    } catch (\Exception $e) {
+      return response()->json(['error' => 'Error al subir archivo: ' . $e->getMessage()]);
+    }
+  }
+
+  public function getCorrectivosGenerales(Request $request)
+  {
+    $mcorrectivos_generales = new Mcorrectivos_generales();
+    $result = $mcorrectivos_generales->get_ind($request->all());
+
+    if ($result != null) {
+      return response()->json($result);
+    } else {
+      return response()->json(2);
+    }
+  }
+
+  public function getArchivosCorrectivosGenerales(Request $request)
+  {
+    $mcorrectivos_generales_archivos = new Mcorrectivos_generales_archivos();
+    $result = $mcorrectivos_generales_archivos->get_ind($request->all());
+
+    return response()->json($result);
+  }
+
+  public function getOneCorrectivoGeneral(Request $request)
+  {
+    $mcorrectivos_generales = new Mcorrectivos_generales();
+    $result = $mcorrectivos_generales->getOne_ind($request->all());
+
+    return response()->json($result);
+  }
+  public function updateCorrectivoGeneral(Request $request)
+  {
+    try {
+      $data = $request->all();
+
+      $mcorrectivos_generales = new Mcorrectivos_generales();
+      $correctivo = $mcorrectivos_generales->getOne_ind($data);
+      $file_anterior = $correctivo->file ?? null;
+
+      if ($request->hasFile('file')) {
+        $file = $request->file('file');
+        $fileName = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+        $file->move(public_path('assets/upload_correctivos_generales'), $fileName);
+        $data['file'] = $fileName;
+      }
+
+      if ($mcorrectivos_generales->update_ind($data)) {
+        if (isset($data['file']) && $data['file'] != $file_anterior && $file_anterior) {
+          $oldFilePath = public_path('assets/upload_correctivos_generales/' . $file_anterior);
+          if (file_exists($oldFilePath)) {
+            unlink($oldFilePath);
           }
         }
-        echo json_encode($_POST["equipo_id"]);
+        return response()->json($request->input('equipo_id'));
       } else {
-        if (isset($_POST["file"])) {
-          $this->load->helper("file");
-          unlink("./assets/upload_correctivos_generales/" . $_POST["file"]);
+        if (isset($data['file'])) {
+          $newFilePath = public_path('assets/upload_correctivos_generales/' . $data['file']);
+          if (file_exists($newFilePath)) {
+            unlink($newFilePath);
+          }
         }
+        return response()->json(['error' => 'Error al actualizar correctivo']);
       }
+
+    } catch (\Exception $e) {
+      return response()->json(['error' => 'Error del sistema: ' . $e->getMessage()]);
     }
   }
-  public function deleteCorrectivoGeneral()
+
+  public function deleteCorrectivoGeneral(Request $request)
   {
-    $this->load->helper("file");
-    $resultados = $this->Mcorrectivos_generales_archivos->getAll_ind($_POST);
-    foreach ($resultados as $resultado) {
-      if ($this->Mcorrectivos_generales_archivos->delete_ind($resultado->id)) {
-        unlink("./assets/upload_correctivos_generales/" . $resultado->file);
+    try {
+      $mcorrectivos_generales_archivos = new Mcorrectivos_generales_archivos();
+      $resultados = $mcorrectivos_generales_archivos->getAll_ind($request->all());
+
+      foreach ($resultados as $resultado) {
+        if ($mcorrectivos_generales_archivos->delete_ind($resultado->id)) {
+          $filePath = public_path('assets/upload_correctivos_generales/' . $resultado->file);
+          if (file_exists($filePath)) {
+            unlink($filePath);
+          }
+        }
       }
+
+      $mcorrectivos_generales = new Mcorrectivos_generales();
+      $mcorrectivos_generales->delete_ind($request->all());
+
+      return response()->json(['success' => true]);
+
+    } catch (\Exception $e) {
+      return response()->json(['error' => 'Error del sistema: ' . $e->getMessage()]);
     }
-    $this->Mcorrectivos_generales->delete_ind($_POST);
   }
 
   /*CRUD CALIBRACION*/
-  public function addCalibracion()
+  public function addCalibracion(Request $request)
   {
-    $config['upload_path'] = "./assets/upload_calibraciones";
-    $config['allowed_types'] = '*';
-    $config['encrypt_name'] = TRUE;
-    $this->load->library('upload', $config, 'uploadCalibracion');
-    $this->uploadCalibracion->initialize($config);
-    if (!empty($_FILES["file"]["name"])) {
-      $this->uploadCalibracion->do_upload("file"); //Esto sube el archivo
-      $data = "";
-      $data = $this->uploadCalibracion->data();
-      $_POST["file"] = $data["file_name"];
-    }
-    $this->Mcalibraciones->add_ind($_POST);
-    echo json_encode($_POST["equipo_id"]);
-  }
+    try {
+      $data = $request->all();
 
-  public function getCalibraciones()
-  {
-    if ($this->Mcalibraciones->get_ind($_POST) != null) {
-      echo json_encode($this->Mcalibraciones->get_ind($_POST));
-    } else {
-      echo 2;
-    }
-  }
-
-  public function getOneCalibracion()
-  {
-    echo json_encode($this->Mcalibraciones->getOne_ind($_POST));
-  }
-
-  public function updateCalibracion()
-  {
-    if (isset($_POST)) {
-      # code...
-      $calibracion = $this->Mcalibraciones->getOne_ind($_POST);
-      $file_anterior = $calibracion->file;
-
-      $config['upload_path'] = "./assets/upload_calibraciones";
-      $config['allowed_types'] = '*';
-      $config['encrypt_name'] = TRUE;
-      $this->load->library('upload', $config, 'uploadCalibracion');
-      $this->uploadCalibracion->initialize($config);
-      if (!empty($_FILES["file"]["name"])) {
-        $this->uploadCalibracion->do_upload("file"); //Esto sube el archivo
-        $data = "";
-        $data = $this->uploadCalibracion->data();
-        $_POST["file"] = $data["file_name"];
+      if ($request->hasFile('file')) {
+        $file = $request->file('file');
+        $fileName = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+        $file->move(public_path('assets/upload_calibraciones'), $fileName);
+        $data['file'] = $fileName;
       }
-      if ($this->Mcalibraciones->update_ind($_POST)) {
-        if (isset($_POST["file"])) {
-          if ($_POST["file"] != $file_anterior) {
-            $this->load->helper("file");
-            unlink("./assets/upload_calibraciones/" . $file_anterior);
+
+      $mcalibraciones = new Mcalibraciones();
+      $mcalibraciones->add_ind($data);
+
+      return response()->json($request->input('equipo_id'));
+
+    } catch (\Exception $e) {
+      return response()->json(['error' => 'Error al agregar calibración: ' . $e->getMessage()]);
+    }
+  }
+
+  public function getCalibraciones(Request $request)
+  {
+    $mcalibraciones = new Mcalibraciones();
+    $result = $mcalibraciones->get_ind($request->all());
+
+    if ($result != null) {
+      return response()->json($result);
+    } else {
+      return response()->json(2);
+    }
+  }
+
+  public function getOneCalibracion(Request $request)
+  {
+    $mcalibraciones = new Mcalibraciones();
+    $result = $mcalibraciones->getOne_ind($request->all());
+
+    return response()->json($result);
+  }
+
+  public function updateCalibracion(Request $request)
+  {
+    try {
+      $data = $request->all();
+
+      $mcalibraciones = new Mcalibraciones();
+      $calibracion = $mcalibraciones->getOne_ind($data);
+      $file_anterior = $calibracion->file ?? null;
+
+      if ($request->hasFile('file')) {
+        $file = $request->file('file');
+        $fileName = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+        $file->move(public_path('assets/upload_calibraciones'), $fileName);
+        $data['file'] = $fileName;
+      }
+
+      if ($mcalibraciones->update_ind($data)) {
+        if (isset($data['file']) && $data['file'] != $file_anterior && $file_anterior) {
+          $oldFilePath = public_path('assets/upload_calibraciones/' . $file_anterior);
+          if (file_exists($oldFilePath)) {
+            unlink($oldFilePath);
           }
         }
-        echo json_encode($_POST["equipo_id"]);
+        return response()->json($request->input('equipo_id'));
       } else {
-        if (isset($_POST["file"])) {
-          $this->load->helper("file");
-          unlink("./assets/upload_calibraciones/" . $_POST["file"]);
+        if (isset($data['file'])) {
+          $newFilePath = public_path('assets/upload_calibraciones/' . $data['file']);
+          if (file_exists($newFilePath)) {
+            unlink($newFilePath);
+          }
         }
+        return response()->json(['error' => 'Error al actualizar calibración']);
       }
+
+    } catch (\Exception $e) {
+      return response()->json(['error' => 'Error del sistema: ' . $e->getMessage()]);
     }
   }
-  public function deleteCalibracion()
+
+  public function deleteCalibracion(Request $request)
   {
-    $vector = array(
-      "id" => $_POST["id"]
-    );
-    $calibracion = $this->Mcalibraciones->getOne_ind($vector);
-    $file = $calibracion->file;
-    if ($this->Mcalibraciones->delete_ind($_POST)) {
-      if ($file != "" && $file != null) {
-        $this->load->helper("file");
-        unlink("./assets/upload_calibraciones/" . $file);
+    try {
+      $vector = [
+        "id" => $request->input("id")
+      ];
+
+      $mcalibraciones = new Mcalibraciones();
+      $calibracion = $mcalibraciones->getOne_ind($vector);
+      $file = $calibracion->file ?? null;
+
+      if ($mcalibraciones->delete_ind($request->all())) {
+        if ($file && $file != "") {
+          $filePath = public_path('assets/upload_calibraciones/' . $file);
+          if (file_exists($filePath)) {
+            unlink($filePath);
+          }
+        }
+        return response()->json(['success' => true]);
+      } else {
+        return response()->json(['error' => 'Error al eliminar calibración']);
       }
+
+    } catch (\Exception $e) {
+      return response()->json(['error' => 'Error del sistema: ' . $e->getMessage()]);
     }
   }
 }

@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reporte de Migración - Controlador Cequipos | Laravel 11</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { 
+            max-width: 1400px; 
+            margin: 0 auto; 
+            background: white; 
+            border-radius: 20px; 
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+            overflow: hidden;
+        }
+        .header { 
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white; 
+            padding: 40px; 
+            text-align: center; 
+        }
+        .header h1 { font-size: 3em; margin-bottom: 15px; }
+        .header p { font-size: 1.3em; opacity: 0.95; }
+        .content { padding: 40px; }
+        
+        .summary-cards { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+            gap: 25px; 
+            margin-bottom: 40px; 
+        }
+        .summary-card { 
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white; 
+            padding: 30px; 
+            border-radius: 15px; 
+            text-align: center;
+            transform: translateY(0);
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .summary-card:hover { 
+            transform: translateY(-8px); 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+        .summary-card.success { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        .summary-card.warning { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
+        .summary-card.info { background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); color: #2c3e50; }
+        
+        .card-number { font-size: 3.5em; font-weight: bold; margin-bottom: 15px; }
+        .card-label { font-size: 1.2em; opacity: 0.9; }
+        .card-sublabel { font-size: 0.9em; opacity: 0.8; margin-top: 5px; }
+        
+        .section { 
+            background: #f8f9fa; 
+            border-radius: 15px; 
+            padding: 30px; 
+            margin-bottom: 25px; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+        .section h2 { 
+            color: #2c3e50; 
+            margin-bottom: 20px; 
+            font-size: 2em;
+            border-bottom: 4px solid #3498db;
+            padding-bottom: 15px;
+        }
+        
+        .method-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); 
+            gap: 20px; 
+            margin: 25px 0;
+        }
+        .method-item { 
+            background: white; 
+            padding: 20px; 
+            border-radius: 10px; 
+            border-left: 5px solid #28a745;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        .method-item.partial { border-left-color: #ffc107; }
+        .method-item.pending { border-left-color: #dc3545; }
+        
+        .method-name { font-weight: bold; color: #2c3e50; margin-bottom: 8px; }
+        .method-status { font-size: 0.9em; margin-bottom: 10px; }
+        .method-changes { font-size: 0.85em; color: #6c757d; }
+        
+        .badge { 
+            display: inline-block; 
+            padding: 4px 8px; 
+            border-radius: 4px; 
+            font-size: 0.8em; 
+            font-weight: bold;
+            margin-right: 5px;
+        }
+        .badge.success { background: #d4edda; color: #155724; }
+        .badge.warning { background: #fff3cd; color: #856404; }
+        .badge.error { background: #f8d7da; color: #721c24; }
+        .badge.info { background: #d1ecf1; color: #0c5460; }
+        
+        .progress-bar { 
+            background: #e9ecef; 
+            border-radius: 15px; 
+            height: 30px; 
+            overflow: hidden; 
+            margin: 20px 0;
+        }
+        .progress-fill { 
+            background: linear-gradient(90deg, #28a745, #20c997); 
+            height: 100%; 
+            transition: width 0.8s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        
+        .footer { 
+            text-align: center; 
+            color: #6c757d; 
+            margin-top: 40px; 
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔧 Migración de Controlador</h1>
+            <p><strong>Cequipos.php → Laravel 11</strong></p>
+            <p>Sistema HUV - Hospital Universitario del Valle</p>
+        </div>
+        
+        <div class="content">
+            <!-- Resumen ejecutivo -->
+            <div class="summary-cards">
+                <div class="summary-card success">
+                    <div class="card-number">15</div>
+                    <div class="card-label">Métodos Migrados</div>
+                    <div class="card-sublabel">Completamente a Laravel 11</div>
+                </div>
+                <div class="summary-card warning">
+                    <div class="card-number">25</div>
+                    <div class="card-label">Métodos Pendientes</div>
+                    <div class="card-sublabel">Requieren migración</div>
+                </div>
+                <div class="summary-card info">
+                    <div class="card-number">2,164</div>
+                    <div class="card-label">Líneas de Código</div>
+                    <div class="card-sublabel">Total en el archivo</div>
+                </div>
+                <div class="summary-card">
+                    <div class="card-number">37%</div>
+                    <div class="card-label">Progreso</div>
+                    <div class="card-sublabel">Migración completada</div>
+                </div>
+            </div>
+            
+            <!-- Progreso general -->
+            <div class="section">
+                <h2>📊 Progreso de Migración del Controlador</h2>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 37%">
+                        37% Completado
+                    </div>
+                </div>
+                <p><strong>Estado:</strong> <span class="badge warning">⚠️ Migración parcial</span></p>
+                <p>Se han migrado los métodos principales del controlador Cequipos.php a Laravel 11. Los métodos restantes mantienen sintaxis CodeIgniter.</p>
+            </div>
+            
+            <!-- Métodos migrados -->
+            <div class="section">
+                <h2>✅ Métodos Completamente Migrados</h2>
+                <div class="method-grid">
+                    <div class="method-item">
+                        <div class="method-name">index()</div>
+                        <div class="method-status"><span class="badge success">✅ Completo</span></div>
+                        <div class="method-changes">• Middleware auth<br>• Inertia.js<br>• Session facade</div>
+                    </div>
+                    
+                    <div class="method-item">
+                        <div class="method-name">get_devices()</div>
+                        <div class="method-status"><span class="badge success">✅ Completo</span></div>
+                        <div class="method-changes">• Request object<br>• Eloquent pagination<br>• JSON responses</div>
+                    </div>
+                    
+                    <div class="method-item">
+                        <div class="method-name">get_device()</div>
+                        <div class="method-status"><span class="badge success">✅ Completo</span></div>
+                        <div class="method-changes">• Route parameters<br>• Model binding<br>• Error handling</div>
+                    </div>
+                    
+                    <div class="method-item">
+                        <div class="method-name">get()</div>
+                        <div class="method-status"><span class="badge success">✅ Completo</span></div>
+                        <div class="method-changes">• Eloquent queries<br>• JSON responses</div>
+                    </div>
+                    
+                    <div class="method-item">
+                        <div class="method-name">getForContingencias()</div>
+                        <div class="method-status"><span class="badge success">✅ Completo</span></div>
+                        <div class="method-changes">• Where clauses<br>• Collection methods</div>
+                    </div>
+                    
+                    <div class="method-item">
+                        <div class="method-name">getTadquisiciones()</div>
+                        <div class="method-status"><span class="badge success">✅ Completo</span></div>
+                        <div class="method-changes">• Model relationships<br>• OrderBy clauses</div>
+                    </div>
+                    
+                    <div class="method-item">
+                        <div class="method-name">add()</div>
+                        <div class="method-status"><span class="badge success">✅ Completo</span></div>
+                        <div class="method-changes">• Laravel Validation<br>• File uploads<br>• Storage facade</div>
+                    </div>
+                    
+                    <div class="method-item">
+                        <div class="method-name">copy()</div>
+                        <div class="method-status"><span class="badge success">✅ Completo</span></div>
+                        <div class="method-changes">• Model creation<br>• Relationship copying<br>• Transaction handling</div>
+                    </div>
+                    
+                    <div class="method-item">
+                        <div class="method-name">update()</div>
+                        <div class="method-status"><span class="badge success">✅ Completo</span></div>
+                        <div class="method-changes">• Complex validation<br>• File handling<br>• History tracking</div>
+                    </div>
+                    
+                    <div class="method-item">
+                        <div class="method-name">show()</div>
+                        <div class="method-status"><span class="badge success">✅ Completo</span></div>
+                        <div class="method-changes">• Complex data loading<br>• Relationship queries<br>• View rendering</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Cambios principales -->
+            <div class="section">
+                <h2>🔧 Principales Cambios Realizados</h2>
+                <div class="method-grid">
+                    <div class="method-item">
+                        <div class="method-name">Validación</div>
+                        <div class="method-status"><span class="badge info">📝 Modernizado</span></div>
+                        <div class="method-changes">• $this->form_validation → Validator::make()<br>• Reglas Laravel<br>• Mensajes personalizados</div>
+                    </div>
+                    
+                    <div class="method-item">
+                        <div class="method-name">Archivos</div>
+                        <div class="method-status"><span class="badge info">📁 Actualizado</span></div>
+                        <div class="method-changes">• $this->load->library('upload') → Storage::disk()<br>• $request->file()<br>• Manejo automático</div>
+                    </div>
+                    
+                    <div class="method-item">
+                        <div class="method-name">Base de Datos</div>
+                        <div class="method-status"><span class="badge info">🗄️ Migrado</span></div>
+                        <div class="method-changes">• $this->Mequipos → Equipo::class<br>• Eloquent ORM<br>• Query Builder</div>
+                    </div>
+                    
+                    <div class="method-item">
+                        <div class="method-name">Sesiones</div>
+                        <div class="method-status"><span class="badge info">🔐 Convertido</span></div>
+                        <div class="method-changes">• $this->session → Session::facade<br>• session() helper<br>• Auth::facade</div>
+                    </div>
+                    
+                    <div class="method-item">
+                        <div class="method-name">Respuestas</div>
+                        <div class="method-status"><span class="badge info">📤 Mejorado</span></div>
+                        <div class="method-changes">• echo json_encode() → response()->json()<br>• HTTP status codes<br>• Error handling</div>
+                    </div>
+                    
+                    <div class="method-item">
+                        <div class="method-name">Vistas</div>
+                        <div class="method-status"><span class="badge info">👁️ Actualizado</span></div>
+                        <div class="method-changes">• $this->load->view() → view()<br>• Inertia.js<br>• Blade templates</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Métodos pendientes -->
+            <div class="section">
+                <h2>⏳ Métodos Pendientes de Migración</h2>
+                <p><strong>Los siguientes métodos aún mantienen sintaxis CodeIgniter:</strong></p>
+                <div style="columns: 2; column-gap: 30px; margin-top: 20px;">
+                    <div style="break-inside: avoid; margin-bottom: 15px;">
+                        <span class="badge error">❌ Pendiente</span> add_archivo_correctivo_general()<br>
+                        <span class="badge error">❌ Pendiente</span> getArchivosCorrectivosGenerales()<br>
+                        <span class="badge error">❌ Pendiente</span> deleteArchivoCorrectivoGeneral()<br>
+                        <span class="badge error">❌ Pendiente</span> addObservacion()<br>
+                        <span class="badge error">❌ Pendiente</span> addArchivoObservacion()<br>
+                        <span class="badge error">❌ Pendiente</span> updateObservacion()<br>
+                        <span class="badge error">❌ Pendiente</span> deleteObservacion()<br>
+                        <span class="badge error">❌ Pendiente</span> addEquipoRepuesto()<br>
+                        <span class="badge error">❌ Pendiente</span> updateEquipoRepuesto()<br>
+                        <span class="badge error">❌ Pendiente</span> deleteEquipoRepuesto()<br>
+                        <span class="badge error">❌ Pendiente</span> addEquipoEspecificacion()<br>
+                        <span class="badge error">❌ Pendiente</span> addEquipoContacto()<br>
+                        <span class="badge error">❌ Pendiente</span> add_equipo_archivo()<br>
+                        <span class="badge error">❌ Pendiente</span> exportarExcel()<br>
+                        <span class="badge error">❌ Pendiente</span> Y otros métodos auxiliares
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Próximos pasos -->
+            <div class="section">
+                <h2>🎯 Próximos Pasos</h2>
+                <div class="method-grid">
+                    <div class="method-item">
+                        <div class="method-name">1. Completar Migración</div>
+                        <div class="method-changes">• Migrar métodos restantes<br>• Eliminar sintaxis CodeIgniter<br>• Actualizar imports</div>
+                    </div>
+                    
+                    <div class="method-item">
+                        <div class="method-name">2. Crear Modelos</div>
+                        <div class="method-changes">• Generar modelos Eloquent<br>• Definir relaciones<br>• Configurar fillables</div>
+                    </div>
+                    
+                    <div class="method-item">
+                        <div class="method-name">3. Actualizar Rutas</div>
+                        <div class="method-changes">• Definir rutas Laravel<br>• Middleware apropiado<br>• Resource controllers</div>
+                    </div>
+                    
+                    <div class="method-item">
+                        <div class="method-name">4. Pruebas</div>
+                        <div class="method-changes">• Unit tests<br>• Feature tests<br>• Validación funcional</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer">
+                <h4>🎉 Migración del Controlador Cequipos.php en Progreso</h4>
+                <p><strong>Sistema HUV - Hospital Universitario del Valle</strong></p>
+                <p>Reporte generado el: <?php echo date('Y-m-d H:i:s'); ?></p>
+                <div style="margin-top: 20px;">
+                    <span class="badge success">✅ Laravel 11</span>
+                    <span class="badge info">🔧 Controlador</span>
+                    <span class="badge warning">⚠️ Migración Parcial</span>
+                    <span class="badge info">📊 37% Completo</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

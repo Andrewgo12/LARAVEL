@@ -1,18 +1,25 @@
 <?php
-defined('BASEPATH') or exit('El acceso directo no esta permitido');
 
-/**
- * 
- */
-class Ctipos_fallas extends CI_Controller
+namespace App\Http\Controllers\correctivo_general;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Models\Mtipos_fallas;
+use Illuminate\Http\JsonResponse;
+
+class Ctipos_fallas extends Controller
 {
-	function __construct()
-	{
-		parent::__construct();
-		$this->load->model('Mtipos_fallas');
-	}
-	public function getAll()
-	{
-		echo json_encode($this->Mtipos_fallas->get());
-	}
+    private Mtipos_fallas $Mtipos_fallas;
+    
+    public function __construct()
+    {
+        $this->Mtipos_fallas = new Mtipos_fallas();
+    }
+    
+    public function getAll(): JsonResponse
+    {
+        return response()->json($this->Mtipos_fallas->get());
+    }
 }
+
+
