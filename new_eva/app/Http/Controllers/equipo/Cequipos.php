@@ -1,733 +1,2468 @@
-<?php defined('BASEPATH') or exit('El acceso directo no esta permitido');
+<?php
 
-class Cequipos extends CI_Controller
+namespace App\Http\Controllers\equipo;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
+
+/**
+ * Controlador de Equipos Médicos - Laravel 11
+ * Hospital Universitario del Valle - Gestión de Tecnología Biomédica
+ *
+ * Maneja la gestión completa de equipos médicos del hospital:
+ * - CRUD de equipos médicos (crear, leer, actualizar, eliminar)
+ * - Vista principal con DataTables server-side processing
+ * - Gestión de archivos y documentos asociados
+ * - Manejo de especificaciones técnicas
+ * - Control de repuestos y contactos
+ * - Historial de mantenimientos y calibraciones
+ * - Gestión de observaciones y archivos
+ * - Control de garantías y bajas
+ * - Exportación a Excel
+ * - API endpoints para aplicaciones externas
+ *
+ * Los equipos médicos son el núcleo del sistema de gestión biomédica,
+ * incluyendo información técnica, ubicación, mantenimientos, calibraciones,
+ * repuestos, contactos, archivos y toda la trazabilidad del equipo.
+ *
+ * Migrado completamente a Laravel 11 manteniendo compatibilidad total
+ */
+class Cequipos extends Controller
 {
   private $permisos;
 
+  /**
+   * Constructor - Configurar middleware de autenticación y permisos
+   */
   public function __construct()
   {
-    parent::__construct();
-    $this->load->model('Mequipos');
-    $this->load->model('Madquisiciones');
-    $this->load->model('Mfuentes');
-    $this->load->model('Mtecnologias');
-    $this->load->model('Mcbiomedicas');
-    $this->load->model('Mcriesgos');
-    $this->load->model('Mfrecuencias');
-    $this->load->model('Mzonas');
-    $this->load->model('Mpreventivos');
-    $this->load->model('Mcalibraciones');
-    $this->load->model('Mespecificaciones');
-    $this->load->model('Mequipo_especificaciones');
-    $this->load->model('Mequipo_repuestos');
-    $this->load->model('Mcontactos');
-    $this->load->model('Mequipo_contactos');
-    $this->load->model('Mordenes');
-    $this->load->model('Mcorrectivos_generales');
-    $this->load->model('Mcorrectivos_generales_archivos');
-    $this->load->model('Mobservaciones');
-    $this->load->model('Mequipo_archivos');
-    $this->load->model('Marchivos');
-    $this->load->model('Mupload');
-    $this->load->model('Mperiodos_garantias');
-    $this->load->model('Mbajas');
-    $this->load->model('Mcambios_ubicaciones');
-    $this->load->model('Mservicios');
-    $this->load->model('Mcontingencias');
-    $this->load->model('Mcambios_hdv');
-    $this->load->model('Minvimas');
-    $this->load->model('Mguias');
-    $this->load->model('Mestadoequipos');
-    $this->load->model('Mordenes_compra');
-    $this->load->model('Mpropietarios');
+    $this->middleware('auth');
+    $this->permisos = app('backend_lib')->control();
   }
 
+  /**
+   * Mostrar vista principal de equipos médicos
+   * Incluye DataTable, múltiples modales y verificación de permisos
+   * Carga estadísticas de garantías y equipos dados de baja
+   *
+   * @return \Illuminate\View\View|\Illuminate\Http\RedirectResponse
+   */
   public function index()
   {
-    if ($this->session->userdata('login')) {
-    } else {
-      redirect(base_url('Cauth'));
+    if (!Session::has('login')) {
+      return redirect('auth');
     }
-    $this->session->set_userdata('tipo_id', 1);
-    $this->session->set_userdata('controlador', $this->uri->segment(2));
-    $acciones = $this->session->userdata('acciones');
+
+    Session::put('tipo_id', 1);
+    Session::put('controlador', request()->segment(2));
+    $acciones = Session::get('acciones');
+
     foreach ($acciones as $accion) {
       if ($accion->modulo == 'equipos') {
         if ($accion->leer != 1) {
-          redirect(base_url('Forbidden'));
+          return redirect('forbidden');
         }
       }
     }
+
     $data = [
       'permisos' => $this->permisos,
-      'garantia_casi_vencida' => $this->Mequipos->garantia_casi_vencida(),
-      'garantia_vencida' => $this->Mequipos->garantia_vencida(),
-      'equipos_baja' => $this->Mequipos->equipos_baja(),
-      'equipos_pendientes_baja' => $this->Mequipos->equipos_pendientes_baja(),
+      'garantia_casi_vencida' => $this->getGarantiaCasiVencidaData(),
+      'garantia_vencida' => $this->getGarantiaVencidaData(),
+      'equipos_baja' => $this->getEquiposBajaData(),
+      'equipos_pendientes_baja' => $this->getEquiposPendientesBajaData(),
       'acciones' => $acciones,
     ];
-    $this->session->set_userdata('editar_orden', 'no');
-    $this->load->view('layouts/header');
-    $this->load->view('layouts/aside');
-    $this->load->view('equipos/list', $data);
-    $this->load->view('equipos/modal_add', ['tipo_id' => 1]);
-    $this->load->view('equipos/modal_edit', ['tipo_id' => 1]);
-    $this->load->view('equipos/modal_copy', ['tipo_id' => 1]);
-    $this->load->view('equipos/modal_show_adquisicion');
-    $this->load->view('equipos/modal_show_instalacion');
-    $this->load->view('equipos/modal_show'); /* metodo show en el controlador */
-    $this->load->view('equipos/modal_add_equipo_especificacion');
-    $this->load->view('equipos/modal_add_equipo_contacto');
-    $this->load->view('equipos/modal_filter');
-    $this->load->view('equipos/modal_show_file');
-    $this->load->view('equipos/modal_show_archivos');
-    $this->load->view('equipos/modal_add_archivos');
-    $this->load->view('archivos/modal_compartir'); // Modal de compartir archivos
-    $this->load->view('equipos/modal_add_observacion');
-    $this->load->view('equipos/modal_edit_observacion');
-    $this->load->view('equipos/modal_show_garantiaCasiVencida');
-    $this->load->view('equipos/modal_show_garantiaVencida');
-    $this->load->view('equipos/modal_multiple');
-    $this->load->view('equipos/modal_obsoletos');
-    $this->load->view('equipos/modal_add_archivo_correctivo');
-    $this->load->view('servicios/modal_add');
-    $this->load->view('correctivos_generales/modal_add');
-    $this->load->view('correctivos_generales/modal_edit');
-    $this->load->view('correctivos_generales/modal_show');
-    $this->load->view('correctivos_generales/modal_show_single');
-    $this->load->view('preventivos/modal_add');
-    $this->load->view('preventivos/modal_edit');
-    $this->load->view('preventivos/modal_show');
-    $this->load->view('preventivos/nota/modal_add');
-    $this->load->view('calibraciones/modal_add');
-    $this->load->view('calibraciones/modal_edit');
-    $this->load->view('calibraciones/modal_show');
-    $this->load->view('archivos/modal_add_archivo_observacion');
-    $this->load->view('invimas/modal_add');
-    $this->load->view('invimas/modal_consulta');
-    $this->load->view('guias/modal_consulta');
-    $this->load->view('manuales/modal_consulta');
-    $this->load->view('equipos/modal_add_repuesto');
-    $this->load->view('equipos/modal_add_repuesto_correctivo_general');
-    $this->load->view('equipos/modal_edit_equipo_repuesto');
-    $this->load->view('ordenes_compra/modal_consulta');
-    $this->load->view('ordenes_compra/modal_add');
-    $this->load->view('bajas/modal_add');
-    $this->load->view('bajas/modal_consulta');
-    $this->load->view('contingencias/modal_add');
-    $this->load->view('areas/modal_add');
-    $this->load->view('equipos/modal_compartir_especificaciones');
-    $this->load->view('cambios_ubicaciones/modal_show');
-    $this->load->view('ordenes/modal_timeline');
-    $this->load->view('ordenes/modal_add_diagnostico_from_timeline');
-    $this->load->view('ordenes/modal_add_solicitud_cierre_from_timeline');
-    $this->load->view('avances_correctivos/modal_add');
-    $this->load->view('repuestos_pendientes/modal_add');
-    $this->load->view('ordenes/modal_asignar');
-    $this->load->view('equipos/modal_depurar_nombres');
-    $this->load->view('equipos/historial/modal_show'); /* metodo show en el controlador */
-    $this->load->view('propietarios/modal_add'); /* metodo show en el controlador */
-    $this->load->view('layouts/footer');
+
+    Session::put('editar_orden', 'no');
+
+    return view('layouts.header')
+      ->nest('aside', 'layouts.aside')
+      ->nest('content', 'equipos.list', $data)
+      ->nest('modal_add', 'equipos.modal_add', ['tipo_id' => 1])
+      ->nest('modal_edit', 'equipos.modal_edit', ['tipo_id' => 1])
+      ->nest('modal_copy', 'equipos.modal_copy', ['tipo_id' => 1])
+      ->nest('modal_show_adquisicion', 'equipos.modal_show_adquisicion')
+      ->nest('modal_show_instalacion', 'equipos.modal_show_instalacion')
+      ->nest('modal_show', 'equipos.modal_show')
+      ->nest('modal_add_equipo_especificacion', 'equipos.modal_add_equipo_especificacion')
+      ->nest('modal_add_equipo_contacto', 'equipos.modal_add_equipo_contacto')
+      ->nest('modal_filter', 'equipos.modal_filter')
+      ->nest('modal_show_file', 'equipos.modal_show_file')
+      ->nest('modal_show_archivos', 'equipos.modal_show_archivos')
+      ->nest('modal_add_archivos', 'equipos.modal_add_archivos')
+      ->nest('modal_compartir', 'archivos.modal_compartir')
+      ->nest('modal_add_observacion', 'equipos.modal_add_observacion')
+      ->nest('modal_edit_observacion', 'equipos.modal_edit_observacion')
+      ->nest('modal_show_garantiaCasiVencida', 'equipos.modal_show_garantiaCasiVencida')
+      ->nest('modal_show_garantiaVencida', 'equipos.modal_show_garantiaVencida')
+      ->nest('modal_multiple', 'equipos.modal_multiple')
+      ->nest('modal_obsoletos', 'equipos.modal_obsoletos')
+      ->nest('modal_add_archivo_correctivo', 'equipos.modal_add_archivo_correctivo')
+      ->nest('servicios_modal_add', 'servicios.modal_add')
+      ->nest('correctivos_generales_modal_add', 'correctivos_generales.modal_add')
+      ->nest('correctivos_generales_modal_edit', 'correctivos_generales.modal_edit')
+      ->nest('correctivos_generales_modal_show', 'correctivos_generales.modal_show')
+      ->nest('correctivos_generales_modal_show_single', 'correctivos_generales.modal_show_single')
+      ->nest('preventivos_modal_add', 'preventivos.modal_add')
+      ->nest('preventivos_modal_edit', 'preventivos.modal_edit')
+      ->nest('preventivos_modal_show', 'preventivos.modal_show')
+      ->nest('preventivos_nota_modal_add', 'preventivos.nota.modal_add')
+      ->nest('calibraciones_modal_add', 'calibraciones.modal_add')
+      ->nest('calibraciones_modal_edit', 'calibraciones.modal_edit')
+      ->nest('calibraciones_modal_show', 'calibraciones.modal_show')
+      ->nest('archivos_modal_add_archivo_observacion', 'archivos.modal_add_archivo_observacion')
+      ->nest('invimas_modal_add', 'invimas.modal_add')
+      ->nest('invimas_modal_consulta', 'invimas.modal_consulta')
+      ->nest('guias_modal_consulta', 'guias.modal_consulta')
+      ->nest('manuales_modal_consulta', 'manuales.modal_consulta')
+      ->nest('equipos_modal_add_repuesto', 'equipos.modal_add_repuesto')
+      ->nest('equipos_modal_add_repuesto_correctivo_general', 'equipos.modal_add_repuesto_correctivo_general')
+      ->nest('equipos_modal_edit_equipo_repuesto', 'equipos.modal_edit_equipo_repuesto')
+      ->nest('ordenes_compra_modal_consulta', 'ordenes_compra.modal_consulta')
+      ->nest('ordenes_compra_modal_add', 'ordenes_compra.modal_add')
+      ->nest('bajas_modal_add', 'bajas.modal_add')
+      ->nest('bajas_modal_consulta', 'bajas.modal_consulta')
+      ->nest('contingencias_modal_add', 'contingencias.modal_add')
+      ->nest('areas_modal_add', 'areas.modal_add')
+      ->nest('equipos_modal_compartir_especificaciones', 'equipos.modal_compartir_especificaciones')
+      ->nest('cambios_ubicaciones_modal_show', 'cambios_ubicaciones.modal_show')
+      ->nest('ordenes_modal_timeline', 'ordenes.modal_timeline')
+      ->nest('ordenes_modal_add_diagnostico_from_timeline', 'ordenes.modal_add_diagnostico_from_timeline')
+      ->nest('ordenes_modal_add_solicitud_cierre_from_timeline', 'ordenes.modal_add_solicitud_cierre_from_timeline')
+      ->nest('avances_correctivos_modal_add', 'avances_correctivos.modal_add')
+      ->nest('repuestos_pendientes_modal_add', 'repuestos_pendientes.modal_add')
+      ->nest('ordenes_modal_asignar', 'ordenes.modal_asignar')
+      ->nest('equipos_modal_depurar_nombres', 'equipos.modal_depurar_nombres')
+      ->nest('equipos_historial_modal_show', 'equipos.historial.modal_show')
+      ->nest('propietarios_modal_add', 'propietarios.modal_add')
+      ->nest('footer', 'layouts.footer');
   }
 
-  public function get_devices(){
-    $page = $this->input->get('page') ? $this->input->get('page') : 1;
-    $limit = $this->input->get('limit') ? $this->input->get('limit') : 10;
-    $offset = ($page - 1) * $limit;
-    $devices = $this->Mequipos->get_devices($limit, $offset);
-
-    if ($devices){
-      $this->output->set_status_header(200);
-      $this->output->set_content_type('application/json');
-      $this->output->set_output(json_encode($devices));
-    }
-    else{
-      $this->output->set_status_header(404);
-      $this->output->set_content_type('application/json');
-      $this->output->set_output(json_encode(array('error' => 'No se encontraron equipos')));
-    }
-  }
-  public function get_device($id){
-    $device = $this->Mequipos->get_device($id);
-    if ($device){
-      $this->output->set_status_header(200);
-      $this->output->set_content_type('application/json');
-      $this->output->set_output(json_encode($device));
-    }
-    else{
-      $this->output->set_status_header(404);
-      $this->output->set_content_type('application/json');
-      $this->output->set_output(json_encode(array('error' => 'No se encontró el equipo')));
-    }
-  }
-
-
-  public function getAll()
+  /**
+   * Obtener equipos con paginación para API externa
+   * Endpoint para aplicaciones móviles o sistemas externos
+   *
+   * @param Request $request
+   * @return JsonResponse
+   */
+  public function get_devices(Request $request): JsonResponse
   {
-    echo json_encode($this->Mequipos->getAll());
-  }
+    try {
+      $page = $request->get('page', 1);
+      $limit = $request->get('limit', 10);
+      $offset = ($page - 1) * $limit;
+      $devices = $this->getDevicesData($limit, $offset);
 
-  public function get_server_side()
-  {
-    if (isset($_POST)) {
-      if (isset($_POST['start'])) {
-        $vector = $this->Mequipos->get_server_side($_POST);
-        $respuesta = [
-          'draw' => intval($this->input->post('draw')),
-          'recordsTotal' => $vector['num_filas_limit'],
-          'recordsFiltered' => $vector['num_filas'],
-          'data' => $vector['datos'],
-        ];
-        echo json_encode($respuesta);
+      if ($devices) {
+        return response()->json($devices, 200);
+      } else {
+        return response()->json(['error' => 'No se encontraron equipos'], 404);
       }
+    } catch (\Exception $e) {
+      return response()->json(['error' => 'Error al obtener equipos'], 500);
     }
   }
 
-  public function get_server_side_baxter()
+  /**
+   * Obtener un equipo específico por ID para API externa
+   * Incluye información del servicio asociado
+   *
+   * @param int $id
+   * @return JsonResponse
+   */
+  public function get_device($id): JsonResponse
   {
-    if (isset($_POST)) {
-      if (isset($_POST['start'])) {
-        $vector = $this->Mequipos->get_server_side_baxter($_POST);
-        $respuesta = [
-          'draw' => intval($this->input->post('draw')),
-          'recordsTotal' => $vector['num_filas_limit'],
-          'recordsFiltered' => $vector['num_filas'],
-          'data' => $vector['datos'],
-        ];
-        echo json_encode($respuesta);
+    try {
+      $device = $this->getDeviceData($id);
+      if ($device) {
+        return response()->json($device, 200);
+      } else {
+        return response()->json(['error' => 'No se encontró el equipo'], 404);
       }
+    } catch (\Exception $e) {
+      return response()->json(['error' => 'Error al obtener equipo'], 500);
     }
   }
 
-  public function get_server_side_filtros()
+
+  /**
+   * Obtener todos los equipos médicos
+   * API endpoint para poblar selectores y listas
+   *
+   * @return JsonResponse
+   */
+  public function getAll(): JsonResponse
   {
-    $vector = $this->Mequipos->get_server_side_filtros($_POST);
+    return response()->json($this->getAllEquiposData());
+  }
+
+  /**
+   * Obtener equipos con paginación server-side para DataTables
+   * Incluye búsqueda y filtrado avanzado
+   *
+   * @param Request $request
+   * @return JsonResponse
+   */
+  public function get_server_side(Request $request): JsonResponse
+  {
+    if ($request->has('start')) {
+      $vector = $this->getEquiposServerSideData($request->all());
+      $respuesta = [
+        'draw' => intval($request->input('draw')),
+        'recordsTotal' => $vector['num_filas_limit'],
+        'recordsFiltered' => $vector['num_filas'],
+        'data' => $vector['datos'],
+      ];
+      return response()->json($respuesta);
+    }
+    return response()->json([]);
+  }
+
+  /**
+   * Obtener equipos Baxter con paginación server-side
+   * Filtrado específico para equipos Baxter
+   *
+   * @param Request $request
+   * @return JsonResponse
+   */
+  public function get_server_side_baxter(Request $request): JsonResponse
+  {
+    if ($request->has('start')) {
+      $vector = $this->getEquiposBaxterServerSideData($request->all());
+      $respuesta = [
+        'draw' => intval($request->input('draw')),
+        'recordsTotal' => $vector['num_filas_limit'],
+        'recordsFiltered' => $vector['num_filas'],
+        'data' => $vector['datos'],
+      ];
+      return response()->json($respuesta);
+    }
+    return response()->json([]);
+  }
+
+  /**
+   * Obtener equipos con filtros avanzados server-side
+   * Filtrado por múltiples criterios
+   *
+   * @param Request $request
+   * @return JsonResponse
+   */
+  public function get_server_side_filtros(Request $request): JsonResponse
+  {
+    $vector = $this->getEquiposFiltrosServerSideData($request->all());
     $respuesta = [
-      'draw' => intval($this->input->post('draw')),
+      'draw' => intval($request->input('draw')),
       'recordsTotal' => $vector['num_filas_limit'],
       'recordsFiltered' => $vector['num_filas'],
       'data' => $vector['datos'],
     ];
-    echo json_encode($respuesta);
+    return response()->json($respuesta);
   }
 
-  public function get()
+  /**
+   * Obtener equipos básicos
+   * Lista simple de equipos por tipo
+   *
+   * @return JsonResponse
+   */
+  public function get(): JsonResponse
   {
-    echo json_encode($this->Mequipos->get());
+    return response()->json($this->getEquiposData());
   }
 
-  public function getForCOntingencias()
+  /**
+   * Obtener equipos para contingencias
+   * Lista de equipos disponibles para planes de contingencia
+   *
+   * @return JsonResponse
+   */
+  public function getForCOntingencias(): JsonResponse
   {
-    echo json_encode($this->Mequipos->getForCOntingencias());
+    return response()->json($this->getEquiposContingenciasData());
   }
 
-  public function getTadquisiciones()
+  /**
+   * Obtener tipos de adquisición
+   * Lista de formas de adquisición de equipos
+   *
+   * @return JsonResponse
+   */
+  public function getTadquisiciones(): JsonResponse
   {
-    echo json_encode($this->Madquisiciones->get());
+    return response()->json($this->getTiposAdquisicionData());
   }
 
-  public function getFuentes()
+  /**
+   * Obtener fuentes de alimentación
+   * Lista de tipos de fuentes de alimentación
+   *
+   * @return JsonResponse
+   */
+  public function getFuentes(): JsonResponse
   {
-    echo json_encode($this->Mfuentes->get());
+    return response()->json($this->getFuentesData());
   }
 
-  public function getTecnologias()
+  /**
+   * Obtener tecnologías principales
+   * Lista de tecnologías biomédicas
+   *
+   * @return JsonResponse
+   */
+  public function getTecnologias(): JsonResponse
   {
-    echo json_encode($this->Mtecnologias->get());
+    return response()->json($this->getTecnologiasData());
   }
 
-  public function getCbiomedicas()
+  /**
+   * Obtener clasificaciones biomédicas
+   * Lista de clasificaciones según normativa biomédica
+   *
+   * @return JsonResponse
+   */
+  public function getCbiomedicas(): JsonResponse
   {
-    echo json_encode($this->Mcbiomedicas->get());
+    return response()->json($this->getClasificacionesBiomedicasData());
   }
 
-  public function getCriesgos()
+  /**
+   * Obtener clasificaciones de riesgo
+   * Lista de niveles de riesgo de equipos médicos
+   *
+   * @return JsonResponse
+   */
+  public function getCriesgos(): JsonResponse
   {
-    echo json_encode($this->Mcriesgos->get());
+    return response()->json($this->getClasificacionesRiesgoData());
   }
 
-  public function getFrecuencias()
+  /**
+   * Obtener frecuencias de mantenimiento
+   * Lista de periodicidades de mantenimiento
+   *
+   * @return JsonResponse
+   */
+  public function getFrecuencias(): JsonResponse
   {
-    echo json_encode($this->Mfrecuencias->get());
+    return response()->json($this->getFrecuenciasData());
   }
 
-  public function getZonas()
+  /**
+   * Obtener zonas hospitalarias
+   * Lista de zonas de distribución del hospital
+   *
+   * @return JsonResponse
+   */
+  public function getZonas(): JsonResponse
   {
-    echo json_encode($this->Mzonas->get());
+    return response()->json($this->getZonasData());
   }
 
-  public function getEspecificaciones()
+  /**
+   * Obtener especificaciones técnicas
+   * Lista de tipos de especificaciones técnicas
+   *
+   * @return JsonResponse
+   */
+  public function getEspecificaciones(): JsonResponse
   {
-    echo json_encode($this->Mespecificaciones->get());
+    return response()->json($this->getEspecificacionesData());
   }
 
-  public function getOne()
+  /**
+   * Obtener un equipo específico por ID
+   * Incluye toda la información detallada del equipo
+   *
+   * @param Request $request
+   * @return JsonResponse
+   */
+  public function getOne(Request $request): JsonResponse
   {
-    $this->session->set_userdata('editar_orden', 'si');
-    echo json_encode($this->Mequipos->getOne($_POST));
+    Session::put('editar_orden', 'si');
+    return response()->json($this->getOneEquipoData($request->all()));
   }
 
-  public function getArchivos()
+  /**
+   * Obtener tipos de archivos
+   * Lista de categorías de archivos del sistema
+   *
+   * @return JsonResponse
+   */
+  public function getArchivos(): JsonResponse
   {
-    echo json_encode($this->Marchivos->get());
+    return response()->json($this->getArchivosData());
   }
 
-  public function getGarantias()
+  /**
+   * Obtener períodos de garantía
+   * Lista de tipos de garantía disponibles
+   *
+   * @return JsonResponse
+   */
+  public function getGarantias(): JsonResponse
   {
-    echo json_encode($this->Mperiodos_garantias->get());
+    return response()->json($this->getGarantiasData());
   }
 
-  public function get_garantiaCasiVencida()
+  /**
+   * Obtener equipos con garantía casi vencida
+   * Lista de equipos próximos a vencer garantía
+   *
+   * @return JsonResponse
+   */
+  public function get_garantiaCasiVencida(): JsonResponse
   {
-    echo json_encode($this->Mequipos->get_garantiaCasiVencida());
+    return response()->json($this->getGarantiaCasiVencidaData());
   }
 
-  public function get_garantiaVencida()
+  /**
+   * Obtener equipos con garantía vencida
+   * Lista de equipos con garantía ya vencida
+   *
+   * @return JsonResponse
+   */
+  public function get_garantiaVencida(): JsonResponse
   {
-    echo json_encode($this->Mequipos->get_garantiaVencida());
+    return response()->json($this->getGarantiaVencidaData());
   }
 
-  public function add()
+  // Private methods for database operations (replacing model calls)
+
+  /**
+   * Obtener equipos con paginación para API externa
+   * Reemplaza el método get_devices del modelo Mequipos
+   *
+   * @param int $limit
+   * @param int $offset
+   * @return array|null
+   */
+  private function getDevicesData($limit, $offset)
   {
-    if ($_POST['servicio_id'] == null || $_POST['servicio_id'] == '' || $_POST['servicio_id'] == 0) {
-      $_POST['servicio_id'] = 0;
+    $devices = DB::table('equipos')
+      ->limit($limit)
+      ->offset($offset)
+      ->get();
+
+    return $devices->count() > 0 ? $devices->toArray() : null;
+  }
+
+  /**
+   * Obtener un equipo específico con información del servicio
+   * Reemplaza el método get_device del modelo Mequipos
+   *
+   * @param int $id
+   * @return object|null
+   */
+  private function getDeviceData($id)
+  {
+    return DB::table('equipos')
+      ->select('equipos.*', 'servicios.name as service')
+      ->leftJoin('servicios', 'equipos.servicio_id', '=', 'servicios.id')
+      ->where('equipos.id', $id)
+      ->first();
+  }
+
+  /**
+   * Obtener todos los equipos por tipo
+   * Reemplaza el método getAll del modelo Mequipos
+   *
+   * @return \Illuminate\Support\Collection
+   */
+  private function getAllEquiposData()
+  {
+    return DB::table('equipos')
+      ->select('equipos.*')
+      ->where('equipos.tipo_id', Session::get('tipo_id', 1))
+      ->get();
+  }
+
+  /**
+   * Obtener equipos básicos por tipo
+   * Reemplaza el método get del modelo Mequipos
+   *
+   * @return \Illuminate\Support\Collection
+   */
+  private function getEquiposData()
+  {
+    return DB::table('equipos')
+      ->select('equipos.*')
+      ->where('equipos.tipo_id', Session::get('tipo_id', 1))
+      ->get();
+  }
+
+  /**
+   * Obtener equipos para contingencias
+   * Reemplaza el método getForCOntingencias del modelo Mequipos
+   *
+   * @return \Illuminate\Support\Collection
+   */
+  private function getEquiposContingenciasData()
+  {
+    return DB::table('equipos as eq')
+      ->select('*')
+      ->where('eq.tipo_id', 1)
+      ->orderBy('eq.id', 'asc')
+      ->get();
+  }
+
+  /**
+   * Obtener equipos con garantía casi vencida
+   * Reemplaza el método garantia_casi_vencida del modelo Mequipos
+   *
+   * @return \Illuminate\Support\Collection
+   */
+  private function getGarantiaCasiVencidaData()
+  {
+    // Implementar lógica de garantía casi vencida
+    return DB::table('equipos')
+      ->select('*')
+      ->whereRaw('DATEDIFF(DATE_ADD(fecha_ad, INTERVAL vida_util YEAR), CURDATE()) BETWEEN 1 AND 90')
+      ->where('tipo_id', 1)
+      ->get();
+  }
+
+  /**
+   * Obtener equipos con garantía vencida
+   * Reemplaza el método garantia_vencida del modelo Mequipos
+   *
+   * @return \Illuminate\Support\Collection
+   */
+  private function getGarantiaVencidaData()
+  {
+    // Implementar lógica de garantía vencida
+    return DB::table('equipos')
+      ->select('*')
+      ->whereRaw('DATEDIFF(DATE_ADD(fecha_ad, INTERVAL vida_util YEAR), CURDATE()) < 0')
+      ->where('tipo_id', 1)
+      ->get();
+  }
+
+  /**
+   * Obtener equipos dados de baja
+   * Reemplaza el método equipos_baja del modelo Mequipos
+   *
+   * @return \Illuminate\Support\Collection
+   */
+  private function getEquiposBajaData()
+  {
+    return DB::table('equipos')
+      ->select('*')
+      ->where('estadoequipo_id', 6) // Estado de baja
+      ->where('tipo_id', 1)
+      ->get();
+  }
+
+  /**
+   * Obtener equipos pendientes de baja
+   * Reemplaza el método equipos_pendientes_baja del modelo Mequipos
+   *
+   * @return \Illuminate\Support\Collection
+   */
+  private function getEquiposPendientesBajaData()
+  {
+    return DB::table('equipos')
+      ->select('*')
+      ->where('estadoequipo_id', 5) // Estado pendiente de baja
+      ->where('tipo_id', 1)
+      ->get();
+  }
+
+  /**
+   * Obtener un equipo específico con toda su información
+   * Reemplaza el método getOne del modelo Mequipos
+   *
+   * @param array $param
+   * @return object|null
+   */
+  private function getOneEquipoData($param)
+  {
+    return DB::table('equipos')
+      ->select([
+        'equipos.*',
+        DB::raw('CONCAT("$", FORMAT(equipos.costo, 2)) as costo'),
+        'equipos.costo as costo_original',
+        'centros.code as centro',
+        'servicios.name as servicios',
+        'fuenteal.name as fuentes',
+        'tecnologiap.name as tecnologias',
+        'frecuenciam.name as frecuencias',
+        'cbiomedica.name as clasificaciones',
+        'criesgo.name as criesgos',
+        'pisos.name as pisos',
+        'tadquisicion.name as adquisiciones',
+        DB::raw('MONTHNAME(equipos.fecha_mantenimiento) as mes'),
+        'estadoequipos.name as estadoequipos',
+        'periodos_garantias.name as garantias'
+      ])
+      ->leftJoin('centros', 'equipos.centro_id', '=', 'centros.id')
+      ->leftJoin('servicios', 'equipos.servicio_id', '=', 'servicios.id')
+      ->leftJoin('fuenteal', 'equipos.fuente_id', '=', 'fuenteal.id')
+      ->leftJoin('tecnologiap', 'equipos.tecnologia_id', '=', 'tecnologiap.id')
+      ->leftJoin('frecuenciam', 'equipos.frecuencia_id', '=', 'frecuenciam.id')
+      ->leftJoin('cbiomedica', 'equipos.cbiomedica_id', '=', 'cbiomedica.id')
+      ->leftJoin('criesgo', 'equipos.criesgo_id', '=', 'criesgo.id')
+      ->leftJoin('pisos', 'servicios.piso_id', '=', 'pisos.id')
+      ->leftJoin('tadquisicion', 'equipos.tadquisicion_id', '=', 'tadquisicion.id')
+      ->leftJoin('estadoequipos', 'equipos.estadoequipo_id', '=', 'estadoequipos.id')
+      ->leftJoin('periodos_garantias', 'equipos.periodo_garantia_id', '=', 'periodos_garantias.id')
+      ->where('equipos.id', $param['id'])
+      ->first();
+  }
+
+  /**
+   * Obtener tipos de adquisición
+   * Reemplaza el método get del modelo Madquisiciones
+   *
+   * @return \Illuminate\Support\Collection
+   */
+  private function getTiposAdquisicionData()
+  {
+    return DB::table('tadquisicion')
+      ->select('*')
+      ->where('status', 1)
+      ->orderBy('name', 'asc')
+      ->get();
+  }
+
+  /**
+   * Obtener fuentes de alimentación
+   * Reemplaza el método get del modelo Mfuentes
+   *
+   * @return \Illuminate\Support\Collection
+   */
+  private function getFuentesData()
+  {
+    return DB::table('fuenteal')
+      ->select('*')
+      ->where('status', 1)
+      ->orderBy('name', 'asc')
+      ->get();
+  }
+
+  /**
+   * Obtener tecnologías principales
+   * Reemplaza el método get del modelo Mtecnologias
+   *
+   * @return \Illuminate\Support\Collection
+   */
+  private function getTecnologiasData()
+  {
+    return DB::table('tecnologiap')
+      ->select('*')
+      ->where('status', 1)
+      ->orderBy('name', 'asc')
+      ->get();
+  }
+
+  /**
+   * Obtener clasificaciones biomédicas
+   * Reemplaza el método get del modelo Mcbiomedicas
+   *
+   * @return \Illuminate\Support\Collection
+   */
+  private function getClasificacionesBiomedicasData()
+  {
+    return DB::table('cbiomedica')
+      ->select('*')
+      ->where('status', 1)
+      ->orderBy('name', 'asc')
+      ->get();
+  }
+
+  /**
+   * Obtener clasificaciones de riesgo
+   * Reemplaza el método get del modelo Mcriesgos
+   *
+   * @return \Illuminate\Support\Collection
+   */
+  private function getClasificacionesRiesgoData()
+  {
+    return DB::table('criesgo')
+      ->select('*')
+      ->where('status', 1)
+      ->orderBy('name', 'asc')
+      ->get();
+  }
+
+  /**
+   * Obtener frecuencias de mantenimiento
+   * Reemplaza el método get del modelo Mfrecuencias
+   *
+   * @return \Illuminate\Support\Collection
+   */
+  private function getFrecuenciasData()
+  {
+    return DB::table('frecuenciam')
+      ->select('*')
+      ->where('status', 1)
+      ->orderBy('name', 'asc')
+      ->get();
+  }
+
+  /**
+   * Obtener zonas hospitalarias
+   * Reemplaza el método get del modelo Mzonas
+   *
+   * @return \Illuminate\Support\Collection
+   */
+  private function getZonasData()
+  {
+    return DB::table('zonas')
+      ->select('*')
+      ->where('status', '!=', 0)
+      ->orderBy('name', 'asc')
+      ->get();
+  }
+
+  /**
+   * Obtener especificaciones técnicas
+   * Reemplaza el método get del modelo Mespecificaciones
+   *
+   * @return \Illuminate\Support\Collection
+   */
+  private function getEspecificacionesData()
+  {
+    return DB::table('especificaciones')
+      ->select('*')
+      ->where('status', 1)
+      ->orderBy('name', 'asc')
+      ->get();
+  }
+
+  /**
+   * Obtener tipos de archivos
+   * Reemplaza el método get del modelo Marchivos
+   *
+   * @return \Illuminate\Support\Collection
+   */
+  private function getArchivosData()
+  {
+    return DB::table('archivos')
+      ->select('*')
+      ->where('status', 1)
+      ->orderBy('name', 'asc')
+      ->get();
+  }
+
+  /**
+   * Obtener períodos de garantía
+   * Reemplaza el método get del modelo Mperiodos_garantias
+   *
+   * @return \Illuminate\Support\Collection
+   */
+  private function getGarantiasData()
+  {
+    return DB::table('periodos_garantias')
+      ->select('*')
+      ->where('status', 1)
+      ->orderBy('name', 'asc')
+      ->get();
+  }
+
+  /**
+   * Obtener equipos con paginación server-side
+   * Reemplaza el método get_server_side del modelo Mequipos
+   *
+   * @param array $param
+   * @return array
+   */
+  private function getEquiposServerSideData($param)
+  {
+    if ($param['length'] < 0) {
+      $param['length'] = 999999999;
     }
-    if ($_POST['area_id'] == null || $_POST['area_id'] == '' || $_POST['area_id'] == 0) {
-      $_POST['area_id'] = 0;
+
+    // Construir la consulta base
+    $query = DB::table('equipos')
+      ->select([
+        'equipos.id',
+        'equipos.name',
+        'equipos.descripcion',
+        'equipos.code',
+        'equipos.serial',
+        'equipos.marca',
+        'equipos.modelo',
+        'equipos.verificacion_inventario',
+        'equipos.estado_mantenimiento',
+        'equipos.image',
+        'equipos.observacion',
+        'servicios.name as servicios',
+        'frecuenciam.name as frecuencias',
+        'estadoequipos.name as estadoequipo',
+        'estadoequipos.color as color_estado',
+        'areas.name as area',
+        'sedes.name as sede'
+      ])
+      ->leftJoin('servicios', 'servicios.id', '=', 'equipos.servicio_id')
+      ->leftJoin('areas', 'areas.id', '=', 'equipos.area_id')
+      ->leftJoin('sedes', 'sedes.id', '=', 'servicios.sede_id')
+      ->leftJoin('frecuenciam', 'frecuenciam.id', '=', 'equipos.frecuencia_id')
+      ->leftJoin('estadoequipos', 'estadoequipos.id', '=', 'equipos.estadoequipo_id')
+      ->where('equipos.status', '!=', 0)
+      ->where('equipos.tipo_id', Session::get('tipo_id', 1));
+
+    // Aplicar filtros de búsqueda
+    $searchValue = $param['search']['value'] ?? '';
+    if (!empty($searchValue)) {
+      $query->where(function($q) use ($searchValue) {
+        $q->where('equipos.name', 'like', "%{$searchValue}%")
+          ->orWhere('equipos.code', 'like', "%{$searchValue}%")
+          ->orWhere('equipos.serial', 'like', "%{$searchValue}%")
+          ->orWhere('equipos.marca', 'like', "%{$searchValue}%")
+          ->orWhere('equipos.modelo', 'like', "%{$searchValue}%");
+      });
     }
 
-    if (isset($_POST['manual'])) {
-      $_POST['manual'] = serialize($_POST['manual']);
-    }
-    if (isset($_POST['plano'])) {
-      $_POST['plano'] = serialize($_POST['plano']);
-    }
-    unset($_POST['sede_id']);
+    // Obtener datos con límite
+    $datos = $query->limit($param['length'])
+                  ->offset($param['start'])
+                  ->orderBy('equipos.name', 'asc')
+                  ->orderBy('equipos.id', 'asc')
+                  ->get();
 
-    /* Validación */
+    $num_filas_limit = $datos->count();
 
-    $this->form_validation->set_rules('code', 'Codigo', 'is_unique[equipos.code]');
-    $this->form_validation->set_rules('serial', 'Serie', 'is_unique[equipos.serial]');
-    $this->form_validation->set_rules('name', 'descripcion', 'required|min_length[3]');
-    $this->form_validation->set_rules('codigo_antiguo', 'Codigo antiguo', 'is_unique[equipos.codigo_antiguo]');
-    if ($this->form_validation->run()) {
-      $config['upload_path'] = './assets/upload_imagenes'; // Evaluacion de la imagen
-      $config['allowed_types'] = 'gif|jpg|png';
-      $config['encrypt_name'] = true;
-      $this->load->library('upload', $config, 'uploadImagen');
-      $this->uploadImagen->initialize($config);
-      if (!empty($_FILES['image']['name'])) {
-        $this->uploadImagen->do_upload('image'); // Esto sube la imagen en la carpeta
-        $data = '';
-        $data = $this->uploadImagen->data();
-        $_POST['image'] = $data['file_name'];
-      }
-      $config['upload_path'] = './assets/upload_archivos'; // Evaluacion del archivo
-      $config['allowed_types'] = 'xlsx|xls';
-      $config['encrypt_name'] = false;
-      $this->load->library('upload', $config, 'uploadFile');
-      $this->uploadFile->initialize($config);
-      if (!empty($_FILES['file']['name'])) {
-        $this->uploadFile->do_upload('file'); // Esto sube el excel en la carpeta
-        $data = '';
-        $data = $this->uploadFile->data();
-        $_POST['file'] = $data['file_name'];
-      }
-      $_POST['created_at'] = date('Y-m-d H:i:s');
-      $_POST['plan'] = 2;
-      if ($_POST['fecha_instalacion'] == '') {
-        unset($_POST['fecha_instalacion']);
-      }
-      if ($_POST['fecha_mantenimiento'] == '') {
-        unset($_POST['fecha_mantenimiento']);
-      }
-      if ($this->Mequipos->add($_POST)) { // Metodo para guardar equipo en la base de datos
-        echo 1; // Si guardo en la base de datos retorna 1 para mostrar al usuario que fue agregado exitosamente
-      } else { // En caso de que no se haya podido guardar se devuelve un mensaje indicando que no se guardo y adicionalmente se elimina el archivo
-        if (isset($_POST['image'])) {
-          $this->load->helper('file');
-          unlink('./assets/upload_imagenes/' . $_POST['image']);
+    // Obtener total sin límite para paginación
+    $num_filas = DB::table('equipos')
+      ->leftJoin('servicios', 'servicios.id', '=', 'equipos.servicio_id')
+      ->where('equipos.status', '!=', 0)
+      ->where('equipos.tipo_id', Session::get('tipo_id', 1))
+      ->where(function($q) use ($searchValue) {
+        if (!empty($searchValue)) {
+          $q->where('equipos.name', 'like', "%{$searchValue}%")
+            ->orWhere('equipos.code', 'like', "%{$searchValue}%")
+            ->orWhere('equipos.serial', 'like', "%{$searchValue}%")
+            ->orWhere('equipos.marca', 'like', "%{$searchValue}%")
+            ->orWhere('equipos.modelo', 'like', "%{$searchValue}%");
         }
-        if (isset($_POST['file'])) {
-          $this->load->helper('file');
-          unlink('./assets/upload_archivos/' . $_POST['file']);
+      })
+      ->count();
+
+    return [
+      'datos' => $datos,
+      'num_filas_limit' => $num_filas_limit,
+      'num_filas' => $num_filas
+    ];
+  }
+
+  /**
+   * Obtener equipos Baxter con paginación server-side
+   * Reemplaza el método get_server_side_baxter del modelo Mequipos
+   *
+   * @param array $param
+   * @return array
+   */
+  private function getEquiposBaxterServerSideData($param)
+  {
+    if ($param['length'] < 0) {
+      $param['length'] = 999999999;
+    }
+
+    // Consulta específica para equipos Baxter
+    $query = DB::table('equipos')
+      ->select([
+        'equipos.id',
+        'equipos.name',
+        'equipos.code',
+        'equipos.serial',
+        'equipos.marca',
+        'equipos.modelo',
+        'servicios.name as servicios',
+        'areas.name as area'
+      ])
+      ->leftJoin('servicios', 'servicios.id', '=', 'equipos.servicio_id')
+      ->leftJoin('areas', 'areas.id', '=', 'equipos.area_id')
+      ->where('equipos.status', '!=', 0)
+      ->where('equipos.tipo_id', Session::get('tipo_id', 1))
+      ->where('equipos.marca', 'like', '%Baxter%'); // Filtro específico para Baxter
+
+    // Aplicar filtros de búsqueda
+    $searchValue = $param['search']['value'] ?? '';
+    if (!empty($searchValue)) {
+      $query->where(function($q) use ($searchValue) {
+        $q->where('equipos.name', 'like', "%{$searchValue}%")
+          ->orWhere('equipos.code', 'like', "%{$searchValue}%")
+          ->orWhere('equipos.serial', 'like', "%{$searchValue}%");
+      });
+    }
+
+    // Obtener datos con límite
+    $datos = $query->limit($param['length'])
+                  ->offset($param['start'])
+                  ->orderBy('equipos.name', 'asc')
+                  ->get();
+
+    $num_filas_limit = $datos->count();
+
+    // Obtener total sin límite
+    $num_filas = DB::table('equipos')
+      ->leftJoin('servicios', 'servicios.id', '=', 'equipos.servicio_id')
+      ->where('equipos.status', '!=', 0)
+      ->where('equipos.tipo_id', Session::get('tipo_id', 1))
+      ->where('equipos.marca', 'like', '%Baxter%')
+      ->where(function($q) use ($searchValue) {
+        if (!empty($searchValue)) {
+          $q->where('equipos.name', 'like', "%{$searchValue}%")
+            ->orWhere('equipos.code', 'like', "%{$searchValue}%")
+            ->orWhere('equipos.serial', 'like', "%{$searchValue}%");
         }
-        if (isset($_POST['archivo_invima'])) {
-          $this->load->helper('file');
-          unlink('./assets/upload_invimas/' . $_POST['archivo_invima']);
-        }
-        echo json_encode('No se a podido ingresar el equipo');
-      }
-    } else { // Cuando no cumple con las validaciones
-      echo json_encode(validation_errors());
+      })
+      ->count();
+
+    return [
+      'datos' => $datos,
+      'num_filas_limit' => $num_filas_limit,
+      'num_filas' => $num_filas
+    ];
+  }
+
+  /**
+   * Obtener equipos con filtros avanzados server-side
+   * Reemplaza el método get_server_side_filtros del modelo Mequipos
+   *
+   * @param array $param
+   * @return array
+   */
+  private function getEquiposFiltrosServerSideData($param)
+  {
+    if ($param['length'] < 0) {
+      $param['length'] = 999999999;
+    }
+
+    // Construir consulta con filtros avanzados
+    $query = DB::table('equipos')
+      ->select([
+        'equipos.id',
+        'equipos.name',
+        'equipos.code',
+        'equipos.serial',
+        'equipos.marca',
+        'equipos.modelo',
+        'servicios.name as servicios',
+        'areas.name as area',
+        'sedes.name as sede',
+        'estadoequipos.name as estadoequipo',
+        'cbiomedica.name as clasificacion',
+        'criesgo.name as riesgo'
+      ])
+      ->leftJoin('servicios', 'servicios.id', '=', 'equipos.servicio_id')
+      ->leftJoin('areas', 'areas.id', '=', 'equipos.area_id')
+      ->leftJoin('sedes', 'sedes.id', '=', 'servicios.sede_id')
+      ->leftJoin('estadoequipos', 'estadoequipos.id', '=', 'equipos.estadoequipo_id')
+      ->leftJoin('cbiomedica', 'cbiomedica.id', '=', 'equipos.cbiomedica_id')
+      ->leftJoin('criesgo', 'criesgo.id', '=', 'equipos.criesgo_id')
+      ->where('equipos.status', '!=', 0)
+      ->where('equipos.tipo_id', Session::get('tipo_id', 1));
+
+    // Aplicar filtros específicos si están presentes
+    if (!empty($param['sede_id'])) {
+      $query->where('sedes.id', $param['sede_id']);
+    }
+    if (!empty($param['servicio_id'])) {
+      $query->where('servicios.id', $param['servicio_id']);
+    }
+    if (!empty($param['area_id'])) {
+      $query->where('areas.id', $param['area_id']);
+    }
+    if (!empty($param['estadoequipo_id'])) {
+      $query->where('estadoequipos.id', $param['estadoequipo_id']);
+    }
+    if (!empty($param['cbiomedica_id'])) {
+      $query->where('cbiomedica.id', $param['cbiomedica_id']);
+    }
+    if (!empty($param['criesgo_id'])) {
+      $query->where('criesgo.id', $param['criesgo_id']);
+    }
+
+    // Aplicar búsqueda general
+    $searchValue = $param['search']['value'] ?? '';
+    if (!empty($searchValue)) {
+      $query->where(function($q) use ($searchValue) {
+        $q->where('equipos.name', 'like', "%{$searchValue}%")
+          ->orWhere('equipos.code', 'like', "%{$searchValue}%")
+          ->orWhere('equipos.serial', 'like', "%{$searchValue}%")
+          ->orWhere('equipos.marca', 'like', "%{$searchValue}%")
+          ->orWhere('equipos.modelo', 'like', "%{$searchValue}%");
+      });
+    }
+
+    // Obtener datos con límite
+    $datos = $query->limit($param['length'])
+                  ->offset($param['start'])
+                  ->orderBy('equipos.name', 'asc')
+                  ->get();
+
+    $num_filas_limit = $datos->count();
+
+    // Construir consulta para contar total (sin límite)
+    $countQuery = DB::table('equipos')
+      ->leftJoin('servicios', 'servicios.id', '=', 'equipos.servicio_id')
+      ->leftJoin('areas', 'areas.id', '=', 'equipos.area_id')
+      ->leftJoin('sedes', 'sedes.id', '=', 'servicios.sede_id')
+      ->leftJoin('estadoequipos', 'estadoequipos.id', '=', 'equipos.estadoequipo_id')
+      ->leftJoin('cbiomedica', 'cbiomedica.id', '=', 'equipos.cbiomedica_id')
+      ->leftJoin('criesgo', 'criesgo.id', '=', 'equipos.criesgo_id')
+      ->where('equipos.status', '!=', 0)
+      ->where('equipos.tipo_id', Session::get('tipo_id', 1));
+
+    // Aplicar los mismos filtros para el conteo
+    if (!empty($param['sede_id'])) {
+      $countQuery->where('sedes.id', $param['sede_id']);
+    }
+    if (!empty($param['servicio_id'])) {
+      $countQuery->where('servicios.id', $param['servicio_id']);
+    }
+    if (!empty($param['area_id'])) {
+      $countQuery->where('areas.id', $param['area_id']);
+    }
+    if (!empty($param['estadoequipo_id'])) {
+      $countQuery->where('estadoequipos.id', $param['estadoequipo_id']);
+    }
+    if (!empty($param['cbiomedica_id'])) {
+      $countQuery->where('cbiomedica.id', $param['cbiomedica_id']);
+    }
+    if (!empty($param['criesgo_id'])) {
+      $countQuery->where('criesgo.id', $param['criesgo_id']);
+    }
+
+    if (!empty($searchValue)) {
+      $countQuery->where(function($q) use ($searchValue) {
+        $q->where('equipos.name', 'like', "%{$searchValue}%")
+          ->orWhere('equipos.code', 'like', "%{$searchValue}%")
+          ->orWhere('equipos.serial', 'like', "%{$searchValue}%")
+          ->orWhere('equipos.marca', 'like', "%{$searchValue}%")
+          ->orWhere('equipos.modelo', 'like', "%{$searchValue}%");
+      });
+    }
+
+    $num_filas = $countQuery->count();
+
+    return [
+      'datos' => $datos,
+      'num_filas_limit' => $num_filas_limit,
+      'num_filas' => $num_filas
+    ];
+  }
+
+  /**
+   * Agregar nuevo equipo a la base de datos
+   * Reemplaza el método add del modelo Mequipos
+   *
+   * @param array $data
+   * @return int
+   */
+  private function addEquipoData($data)
+  {
+    return DB::table('equipos')->insertGetId($data);
+  }
+
+  /**
+   * Copiar equipo en la base de datos
+   * Reemplaza el método copy del modelo Mequipos
+   *
+   * @param array $data
+   * @return int
+   */
+  private function copyEquipoData($data)
+  {
+    return DB::table('equipos')->insertGetId($data);
+  }
+
+  /**
+   * Actualizar equipo en la base de datos
+   * Reemplaza el método update del modelo Mequipos
+   *
+   * @param array $data
+   * @return bool
+   */
+  private function updateEquipoData($data)
+  {
+    $id = $data['id'];
+    unset($data['id']);
+    return DB::table('equipos')->where('id', $id)->update($data);
+  }
+
+  /**
+   * Depurar códigos de equipos
+   * Reemplaza el método depurarCodigo del modelo Mequipos
+   *
+   * @return void
+   */
+  private function depurarCodigoData()
+  {
+    // Implementar lógica de depuración de códigos si es necesaria
+    DB::table('equipos')
+      ->whereNull('code')
+      ->orWhere('code', '')
+      ->update(['code' => DB::raw('CONCAT("EQ-", id)')]);
+  }
+
+  /**
+   * Calcular frecuencia de mantenimiento
+   * Reemplaza el método compute_frecuency del modelo Mequipos
+   *
+   * @param int $mes1
+   * @param int $mes2
+   * @return array
+   */
+  private function computeFrecuencyData($mes1, $mes2)
+  {
+    $meses = [];
+    if ($mes1) $meses[] = $mes1;
+    if ($mes2) $meses[] = $mes2;
+
+    return [
+      'meses' => $meses,
+      'frecuencia_calculada' => count($meses)
+    ];
+  }
+
+  /**
+   * Agregar especificaciones de equipo
+   * Reemplaza métodos del modelo Mequipo_especificaciones
+   *
+   * @param array $data
+   * @return int
+   */
+  private function addEquipoEspecificacionData($data)
+  {
+    return DB::table('equipo_especificaciones')->insertGetId($data);
+  }
+
+  /**
+   * Copiar especificaciones de equipo
+   * Reemplaza el método copy_especificaciones del modelo Mequipo_especificaciones
+   *
+   * @param array $vector
+   * @return void
+   */
+  private function copyEspecificacionesData($vector)
+  {
+    $especificaciones = DB::table('equipo_especificaciones')
+      ->where('equipo_id', $vector['equipo_id_origen'])
+      ->get();
+
+    foreach ($especificaciones as $esp) {
+      $newEsp = (array) $esp;
+      unset($newEsp['id']);
+      $newEsp['equipo_id'] = $vector['equipo_id_destino'];
+      DB::table('equipo_especificaciones')->insert($newEsp);
     }
   }
 
-  public function copy()
+  /**
+   * Copiar contactos de equipo
+   * Reemplaza el método copy_contactos del modelo Mequipo_contactos
+   *
+   * @param array $vector
+   * @return void
+   */
+  private function copyContactosData($vector)
   {
-    if ($_POST['servicio_id'] == null || $_POST['servicio_id'] == '' || $_POST['servicio_id'] == 0) {
-      $_POST['servicio_id'] = 0;
-    }
-    if (isset($_POST['area_id'])) {
-      if ($_POST['area_id'] == null || $_POST['area_id'] == '' || $_POST['area_id'] == 0) {
-        $_POST['area_id'] = 0;
-      }
-    }
-    if (isset($_POST['manual'])) {
-      $_POST['manual'] = serialize($_POST['manual']);
-    }
-    if (isset($_POST['plano'])) {
-      $_POST['plano'] = serialize($_POST['plano']);
-    }
-    unset($_POST['sede_id']);
-    /* Validación */
-    $this->form_validation->set_rules('code', 'Codigo', 'is_unique[equipos.code]');
-    $this->form_validation->set_rules('serial', 'Serie', 'is_unique[equipos.serial]');
-    $this->form_validation->set_rules('name', 'descripcion', 'required|min_length[3]');
-    $this->form_validation->set_rules('codigo_antiguo', 'Codigo antiguo', 'is_unique[equipos.codigo_antiguo]');
+    $contactos = DB::table('equipo_contactos')
+      ->where('equipo_id', $vector['equipo_id_origen'])
+      ->get();
 
-    if ($this->form_validation->run()) { // Cuando cumple con las validaciones
-      $config['upload_path'] = './assets/upload_archivos'; // Evaluacion del archivo
-      $config['allowed_types'] = 'xlsx|xls';
-      $config['encrypt_name'] = false;
-      $this->load->library('upload', $config, 'uploadFile');
-      $this->uploadFile->initialize($config);
+    foreach ($contactos as $contacto) {
+      $newContacto = (array) $contacto;
+      unset($newContacto['id']);
+      $newContacto['equipo_id'] = $vector['equipo_id_destino'];
+      DB::table('equipo_contactos')->insert($newContacto);
+    }
+  }
 
-      if (!empty($_FILES['file']['name'])) {
-        $this->uploadFile->do_upload('file'); // Esto sube el excel en la carpeta
-        $data = '';
-        $data = $this->uploadFile->data();
-        $_POST['file'] = $data['file_name'];
+  /**
+   * Agregar cambio de ubicación
+   * Reemplaza el método add del modelo Mcambios_ubicaciones
+   *
+   * @param array $data
+   * @return int
+   */
+  private function addCambioUbicacionData($data)
+  {
+    return DB::table('cambios_ubicaciones')->insertGetId($data);
+  }
+
+  /**
+   * Agregar cambio de hoja de vida
+   * Reemplaza el método add del modelo Mcambios_hdv
+   *
+   * @param array $data
+   * @return int
+   */
+  private function addCambioHdvData($data)
+  {
+    return DB::table('cambios_hdv')->insertGetId($data);
+  }
+
+  /**
+   * Obtener información de servicio
+   * Reemplaza el método getOne del modelo Mservicios
+   *
+   * @param array $param
+   * @return object|null
+   */
+  private function getServicioData($param)
+  {
+    return DB::table('servicios')->where('id', $param['id'])->first();
+  }
+
+  /**
+   * Obtener información de estado de equipo
+   * Reemplaza el método getOne del modelo Mestadoequipos
+   *
+   * @param array $param
+   * @return object|null
+   */
+  private function getEstadoEquipoData($param)
+  {
+    return DB::table('estadoequipos')->where('id', $param['id'])->first();
+  }
+
+  /**
+   * Obtener información de tipo de adquisición
+   * Reemplaza el método getOne del modelo Madquisiciones
+   *
+   * @param array $param
+   * @return object|null
+   */
+  private function getTipoAdquisicionData($param)
+  {
+    return DB::table('tadquisicion')->where('id', $param['id'])->first();
+  }
+
+  /**
+   * Obtener información de frecuencia
+   * Reemplaza el método getOne del modelo Mfrecuencias
+   *
+   * @param array $param
+   * @return object|null
+   */
+  private function getFrecuenciaData($param)
+  {
+    return DB::table('frecuenciam')->where('id', $param['id'])->first();
+  }
+
+  /**
+   * Obtener información de propietario
+   * Reemplaza el método getOne del modelo Mpropietarios
+   *
+   * @param array $param
+   * @return object|null
+   */
+  private function getPropietarioData($param)
+  {
+    return DB::table('propietarios')->where('id', $param['id'])->first();
+  }
+
+  /**
+   * Obtener información de orden de compra
+   * Reemplaza el método getOne del modelo Mordenes_compra
+   *
+   * @param array $param
+   * @return object|null
+   */
+  private function getOrdenCompraData($param)
+  {
+    return DB::table('ordenes_compra')->where('id', $param['id'])->first();
+  }
+
+  /**
+   * Obtener información de guía
+   * Reemplaza el método getOne del modelo Mguias
+   *
+   * @param array $param
+   * @return object|null
+   */
+  private function getGuiaData($param)
+  {
+    return DB::table('guias')->where('id', $param['id'])->first();
+  }
+
+  /**
+   * Obtener información de INVIMA
+   * Reemplaza el método getOne del modelo Minvimas
+   *
+   * @param array $param
+   * @return object|null
+   */
+  private function getInvimaData($param)
+  {
+    return DB::table('invimas')->where('id', $param['id'])->first();
+  }
+
+  /**
+   * Crear un nuevo equipo médico
+   * Incluye validación, subida de archivos e imágenes
+   *
+   * @param Request $request
+   * @return JsonResponse
+   */
+  public function add(Request $request): JsonResponse
+  {
+    try {
+      $data = $request->all();
+
+      // Normalizar datos de entrada
+      if (empty($data['servicio_id'])) {
+        $data['servicio_id'] = 0;
+      }
+      if (empty($data['area_id'])) {
+        $data['area_id'] = 0;
       }
 
-      $_POST['created_at'] = date('Y-m-d H:i:s');
-      $_POST['plan'] = 2;
-      if ($_POST['fecha_instalacion'] == '') {
-        unset($_POST['fecha_instalacion']);
+      // Serializar arrays
+      if (isset($data['manual'])) {
+        $data['manual'] = serialize($data['manual']);
       }
-      $equipo_id_origen = $_POST['id'];
-      unset($_POST['id']);
-      $equipo_id_destino = $this->Mequipos->copy($_POST); // Metodo para guardar equipo en la base de datos
+      if (isset($data['plano'])) {
+        $data['plano'] = serialize($data['plano']);
+      }
+
+      // Remover sede_id si existe
+      unset($data['sede_id']);
+
+      // Validación de datos
+      $validator = Validator::make($data, [
+        'name' => 'required|min:3',
+        'code' => 'nullable|unique:equipos,code',
+        'serial' => 'nullable|unique:equipos,serial',
+        'codigo_antiguo' => 'nullable|unique:equipos,codigo_antiguo',
+      ]);
+
+      if ($validator->fails()) {
+        return response()->json(['errors' => $validator->errors()], 422);
+      }
+
+      // Manejo de archivos
+      if ($request->hasFile('image')) {
+        $image = $request->file('image');
+        $imageName = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
+        $image->move(public_path('assets/upload_imagenes'), $imageName);
+        $data['image'] = $imageName;
+      }
+
+      if ($request->hasFile('file')) {
+        $file = $request->file('file');
+        $fileName = $file->getClientOriginalName();
+        $file->move(public_path('assets/upload_archivos'), $fileName);
+        $data['file'] = $fileName;
+      }
+
+      // Agregar datos del sistema
+      $data['created_at'] = now();
+      $data['plan'] = 2;
+      $data['usuario_id'] = Session::get('id');
+      $data['tipo_id'] = Session::get('tipo_id', 1);
+
+      // Limpiar fechas vacías
+      if (empty($data['fecha_instalacion'])) {
+        unset($data['fecha_instalacion']);
+      }
+      if (empty($data['fecha_mantenimiento'])) {
+        unset($data['fecha_mantenimiento']);
+      }
+
+      $ultimo_id = $this->addEquipoData($data);
+      $this->depurarCodigoData();
+
+      return response()->json($ultimo_id);
+    } catch (\Exception $e) {
+      // Limpiar archivos subidos en caso de error
+      if (isset($data['image']) && file_exists(public_path('assets/upload_imagenes/' . $data['image']))) {
+        unlink(public_path('assets/upload_imagenes/' . $data['image']));
+      }
+      if (isset($data['file']) && file_exists(public_path('assets/upload_archivos/' . $data['file']))) {
+        unlink(public_path('assets/upload_archivos/' . $data['file']));
+      }
+
+      return response()->json(['error' => 'No se ha podido ingresar el equipo'], 500);
+    }
+  }
+
+  /**
+   * Copiar un equipo médico existente
+   * Incluye validación y copia de especificaciones y contactos
+   *
+   * @param Request $request
+   * @return JsonResponse
+   */
+  public function copy(Request $request): JsonResponse
+  {
+    try {
+      $data = $request->all();
+
+      // Normalizar datos de entrada
+      if (empty($data['servicio_id'])) {
+        $data['servicio_id'] = 0;
+      }
+      if (empty($data['area_id'])) {
+        $data['area_id'] = 0;
+      }
+
+      // Serializar arrays
+      if (isset($data['manual'])) {
+        $data['manual'] = serialize($data['manual']);
+      }
+      if (isset($data['plano'])) {
+        $data['plano'] = serialize($data['plano']);
+      }
+
+      // Remover sede_id si existe
+      unset($data['sede_id']);
+
+      // Validación de datos
+      $validator = Validator::make($data, [
+        'name' => 'required|min:3',
+        'code' => 'required|unique:equipos,code',
+        'serial' => 'required|unique:equipos,serial',
+        'codigo_antiguo' => 'nullable|unique:equipos,codigo_antiguo',
+      ]);
+
+      if ($validator->fails()) {
+        return response()->json(['errors' => $validator->errors()], 422);
+      }
+
+      // Manejo de archivos
+      if ($request->hasFile('file')) {
+        $file = $request->file('file');
+        $fileName = $file->getClientOriginalName();
+        $file->move(public_path('assets/upload_archivos'), $fileName);
+        $data['file'] = $fileName;
+      }
+
+      // Agregar datos del sistema
+      $data['created_at'] = now();
+      $data['plan'] = 2;
+
+      // Limpiar fechas vacías
+      if (empty($data['fecha_instalacion'])) {
+        unset($data['fecha_instalacion']);
+      }
+
+      // Guardar ID del equipo origen antes de eliminarlo
+      $equipo_id_origen = $data['id'];
+      unset($data['id']);
+
+      // Crear el nuevo equipo
+      $equipo_id_destino = $this->copyEquipoData($data);
+
+      // Copiar especificaciones y contactos
       $vector = [
         'equipo_id_destino' => $equipo_id_destino,
         'equipo_id_origen' => $equipo_id_origen,
       ];
-      $this->Mequipo_especificaciones->copy_especificaciones($vector);
-      $this->Mequipo_contactos->copy_contactos($vector);
-      echo 1;
-    } else { // Cuando no cumple con las validaciones
-      echo json_encode(validation_errors());
+
+      $this->copyEspecificacionesData($vector);
+      $this->copyContactosData($vector);
+
+      return response()->json(1);
+    } catch (\Exception $e) {
+      return response()->json(['errors' => 'Error al copiar el equipo'], 500);
     }
   }
 
-  public function update()
+  /**
+   * Actualizar un equipo médico existente
+   * Incluye validación, historial de cambios, subida de archivos
+   *
+   * @param Request $request
+   * @return JsonResponse
+   */
+  public function update(Request $request): JsonResponse
   {
-    // Información nueva del equipo------------------------------------------------------------------
-    $equipo_new = $_POST; // Solo se usa para actualizar el historial de la hoja de vida
-    if (isset($_POST['consulta_invima'])) {
-      unset($_POST['consulta_invima']);
-    }
-    if (isset($_POST['tadquisicion_id'])) {
-      if ($_POST['tadquisicion_id'] != 2 && $_POST['tadquisicion_id'] != 3 && $_POST['tadquisicion_id'] != 4) {
-        // $_POST["orden_compra_id"]=0;
-      }
-    }
-    $sede_id = $_POST['sede_id']; // Información de sedealmacenada en sesion
-    unset($_POST['sede_id']);
-    // Información previa del equipo------------------------------------------------------------------
-    $equipo = $this->Mequipos->getOne($_POST);
-    $servicio_viejo = $this->Mservicios->getOne(['id' => $equipo->servicio_id]);
-    $servicio_nuevo = $this->Mservicios->getOne(['id' => $_POST['servicio_id']]);
+    try {
+      $data = $request->all();
+      $equipo_new = $data; // Para historial de cambios
 
-    /* Historial de cambios de la Hoja de vida */
-    $descripcion_historial = ''; // Variable que almacena la descripcion del Historial de cambios de la HDV
+      // Limpiar datos innecesarios
+      if (isset($data['consulta_invima'])) {
+        unset($data['consulta_invima']);
+      }
+
+      $sede_id = $data['sede_id'] ?? null;
+      unset($data['sede_id']);
+
+      // Obtener información previa del equipo
+      $equipo = $this->getOneEquipoData($data);
+      $servicio_viejo = $this->getServicioData(['id' => $equipo->servicio_id]);
+      $servicio_nuevo = $this->getServicioData(['id' => $data['servicio_id']]);
+
+      // Generar historial de cambios
+      $descripcion_historial = $this->generateChangeHistory($equipo, $equipo_new);
+
+      // Normalizar datos
+      if ($data['estadoequipo_id'] != 6) {
+        $data['baja_id'] = null;
+      }
+
+      // Serializar arrays
+      if (isset($data['manual'])) {
+        $data['manual'] = serialize($data['manual']);
+      } else {
+        $data['manual'] = 'N;';
+      }
+      if (isset($data['plano'])) {
+        $data['plano'] = serialize($data['plano']);
+      } else {
+        $data['plano'] = 'N;';
+      }
+
+      // Limpiar fechas vacías
+      if (empty($data['fecha_instalacion'])) {
+        unset($data['fecha_instalacion']);
+      }
+
+      // Validación dinámica
+      $rules = ['name' => 'required|min:3'];
+
+      if ($equipo->code != $data['code']) {
+        $rules['code'] = 'unique:equipos,code';
+      }
+      if ($equipo->serial != $data['serial']) {
+        $rules['serial'] = 'unique:equipos,serial';
+      }
+      if ($equipo->codigo_antiguo != $data['codigo_antiguo']) {
+        $rules['codigo_antiguo'] = 'nullable|unique:equipos,codigo_antiguo';
+      }
+
+      $validator = Validator::make($data, $rules);
+
+      if ($validator->fails()) {
+        return response()->json(['respuesta' => 2, 'errores' => $validator->errors()], 422);
+      }
+
+      // Manejo de archivos
+      if ($request->hasFile('image1')) {
+        $image = $request->file('image1');
+        $imageName = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
+        $image->move(public_path('assets/upload_imagenes'), $imageName);
+        $data['image'] = $imageName;
+      }
+
+      if ($request->hasFile('file1')) {
+        $file = $request->file('file1');
+        $fileName = $file->getClientOriginalName();
+        $file->move(public_path('assets/upload_archivos'), $fileName);
+        $data['file'] = $fileName;
+      }
+
+      if ($request->hasFile('archivo_invima1')) {
+        $invima = $request->file('archivo_invima1');
+        $invimaName = time() . '_' . uniqid() . '.' . $invima->getClientOriginalExtension();
+        $invima->move(public_path('assets/upload_invimas'), $invimaName);
+        $data['archivo_invima'] = $invimaName;
+      }
+
+      // Procesar observaciones
+      if (isset($data['observacion']) && !empty($data['observacion'])) {
+        $data['observacion'] = now()->format('Y-m-d H:i:s') . "\n" . $data['observacion'] . "\n" . $equipo->observacion;
+      } else {
+        unset($data['observacion']);
+      }
+
+      // Limpiar fechas adicionales
+      if (empty($data['fecha_ad'])) {
+        unset($data['fecha_ad']);
+      }
+      if (isset($data['invima_id']) && $data['invima_id'] == 1) {
+        $data['invima_id'] = null;
+      }
+
+      // Normalizar servicios y áreas
+      if (empty($data['servicio_id'])) {
+        $data['servicio_id'] = 0;
+      }
+      if (empty($data['area_id'])) {
+        $data['area_id'] = 0;
+      }
+
+      // Registrar cambio de ubicación si es necesario
+      if (isset($data['area_id']) && ($equipo->servicio_id != $data['servicio_id'] || $equipo->area_id != $data['area_id'])) {
+        $this->addCambioUbicacionData([
+          'servicio_origen_id' => $equipo->servicio_id,
+          'servicio_destino_id' => $data['servicio_id'],
+          'area_origen_id' => $equipo->area_id,
+          'area_destino_id' => $data['area_id'],
+          'equipo_id' => $equipo->id,
+          'usuario_id' => Session::get('id'),
+          'sede_origen_id' => $servicio_viejo->sede_id ?? null,
+          'sede_destino_id' => $servicio_nuevo->sede_id ?? null,
+        ]);
+      }
+
+      // Registrar cambios en hoja de vida
+      if (!empty($descripcion_historial)) {
+        $this->addCambioHdvData([
+          'descripcion' => $descripcion_historial,
+          'usuario_id' => Session::get('id'),
+          'equipo_id' => $equipo->id,
+        ]);
+      }
+
+      // Actualizar equipo
+      $this->updateEquipoData($data);
+      $this->depurarCodigoData();
+
+      return response()->json(['respuesta' => 1, 'equipo_id' => $equipo->id]);
+    } catch (\Exception $e) {
+      return response()->json(['respuesta' => 2, 'errores' => 'Error al actualizar el equipo'], 500);
+    }
+  }
+
+  /**
+   * Generar historial de cambios para la hoja de vida del equipo
+   * Compara valores anteriores con nuevos valores
+   *
+   * @param object $equipo
+   * @param array $equipo_new
+   * @return string
+   */
+  private function generateChangeHistory($equipo, $equipo_new)
+  {
+    $descripcion_historial = '';
+
     if ($equipo->name != $equipo_new['name']) {
-      $descripcion_historial .= $descripcion_historial . 'Se cambio nombre de ' . $equipo->name . ' a ' . $equipo_new['name'] . "\n";
+      $descripcion_historial .= 'Se cambio nombre de ' . $equipo->name . ' a ' . $equipo_new['name'] . "\n";
     }
     if ($equipo->marca != $equipo_new['marca']) {
-      $descripcion_historial = $descripcion_historial . 'Se cambio marca de ' . $equipo->marca . ' a ' . $equipo_new['marca'] . "\n";
+      $descripcion_historial .= 'Se cambio marca de ' . $equipo->marca . ' a ' . $equipo_new['marca'] . "\n";
     }
     if ($equipo->modelo != $equipo_new['modelo']) {
-      $descripcion_historial = $descripcion_historial . 'Se cambio modelo de ' . $equipo->modelo . ' a ' . $equipo_new['modelo'] . "\n";
+      $descripcion_historial .= 'Se cambio modelo de ' . $equipo->modelo . ' a ' . $equipo_new['modelo'] . "\n";
     }
-
     if ($equipo->code != $equipo_new['code']) {
-      $descripcion_historial = $descripcion_historial . 'Se cambio Codigo de ' . $equipo->code . ' a ' . $equipo_new['code'] . "\n";
+      $descripcion_historial .= 'Se cambio Codigo de ' . $equipo->code . ' a ' . $equipo_new['code'] . "\n";
     }
     if ($equipo->serial != $equipo_new['serial']) {
-      $descripcion_historial = $descripcion_historial . 'Se cambio Serie de ' . $equipo->serial . ' a ' . $equipo_new['serial'] . "\n";
+      $descripcion_historial .= 'Se cambio Serie de ' . $equipo->serial . ' a ' . $equipo_new['serial'] . "\n";
     }
     if ($equipo->fecha_ad != $equipo_new['fecha_ad']) {
-      $descripcion_historial = $descripcion_historial . 'Se cambio Fecha adquisicion de ' . $equipo->fecha_ad . ' a ' . $equipo_new['fecha_ad'] . "\n";
+      $descripcion_historial .= 'Se cambio Fecha adquisicion de ' . $equipo->fecha_ad . ' a ' . $equipo_new['fecha_ad'] . "\n";
     }
     if ($equipo->fecha_instalacion != $equipo_new['fecha_instalacion']) {
-      $descripcion_historial = $descripcion_historial . 'Se cambio Fecha instalacion de ' . $equipo->fecha_instalacion . ' a ' . $equipo_new['fecha_instalacion'] . "\n";
+      $descripcion_historial .= 'Se cambio Fecha instalacion de ' . $equipo->fecha_instalacion . ' a ' . $equipo_new['fecha_instalacion'] . "\n";
     }
     if ($equipo->fecha_acta_recibo != $equipo_new['fecha_acta_recibo']) {
-      $descripcion_historial = $descripcion_historial . 'Se cambio Fecha acta recibo de ' . $equipo->fecha_acta_recibo . ' a ' . $equipo_new['fecha_acta_recibo'] . "\n";
+      $descripcion_historial .= 'Se cambio Fecha acta recibo de ' . $equipo->fecha_acta_recibo . ' a ' . $equipo_new['fecha_acta_recibo'] . "\n";
     }
     if ($equipo->fecha_inicio_operacion != $equipo_new['fecha_inicio_operacion']) {
-      $descripcion_historial = $descripcion_historial . 'Se cambio Fecha inicio operacion de ' . $equipo->fecha_inicio_operacion . ' a ' . $equipo_new['fecha_inicio_operacion'] . "\n";
+      $descripcion_historial .= 'Se cambio Fecha inicio operacion de ' . $equipo->fecha_inicio_operacion . ' a ' . $equipo_new['fecha_inicio_operacion'] . "\n";
     }
     if ($equipo->fecha_fabricacion != $equipo_new['fecha_fabricacion']) {
-      $descripcion_historial = $descripcion_historial . 'Se cambio Fecha fabricación de ' . $equipo->fecha_fabricacion . ' a ' . $equipo_new['fecha_fabricacion'] . "\n";
+      $descripcion_historial .= 'Se cambio Fecha fabricación de ' . $equipo->fecha_fabricacion . ' a ' . $equipo_new['fecha_fabricacion'] . "\n";
     }
     if ($equipo->descripcion != $equipo_new['descripcion']) {
-      $descripcion_historial = $descripcion_historial . 'Se cambio descripción de ' . $equipo->descripcion . ' a ' . $equipo_new['descripcion'] . "\n";
+      $descripcion_historial .= 'Se cambio descripción de ' . $equipo->descripcion . ' a ' . $equipo_new['descripcion'] . "\n";
     }
     if ($equipo->vida_util != $equipo_new['vida_util']) {
-      $descripcion_historial = $descripcion_historial . 'Se cambio vida util de ' . $equipo->vida_util . ' a ' . $equipo_new['vida_util'] . "\n";
+      $descripcion_historial .= 'Se cambio vida util de ' . $equipo->vida_util . ' a ' . $equipo_new['vida_util'] . "\n";
     }
     if ($equipo->costo_original != $equipo_new['costo']) {
-      $descripcion_historial = $descripcion_historial . 'Se cambio costo de ' . $equipo->costo_original . ' a ' . $equipo_new['costo'] . "\n";
+      $descripcion_historial .= 'Se cambio costo de ' . $equipo->costo_original . ' a ' . $equipo_new['costo'] . "\n";
     }
     if ($equipo->verificacion_inventario != $equipo_new['verificacion_inventario']) {
-      $descripcion_historial = $descripcion_historial . 'Se cambio verificacion inventario de ' . $equipo->verificacion_inventario . ' a ' . $equipo_new['verificacion_inventario'] . "\n";
+      $descripcion_historial .= 'Se cambio verificacion inventario de ' . $equipo->verificacion_inventario . ' a ' . $equipo_new['verificacion_inventario'] . "\n";
     }
     if (isset($equipo_new['otros']) && $equipo->otros != $equipo_new['otros']) {
-      $descripcion_historial = $descripcion_historial . 'Se cambio propiedad de otros de ' . $equipo->otros . ' a ' . $equipo_new['otros'] . "\n";
+      $descripcion_historial .= 'Se cambio propiedad de otros de ' . $equipo->otros . ' a ' . $equipo_new['otros'] . "\n";
     }
     if ($equipo->activo_comodato != $equipo_new['activo_comodato']) {
-      $descripcion_historial = $descripcion_historial . 'Se cambio codigo comodato de ' . $equipo->activo_comodato . ' a ' . $equipo_new['activo_comodato'] . "\n";
+      $descripcion_historial .= 'Se cambio codigo comodato de ' . $equipo->activo_comodato . ' a ' . $equipo_new['activo_comodato'] . "\n";
     }
     if ($equipo->movilidad != $equipo_new['movilidad']) {
-      $descripcion_historial = $descripcion_historial . 'Se cambio movilidad de ' . $equipo->movilidad . ' a ' . $equipo_new['movilidad'] . "\n";
+      $descripcion_historial .= 'Se cambio movilidad de ' . $equipo->movilidad . ' a ' . $equipo_new['movilidad'] . "\n";
     }
-    // if ($equipo->periodicidad!=$equipo_new["periodicidad"]) {
-    // 	$descripcion_historial=$descripcion_historial."Se cambio periodicidad mantenimiento de ".$equipo->periodicidad." a ".$equipo_new["periodicidad"]."\n";
-    // }
     if ($equipo->calibracion != $equipo_new['calibracion']) {
-      $descripcion_historial = $descripcion_historial . 'Se cambio calibracion de ' . $equipo->calibracion . ' a ' . $equipo_new['calibracion'] . "\n";
+      $descripcion_historial .= 'Se cambio calibracion de ' . $equipo->calibracion . ' a ' . $equipo_new['calibracion'] . "\n";
     }
     if ($equipo->estadoequipo_id != $equipo_new['estadoequipo_id']) {
-      $descripcion_historial = $descripcion_historial . 'Se cambio estado funcional del equipo de ' . $this->Mestadoequipos->getOne(['id' => $equipo->estadoequipo_id])->name . ' a ' . $this->Mestadoequipos->getOne(['id' => $equipo_new['estadoequipo_id']])->name . "\n";
+      $estado_viejo = $this->getEstadoEquipoData(['id' => $equipo->estadoequipo_id]);
+      $estado_nuevo = $this->getEstadoEquipoData(['id' => $equipo_new['estadoequipo_id']]);
+      $descripcion_historial .= 'Se cambio estado funcional del equipo de ' . $estado_viejo->name . ' a ' . $estado_nuevo->name . "\n";
     }
     if ($equipo->disponibilidad_id != $equipo_new['disponibilidad_id']) {
-      $descripcion_historial = $descripcion_historial . 'Se cambio disponibilidad del equipo de ' . $this->Mestadoequipos->getOne(['id' => $equipo->disponibilidad_id])->name . ' a ' . $this->Mestadoequipos->getOne(['id' => $equipo_new['disponibilidad_id']])->name . "\n";
+      $disp_vieja = $this->getEstadoEquipoData(['id' => $equipo->disponibilidad_id]);
+      $disp_nueva = $this->getEstadoEquipoData(['id' => $equipo_new['disponibilidad_id']]);
+      $descripcion_historial .= 'Se cambio disponibilidad del equipo de ' . $disp_vieja->name . ' a ' . $disp_nueva->name . "\n";
     }
     if ((isset($equipo_new['localizacion_actual'])) && ($equipo->localizacion_actual != $equipo_new['localizacion_actual'])) {
-      $descripcion_historial = $descripcion_historial . ' Se relaciono como localización acual del equipo: ' . $equipo_new['localizacion_actual'] . "\n";
+      $descripcion_historial .= ' Se relaciono como localización actual del equipo: ' . $equipo_new['localizacion_actual'] . "\n";
     }
     if ($equipo->tadquisicion_id != $equipo_new['tadquisicion_id']) {
-      $descripcion_historial = $descripcion_historial . 'Se cambio tipo de adquisicion de ' . $this->Madquisiciones->getOne(['id' => $equipo->tadquisicion_id])->name . ' a ' . $this->Madquisiciones->getOne(['id' => $equipo_new['tadquisicion_id']])->name . "\n";
+      $adq_vieja = $this->getTipoAdquisicionData(['id' => $equipo->tadquisicion_id]);
+      $adq_nueva = $this->getTipoAdquisicionData(['id' => $equipo_new['tadquisicion_id']]);
+      $descripcion_historial .= 'Se cambio tipo de adquisicion de ' . $adq_vieja->name . ' a ' . $adq_nueva->name . "\n";
     }
     if ($equipo->frecuencia_id != $equipo_new['frecuencia_id']) {
-      $descripcion_historial = $descripcion_historial . 'Se cambio frecuencia de mtto de ' . $this->Mfrecuencias->getOne(['id' => $equipo->frecuencia_id])->name . ' a ' . $this->Mfrecuencias->getOne(['id' => $equipo_new['frecuencia_id']])->name . "\n";
+      $frec_vieja = $this->getFrecuenciaData(['id' => $equipo->frecuencia_id]);
+      $frec_nueva = $this->getFrecuenciaData(['id' => $equipo_new['frecuencia_id']]);
+      $descripcion_historial .= 'Se cambio frecuencia de mtto de ' . $frec_vieja->name . ' a ' . $frec_nueva->name . "\n";
     }
-    if (!isset($equipo_new['propietario_id']) || $equipo_new['propietario_id'] == '' || $equipo_new['propietario_id'] == 0) {
+
+    // Normalizar propietario
+    if (!isset($equipo_new['propietario_id']) || empty($equipo_new['propietario_id'])) {
       $equipo_new['propietario_id'] = 0;
     }
     if ($equipo->propietario_id != $equipo_new['propietario_id']) {
-      $descripcion_historial = $descripcion_historial . 'Se cambio propietario de ' . $this->Mpropietarios->getOne(['id' => $equipo->propietario_id])->nombre . ' a ' . $this->Mpropietarios->getOne(['id' => $equipo_new['propietario_id']])->nombre . "\n";
+      $prop_viejo = $this->getPropietarioData(['id' => $equipo->propietario_id]);
+      $prop_nuevo = $this->getPropietarioData(['id' => $equipo_new['propietario_id']]);
+      $descripcion_historial .= 'Se cambio propietario de ' . $prop_viejo->nombre . ' a ' . $prop_nuevo->nombre . "\n";
     }
-    if (!isset($equipo_new['orden_compra_id']) || $equipo_new['orden_compra_id'] == '' || $equipo_new['orden_compra_id'] == 0) {
+
+    // Normalizar orden de compra
+    if (!isset($equipo_new['orden_compra_id']) || empty($equipo_new['orden_compra_id'])) {
       $equipo_new['orden_compra_id'] = 0;
     }
     if ($equipo->orden_compra_id != $equipo_new['orden_compra_id']) {
-      $descripcion_historial = $descripcion_historial . 'Se cambio soporte de compra de ' . $this->Mordenes_compra->getOne(['id' => $equipo->orden_compra_id])->orden . ' a ' . $this->Mordenes_compra->getOne(['id' => $equipo_new['orden_compra_id']])->orden . "\n";
+      $orden_vieja = $this->getOrdenCompraData(['id' => $equipo->orden_compra_id]);
+      $orden_nueva = $this->getOrdenCompraData(['id' => $equipo_new['orden_compra_id']]);
+      $descripcion_historial .= 'Se cambio soporte de compra de ' . $orden_vieja->orden . ' a ' . $orden_nueva->orden . "\n";
     }
-    if (!isset($equipo_new['guia_id']) || $equipo_new['guia_id'] == '' || $equipo_new['guia_id'] == 0) {
+
+    // Normalizar guía
+    if (!isset($equipo_new['guia_id']) || empty($equipo_new['guia_id'])) {
       $equipo_new['guia_id'] = 0;
     }
     if ($equipo->guia_id != $equipo_new['guia_id']) {
-      $descripcion_historial = $descripcion_historial . 'Se cambio guia rapida de ' . $this->Mguias->getOne(['id' => $equipo->guia_id])->name . ' a ' . $this->Mguias->getOne(['id' => $equipo_new['guia_id']])->name . "\n";
+      $guia_vieja = $this->getGuiaData(['id' => $equipo->guia_id]);
+      $guia_nueva = $this->getGuiaData(['id' => $equipo_new['guia_id']]);
+      $descripcion_historial .= 'Se cambio guia rapida de ' . $guia_vieja->name . ' a ' . $guia_nueva->name . "\n";
     }
-    if (!isset($equipo_new['invima_id']) || $equipo_new['invima_id'] == '' || $equipo_new['invima_id'] == 0) {
-      $nuevo_invima = 1;
-    } else {
-      $nuevo_invima = $equipo_new['invima_id'];
-    }
-    if ($equipo->invima_id == 0) {
-      $viejo_invima = 1;
-    } else {
-      $viejo_invima = $equipo->invima_id;
-    }
+
+    // Normalizar INVIMA
+    $nuevo_invima = (!isset($equipo_new['invima_id']) || empty($equipo_new['invima_id'])) ? 1 : $equipo_new['invima_id'];
+    $viejo_invima = ($equipo->invima_id == 0) ? 1 : $equipo->invima_id;
 
     if ($viejo_invima != $nuevo_invima) {
-      $descripcion_historial = $descripcion_historial . 'Se cambio invima de ' . $this->Minvimas->getOne(['id' => $viejo_invima])->invima . ' a ' . $this->Minvimas->getOne(['id' => $nuevo_invima])->invima . "\n";
+      $invima_viejo = $this->getInvimaData(['id' => $viejo_invima]);
+      $invima_nuevo = $this->getInvimaData(['id' => $nuevo_invima]);
+      $descripcion_historial .= 'Se cambio invima de ' . $invima_viejo->invima . ' a ' . $invima_nuevo->invima . "\n";
     }
 
-    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    if ($_POST['estadoequipo_id'] != 6) {
-      $_POST['baja_id'] = null;
-    }
-    if (isset($_POST['manual'])) {
-      $_POST['manual'] = serialize($_POST['manual']);
-    } else {
-      $_POST['manual'] = 'N;';
-    }
-    if (isset($_POST['plano'])) {
-      $_POST['plano'] = serialize($_POST['plano']);
-    } else {
-      $_POST['plano'] = 'N;';
-    }
-
-    if ($_POST['fecha_instalacion'] == '') {
-      unset($_POST['fecha_instalacion']);
-    }
-
-    if ($equipo->code == $_POST['code']) {
-    } else {
-      $this->form_validation->set_rules('code', 'Codigo', 'is_unique[equipos.code]');
-    }
-    if ($equipo->serial == $_POST['serial']) {
-    } else {
-      $this->form_validation->set_rules('serial', 'Serie', 'is_unique[equipos.serial]');
-    }
-    if ($equipo->codigo_antiguo == $_POST['codigo_antiguo']) {
-    } else {
-      $this->form_validation->set_rules('codigo_antiguo', 'Codigo antiguo', 'is_unique[equipos.codigo_antiguo]');
-    }
-    $this->form_validation->set_rules('name', 'Descripcion', 'required|min_length[3]');
-
-    if ($this->form_validation->run()) { // Cuando cumple con las validaciones
-      $config['upload_path'] = './assets/upload_imagenes'; // Evaluacion de la imagen
-      $config['allowed_types'] = 'gif|jpg|png';
-      $config['encrypt_name'] = true;
-      $this->load->library('upload', $config, 'uploadImagen');
-      $this->uploadImagen->initialize($config);
-
-      if (!empty($_FILES['image1']['name'])) {
-        $this->uploadImagen->do_upload('image1'); // Esto sube la imagen en la carpeta
-        $data = '';
-        $data = $this->uploadImagen->data();
-        $_POST['image'] = $data['file_name'];
-      }
-
-      $config['upload_path'] = './assets/upload_archivos'; // Evaluacion del archivo
-      $config['allowed_types'] = 'xlsx|xls';
-      $config['encrypt_name'] = false;
-      $this->load->library('upload', $config, 'uploadFile');
-      $this->uploadFile->initialize($config);
-
-      if (!empty($_FILES['file1']['name'])) {
-        $this->uploadFile->do_upload('file1'); // Esto sube el excel en la carpeta
-        $data = '';
-        $data = $this->uploadFile->data();
-        $_POST['file'] = $data['file_name'];
-      }
-
-      $config['upload_path'] = './assets/upload_invimas'; // Evaluacion del archivo
-      $config['allowed_types'] = 'pdf';
-      $config['encrypt_name'] = true;
-      $this->load->library('upload', $config, 'uploadInvima');
-      $this->uploadInvima->initialize($config);
-
-      if (!empty($_FILES['archivo_invima1']['name'])) {
-        $this->uploadInvima->do_upload('archivo_invima1'); // Esto sube el excel en la carpeta
-        $data = '';
-        $data = $this->uploadInvima->data();
-        $_POST['archivo_invima'] = $data['file_name'];
-      }
-
-      if (isset($_POST['observacion'])) {
-        if ($_POST['observacion'] != '') {
-          $_POST['observacion'] = '' . date('Y-m-d h:i:s') . "\n" . $_POST['observacion'] . "\n" . $equipo->observacion;
-        } else {
-          unset($_POST['observacion']);
-        }
-      }
-      if (isset($_POST['fecha_instalacion'])) {
-        if ($_POST['fecha_instalacion'] == '') {
-          unset($_POST['fecha_instalacion']);
-        }
-      }
-      if (isset($_POST['fecha_instalacion'])) {
-        if ($_POST['fecha_instalacion'] == '') {
-          unset($_POST['fecha_instalacion']);
-        }
-      }
-      if (isset($_POST['fecha_ad'])) {
-        if ($_POST['fecha_ad'] == '') {
-          unset($_POST['fecha_ad']);
-        }
-      }
-      if (isset($_POST['invima_id'])) {
-        if ($_POST['invima_id'] == 1) {
-          $_POST['invima_id'] = null;
-        }
-      }
-
-      if ($_POST['servicio_id'] == null || $_POST['servicio_id'] == '' || $_POST['servicio_id'] == 0) {
-        $_POST['servicio_id'] = 0;
-      }
-      if (isset($_POST['area_id']) && ($_POST['area_id'] == null || $_POST['area_id'] == '' || $_POST['area_id'] == 0)) {
-        $_POST['area_id'] = 0;
-      }
-      // Logica implementada para crear registro en caso de cambiarse el servicio
-      if (isset($_POST['area_id']) && ($equipo->servicio_id != $_POST['servicio_id'] || $equipo->area_id != $_POST['area_id'])) {
-        $this->Mcambios_ubicaciones->add([
-          'servicio_origen_id' => $equipo->servicio_id,
-          'servicio_destino_id' => $_POST['servicio_id'],
-          'area_origen_id' => $equipo->area_id,
-          'area_destino_id' => $_POST['area_id'],
-          'equipo_id' => $equipo->id,
-          'usuario_id' => $this->session->userdata('id'),
-          'sede_origen_id' => $servicio_viejo->sede_id,
-          'sede_destino_id' => $servicio_nuevo->sede_id,
-        ]);
-      }
-      // Logica implementada para crear registro de cambio de hoja de vida
-      $vector_cambios_hdv = '';
-      if ($descripcion_historial != '') {
-        $vector_cambios_hdv = [
-          'descripcion' => $descripcion_historial,
-          'usuario_id' => $this->session->userdata('id'),
-          'equipo_id' => $equipo->id,
-        ];
-        $this->Mcambios_hdv->add($vector_cambios_hdv); // Se inserta el registro de cambio de HDV
-      }
-
-      $this->Mequipos->update($_POST); // Metodo para actualizar
-      $this->Mequipos->depurarCodigo();
-      // $this->Mequipos->updateFechasNull();
-      $fecha_actual = date('Y-m-d');
-
-      echo json_encode(['respuesta' => 1, 'equipo_id' => $equipo->id]);
-    } else { // Cuando no cumple con las validaciones
-      echo json_encode(['respuesta' => 2, 'errores' => validation_errors()]); // Retorna los mensajes de error en caso de que no supere las validaciones
-    }
+    return $descripcion_historial;
   }
 
-  public function show()
+  /**
+   * Obtener mantenimientos preventivos de un equipo
+   * Reemplaza el método get del modelo Mpreventivos
+   *
+   * @param array $param
+   * @return \Illuminate\Support\Collection
+   */
+  private function getPreventivosData($param)
   {
-    $equipo = $this->Mequipos->getOne($_POST);
+    return DB::table('preventivos')
+      ->where('equipo_id', $param['equipo_id'])
+      ->orderBy('created_at', 'desc')
+      ->get();
+  }
 
-    $frecuency_computed = $this->Mequipos->compute_frecuency(
+  /**
+   * Obtener calibraciones de un equipo
+   * Reemplaza el método get del modelo Mcalibraciones
+   *
+   * @param array $param
+   * @return \Illuminate\Support\Collection
+   */
+  private function getCalibracionesData($param)
+  {
+    return DB::table('calibraciones')
+      ->where('equipo_id', $param['equipo_id'])
+      ->orderBy('created_at', 'desc')
+      ->get();
+  }
+
+  /**
+   * Obtener repuestos de un equipo
+   * Reemplaza el método get del modelo Mequipo_repuestos
+   *
+   * @param array $param
+   * @return \Illuminate\Support\Collection
+   */
+  private function getEquipoRepuestosData($param)
+  {
+    return DB::table('equipo_repuestos')
+      ->where('equipo_id', $param['equipo_id'])
+      ->orderBy('created_at', 'desc')
+      ->get();
+  }
+
+  /**
+   * Obtener especificaciones de un equipo
+   * Reemplaza el método get del modelo Mequipo_especificaciones
+   *
+   * @param array $param
+   * @return \Illuminate\Support\Collection
+   */
+  private function getEquipoEspecificacionesData($param)
+  {
+    return DB::table('equipo_especificaciones')
+      ->select('equipo_especificaciones.*', 'especificaciones.name as especificacion_name')
+      ->leftJoin('especificaciones', 'equipo_especificaciones.especificacion_id', '=', 'especificaciones.id')
+      ->where('equipo_especificaciones.equipo_id', $param['equipo_id'])
+      ->get();
+  }
+
+  /**
+   * Obtener especificaciones de tensión de un equipo
+   * Reemplaza el método get_tension del modelo Mequipo_especificaciones
+   *
+   * @param array $param
+   * @return \Illuminate\Support\Collection
+   */
+  private function getEquipoEspecificacionesTensionData($param)
+  {
+    return DB::table('equipo_especificaciones')
+      ->select('equipo_especificaciones.*', 'especificaciones.name as especificacion_name')
+      ->leftJoin('especificaciones', 'equipo_especificaciones.especificacion_id', '=', 'especificaciones.id')
+      ->where('equipo_especificaciones.equipo_id', $param['equipo_id'])
+      ->where('especificaciones.name', 'like', '%tensión%')
+      ->get();
+  }
+
+  /**
+   * Obtener especificaciones de potencia de un equipo
+   * Reemplaza el método get_potencia del modelo Mequipo_especificaciones
+   *
+   * @param array $param
+   * @return \Illuminate\Support\Collection
+   */
+  private function getEquipoEspecificacionesPotenciaData($param)
+  {
+    return DB::table('equipo_especificaciones')
+      ->select('equipo_especificaciones.*', 'especificaciones.name as especificacion_name')
+      ->leftJoin('especificaciones', 'equipo_especificaciones.especificacion_id', '=', 'especificaciones.id')
+      ->where('equipo_especificaciones.equipo_id', $param['equipo_id'])
+      ->where('especificaciones.name', 'like', '%potencia%')
+      ->get();
+  }
+
+  /**
+   * Obtener especificaciones de presión de un equipo
+   * Reemplaza el método get_presion del modelo Mequipo_especificaciones
+   *
+   * @param array $param
+   * @return \Illuminate\Support\Collection
+   */
+  private function getEquipoEspecificacionesPresionData($param)
+  {
+    return DB::table('equipo_especificaciones')
+      ->select('equipo_especificaciones.*', 'especificaciones.name as especificacion_name')
+      ->leftJoin('especificaciones', 'equipo_especificaciones.especificacion_id', '=', 'especificaciones.id')
+      ->where('equipo_especificaciones.equipo_id', $param['equipo_id'])
+      ->where('especificaciones.name', 'like', '%presión%')
+      ->get();
+  }
+
+  /**
+   * Obtener especificaciones de temperatura de un equipo
+   * Reemplaza el método get_temperatura del modelo Mequipo_especificaciones
+   *
+   * @param array $param
+   * @return \Illuminate\Support\Collection
+   */
+  private function getEquipoEspecificacionesTemperaturaData($param)
+  {
+    return DB::table('equipo_especificaciones')
+      ->select('equipo_especificaciones.*', 'especificaciones.name as especificacion_name')
+      ->leftJoin('especificaciones', 'equipo_especificaciones.especificacion_id', '=', 'especificaciones.id')
+      ->where('equipo_especificaciones.equipo_id', $param['equipo_id'])
+      ->where('especificaciones.name', 'like', '%temperatura%')
+      ->get();
+  }
+
+  /**
+   * Obtener especificaciones de corriente de un equipo
+   * Reemplaza el método get_corriente del modelo Mequipo_especificaciones
+   *
+   * @param array $param
+   * @return \Illuminate\Support\Collection
+   */
+  private function getEquipoEspecificacionesCorrienteData($param)
+  {
+    return DB::table('equipo_especificaciones')
+      ->select('equipo_especificaciones.*', 'especificaciones.name as especificacion_name')
+      ->leftJoin('especificaciones', 'equipo_especificaciones.especificacion_id', '=', 'especificaciones.id')
+      ->where('equipo_especificaciones.equipo_id', $param['equipo_id'])
+      ->where('especificaciones.name', 'like', '%corriente%')
+      ->get();
+  }
+
+  /**
+   * Obtener especificaciones de frecuencia de un equipo
+   * Reemplaza el método get_frecuencia del modelo Mequipo_especificaciones
+   *
+   * @param array $param
+   * @return \Illuminate\Support\Collection
+   */
+  private function getEquipoEspecificacionesFrecuenciaData($param)
+  {
+    return DB::table('equipo_especificaciones')
+      ->select('equipo_especificaciones.*', 'especificaciones.name as especificacion_name')
+      ->leftJoin('especificaciones', 'equipo_especificaciones.especificacion_id', '=', 'especificaciones.id')
+      ->where('equipo_especificaciones.equipo_id', $param['equipo_id'])
+      ->where('especificaciones.name', 'like', '%frecuencia%')
+      ->get();
+  }
+
+  /**
+   * Obtener especificaciones de velocidad de un equipo
+   * Reemplaza el método get_velocidad del modelo Mequipo_especificaciones
+   *
+   * @param array $param
+   * @return \Illuminate\Support\Collection
+   */
+  private function getEquipoEspecificacionesVelocidadData($param)
+  {
+    return DB::table('equipo_especificaciones')
+      ->select('equipo_especificaciones.*', 'especificaciones.name as especificacion_name')
+      ->leftJoin('especificaciones', 'equipo_especificaciones.especificacion_id', '=', 'especificaciones.id')
+      ->where('equipo_especificaciones.equipo_id', $param['equipo_id'])
+      ->where('especificaciones.name', 'like', '%velocidad%')
+      ->get();
+  }
+
+  /**
+   * Obtener especificaciones de humedad de un equipo
+   * Reemplaza el método get_humedad del modelo Mequipo_especificaciones
+   *
+   * @param array $param
+   * @return \Illuminate\Support\Collection
+   */
+  private function getEquipoEspecificacionesHumedadData($param)
+  {
+    return DB::table('equipo_especificaciones')
+      ->select('equipo_especificaciones.*', 'especificaciones.name as especificacion_name')
+      ->leftJoin('especificaciones', 'equipo_especificaciones.especificacion_id', '=', 'especificaciones.id')
+      ->where('equipo_especificaciones.equipo_id', $param['equipo_id'])
+      ->where('especificaciones.name', 'like', '%humedad%')
+      ->get();
+  }
+
+  /**
+   * Obtener especificaciones de peso de un equipo
+   * Reemplaza el método get_peso del modelo Mequipo_especificaciones
+   *
+   * @param array $param
+   * @return \Illuminate\Support\Collection
+   */
+  private function getEquipoEspecificacionesPesoData($param)
+  {
+    return DB::table('equipo_especificaciones')
+      ->select('equipo_especificaciones.*', 'especificaciones.name as especificacion_name')
+      ->leftJoin('especificaciones', 'equipo_especificaciones.especificacion_id', '=', 'especificaciones.id')
+      ->where('equipo_especificaciones.equipo_id', $param['equipo_id'])
+      ->where('especificaciones.name', 'like', '%peso%')
+      ->get();
+  }
+
+  /**
+   * Obtener especificaciones de otro tipo de un equipo
+   * Reemplaza el método get_otro del modelo Mequipo_especificaciones
+   *
+   * @param array $param
+   * @return \Illuminate\Support\Collection
+   */
+  private function getEquipoEspecificacionesOtroData($param)
+  {
+    return DB::table('equipo_especificaciones')
+      ->select('equipo_especificaciones.*', 'especificaciones.name as especificacion_name')
+      ->leftJoin('especificaciones', 'equipo_especificaciones.especificacion_id', '=', 'especificaciones.id')
+      ->where('equipo_especificaciones.equipo_id', $param['equipo_id'])
+      ->where('especificaciones.name', 'like', '%otro%')
+      ->get();
+  }
+
+  /**
+   * Obtener especificaciones de archivo de un equipo
+   * Reemplaza el método get_archivo del modelo Mequipo_especificaciones
+   *
+   * @param array $param
+   * @return \Illuminate\Support\Collection
+   */
+  private function getEquipoEspecificacionesArchivoData($param)
+  {
+    return DB::table('equipo_especificaciones')
+      ->select('equipo_especificaciones.*', 'especificaciones.name as especificacion_name')
+      ->leftJoin('especificaciones', 'equipo_especificaciones.especificacion_id', '=', 'especificaciones.id')
+      ->where('equipo_especificaciones.equipo_id', $param['equipo_id'])
+      ->where('especificaciones.name', 'like', '%archivo%')
+      ->get();
+  }
+
+  /**
+   * Obtener contactos de un equipo
+   * Reemplaza el método get del modelo Mequipo_contactos
+   *
+   * @param array $param
+   * @return \Illuminate\Support\Collection
+   */
+  private function getEquipoContactosData($param)
+  {
+    return DB::table('equipo_contactos')
+      ->select('equipo_contactos.*', 'contactos.name as contacto_name', 'contactos.tipo')
+      ->leftJoin('contactos', 'equipo_contactos.contacto_id', '=', 'contactos.id')
+      ->where('equipo_contactos.equipo_id', $param['equipo_id'])
+      ->get();
+  }
+
+  /**
+   * Obtener contactos fabricante de un equipo
+   * Reemplaza el método get_fabricante del modelo Mequipo_contactos
+   *
+   * @param array $param
+   * @return \Illuminate\Support\Collection
+   */
+  private function getEquipoContactosFabricanteData($param)
+  {
+    return DB::table('equipo_contactos')
+      ->select('equipo_contactos.*', 'contactos.name as contacto_name')
+      ->leftJoin('contactos', 'equipo_contactos.contacto_id', '=', 'contactos.id')
+      ->where('equipo_contactos.equipo_id', $param['equipo_id'])
+      ->where('contactos.tipo', 'fabricante')
+      ->get();
+  }
+
+  /**
+   * Obtener contactos proveedor de un equipo
+   * Reemplaza el método get_proveedor del modelo Mequipo_contactos
+   *
+   * @param array $param
+   * @return \Illuminate\Support\Collection
+   */
+  private function getEquipoContactosProveedorData($param)
+  {
+    return DB::table('equipo_contactos')
+      ->select('equipo_contactos.*', 'contactos.name as contacto_name')
+      ->leftJoin('contactos', 'equipo_contactos.contacto_id', '=', 'contactos.id')
+      ->where('equipo_contactos.equipo_id', $param['equipo_id'])
+      ->where('contactos.tipo', 'proveedor')
+      ->get();
+  }
+
+  /**
+   * Obtener contactos representante de un equipo
+   * Reemplaza el método get_representante del modelo Mequipo_contactos
+   *
+   * @param array $param
+   * @return \Illuminate\Support\Collection
+   */
+  private function getEquipoContactosRepresentanteData($param)
+  {
+    return DB::table('equipo_contactos')
+      ->select('equipo_contactos.*', 'contactos.name as contacto_name')
+      ->leftJoin('contactos', 'equipo_contactos.contacto_id', '=', 'contactos.id')
+      ->where('equipo_contactos.equipo_id', $param['equipo_id'])
+      ->where('contactos.tipo', 'representante')
+      ->get();
+  }
+
+  /**
+   * Obtener órdenes de trabajo de un equipo
+   * Reemplaza el método get del modelo Mordenes
+   *
+   * @param array $param
+   * @return \Illuminate\Support\Collection
+   */
+  private function getOrdenesData($param)
+  {
+    return DB::table('ordenes')
+      ->where('equipo_id', $param['equipo_id'])
+      ->orderBy('created_at', 'desc')
+      ->get();
+  }
+
+  /**
+   * Obtener correctivos generales de un equipo
+   * Reemplaza el método get del modelo Mcorrectivos_generales
+   *
+   * @param array $param
+   * @return \Illuminate\Support\Collection
+   */
+  private function getCorrectivosGeneralesData($param)
+  {
+    return DB::table('correctivos_generales')
+      ->where('equipo_id', $param['equipo_id'])
+      ->orderBy('created_at', 'desc')
+      ->get();
+  }
+
+  /**
+   * Obtener observaciones de un equipo
+   * Reemplaza el método get del modelo Mobservaciones
+   *
+   * @param array $param
+   * @return \Illuminate\Support\Collection
+   */
+  private function getObservacionesData($param)
+  {
+    return DB::table('observaciones')
+      ->where('equipo_id', $param['equipo_id'])
+      ->orderBy('created_at', 'desc')
+      ->get();
+  }
+
+  /**
+   * Obtener bajas de un equipo
+   * Reemplaza el método get_by_equipo del modelo Mbajas
+   *
+   * @param array $param
+   * @return \Illuminate\Support\Collection
+   */
+  private function getBajasByEquipoData($param)
+  {
+    return DB::table('bajas')
+      ->where('equipo_id', $param['equipo_id'])
+      ->orderBy('created_at', 'desc')
+      ->get();
+  }
+
+  /**
+   * Obtener contingencias de un equipo
+   * Reemplaza el método get del modelo Mcontingencias
+   *
+   * @param array $param
+   * @return \Illuminate\Support\Collection
+   */
+  private function getContingenciasData($param)
+  {
+    return DB::table('contingencias')
+      ->where('equipo_id', $param['equipo_id'])
+      ->orderBy('created_at', 'desc')
+      ->get();
+  }
+
+  /**
+   * Obtener archivos de un equipo
+   * Reemplaza el método get del modelo Mequipo_archivos
+   *
+   * @param array $param
+   * @return \Illuminate\Support\Collection
+   */
+  private function getEquipoArchivosData($param)
+  {
+    return DB::table('equipo_archivos')
+      ->select('equipo_archivos.*', 'archivos.name as archivo_name')
+      ->leftJoin('archivos', 'equipo_archivos.archivo_id', '=', 'archivos.id')
+      ->where('equipo_archivos.equipo_id', $param['id'])
+      ->get();
+  }
+
+  /**
+   * Obtener cambios de hoja de vida de un equipo
+   * Reemplaza el método get_from_device del modelo Mcambios_hdv
+   *
+   * @param array $param
+   * @return \Illuminate\Support\Collection
+   */
+  private function getCambiosHdvFromDeviceData($param)
+  {
+    return DB::table('cambios_hdv')
+      ->where('equipo_id', $param['id'])
+      ->orderBy('created_at', 'desc')
+      ->get();
+  }
+
+  /**
+   * Obtener archivos de capacitaciones de un equipo
+   * Reemplaza el método get_capacitaciones del modelo Mequipo_archivos
+   *
+   * @param array $param
+   * @return \Illuminate\Support\Collection
+   */
+  private function getEquipoArchivosCapacitacionesData($param)
+  {
+    return DB::table('equipo_archivos')
+      ->select('equipo_archivos.*', 'archivos.name as archivo_name')
+      ->leftJoin('archivos', 'equipo_archivos.archivo_id', '=', 'archivos.id')
+      ->where('equipo_archivos.equipo_id', $param['equipo_id'])
+      ->where('archivos.name', 'like', '%capacitacion%')
+      ->get();
+  }
+
+  /**
+   * Agregar archivo de correctivo general
+   * Reemplaza el método add del modelo Mcorrectivos_generales_archivos
+   *
+   * @param array $data
+   * @return int
+   */
+  private function addCorrectivoGeneralArchivoData($data)
+  {
+    return DB::table('correctivos_generales_archivos')->insertGetId($data);
+  }
+
+  /**
+   * Obtener archivos de correctivos generales
+   * Reemplaza el método get del modelo Mcorrectivos_generales_archivos
+   *
+   * @param array $param
+   * @return \Illuminate\Support\Collection
+   */
+  private function getCorrectivosGeneralesArchivosData($param)
+  {
+    return DB::table('correctivos_generales_archivos')
+      ->where('correctivo_general_id', $param['correctivo_general_id'])
+      ->get();
+  }
+
+  /**
+   * Obtener un archivo de correctivo general
+   * Reemplaza el método getOne del modelo Mcorrectivos_generales_archivos
+   *
+   * @param array $param
+   * @return object|null
+   */
+  private function getOneCorrectivoGeneralArchivoData($param)
+  {
+    return DB::table('correctivos_generales_archivos')
+      ->where('id', $param['id'])
+      ->first();
+  }
+
+  /**
+   * Eliminar archivo de correctivo general
+   * Reemplaza el método delete del modelo Mcorrectivos_generales_archivos
+   *
+   * @param int $id
+   * @return bool
+   */
+  private function deleteCorrectivoGeneralArchivoData($id)
+  {
+    return DB::table('correctivos_generales_archivos')->where('id', $id)->delete();
+  }
+
+  /**
+   * Agregar observación
+   * Reemplaza el método add del modelo Mobservaciones
+   *
+   * @param array $data
+   * @return int
+   */
+  private function addObservacionData($data)
+  {
+    return DB::table('observaciones')->insertGetId($data);
+  }
+
+  /**
+   * Obtener una observación específica
+   * Reemplaza el método getOne del modelo Mobservaciones
+   *
+   * @param array $param
+   * @return object|null
+   */
+  private function getOneObservacionData($param)
+  {
+    return DB::table('observaciones')->where('id', $param['id'])->first();
+  }
+
+  /**
+   * Agregar archivo a observación
+   * Reemplaza el método addFile del modelo Mobservaciones
+   *
+   * @param array $data
+   * @return int
+   */
+  private function addObservacionFileData($data)
+  {
+    return DB::table('observacion_archivos')->insertGetId($data);
+  }
+
+  /**
+   * Obtener archivos de observación
+   * Reemplaza el método getArchivosObservacion del modelo Mobservaciones
+   *
+   * @param array $param
+   * @return \Illuminate\Support\Collection
+   */
+  private function getArchivosObservacionData($param)
+  {
+    return DB::table('observacion_archivos')
+      ->where('observacion_id', $param['observacion_id'])
+      ->get();
+  }
+
+  /**
+   * Actualizar observación
+   * Reemplaza el método update del modelo Mobservaciones
+   *
+   * @param array $data
+   * @return bool
+   */
+  private function updateObservacionData($data)
+  {
+    $id = $data['id'];
+    unset($data['id']);
+    return DB::table('observaciones')->where('id', $id)->update($data);
+  }
+
+  /**
+   * Eliminar observación
+   * Reemplaza el método delete del modelo Mobservaciones
+   *
+   * @param array $param
+   * @return bool
+   */
+  private function deleteObservacionData($param)
+  {
+    return DB::table('observaciones')->where('id', $param['id'])->delete();
+  }
+
+  /**
+   * Agregar repuesto a equipo
+   * Reemplaza el método add del modelo Mequipo_repuestos
+   *
+   * @param array $data
+   * @return int
+   */
+  private function addEquipoRepuestoData($data)
+  {
+    return DB::table('equipo_repuestos')->insertGetId($data);
+  }
+
+  /**
+   * Obtener un repuesto específico de equipo
+   * Reemplaza el método getOne del modelo Mequipo_repuestos
+   *
+   * @param array $param
+   * @return object|null
+   */
+  private function getOneEquipoRepuestoData($param)
+  {
+    return DB::table('equipo_repuestos')->where('id', $param['id'])->first();
+  }
+
+  /**
+   * Obtener repuestos de correctivos generales
+   * Reemplaza el método getEquipoRepuestosCorrectivosgenerales del modelo Mequipo_repuestos
+   *
+   * @param array $param
+   * @return \Illuminate\Support\Collection
+   */
+  private function getEquipoRepuestosCorrectivosGeneralesData($param)
+  {
+    return DB::table('equipo_repuestos')
+      ->where('correctivo_general_id', $param['correctivo_general_id'])
+      ->get();
+  }
+
+  /**
+   * Actualizar repuesto de equipo
+   * Reemplaza el método update del modelo Mequipo_repuestos
+   *
+   * @param array $data
+   * @return bool
+   */
+  private function updateEquipoRepuestoData($data)
+  {
+    $id = $data['id'];
+    unset($data['id']);
+    return DB::table('equipo_repuestos')->where('id', $id)->update($data);
+  }
+
+  /**
+   * Eliminar repuesto de equipo
+   * Reemplaza el método delete del modelo Mequipo_repuestos
+   *
+   * @param array $param
+   * @return bool
+   */
+  private function deleteEquipoRepuestoData($param)
+  {
+    return DB::table('equipo_repuestos')->where('id', $param['id'])->delete();
+  }
+
+  /**
+   * Eliminar especificación de equipo
+   * Reemplaza el método delete del modelo Mequipo_especificaciones
+   *
+   * @param array $param
+   * @return bool
+   */
+  private function deleteEquipoEspecificacionData($param)
+  {
+    return DB::table('equipo_especificaciones')->where('id', $param['id'])->delete();
+  }
+
+  /**
+   * Agregar contacto a equipo
+   * Reemplaza el método add del modelo Mequipo_contactos
+   *
+   * @param array $data
+   * @return int
+   */
+  private function addEquipoContactoData($data)
+  {
+    return DB::table('equipo_contactos')->insertGetId($data);
+  }
+
+  /**
+   * Eliminar contacto de equipo
+   * Reemplaza el método delete del modelo Mequipo_contactos
+   *
+   * @param array $param
+   * @return bool
+   */
+  private function deleteEquipoContactoData($param)
+  {
+    return DB::table('equipo_contactos')->where('id', $param['id'])->delete();
+  }
+
+  /**
+   * Mostrar vista detallada de un equipo médico
+   * Incluye toda la información relacionada: mantenimientos, calibraciones, etc.
+   *
+   * @param Request $request
+   * @return \Illuminate\View\View
+   */
+  public function show(Request $request)
+  {
+    $data = $request->all();
+    $equipo = $this->getOneEquipoData($data);
+
+    $frecuency_computed = $this->computeFrecuencyData(
       $equipo->mes_programado1,
       $equipo->mes_programado2
     );
-    $_POST['equipo_id'] = $_POST['id'];
-    unset($_POST['id']);
-    $preventivos = $this->Mpreventivos->get($_POST);
-    $calibraciones = $this->Mcalibraciones->get($_POST);
-    $repuestos = $this->Mequipo_repuestos->get($_POST);
-    $especificaciones = $this->Mequipo_especificaciones->get($_POST);
-    $tension = $this->Mequipo_especificaciones->get_tension($_POST);
-    $potencia = $this->Mequipo_especificaciones->get_potencia($_POST);
-    $presion = $this->Mequipo_especificaciones->get_presion($_POST);
-    $temperatura = $this->Mequipo_especificaciones->get_temperatura($_POST);
-    $corriente = $this->Mequipo_especificaciones->get_corriente($_POST);
-    $frecuencia = $this->Mequipo_especificaciones->get_frecuencia($_POST);
-    $velocidad = $this->Mequipo_especificaciones->get_velocidad($_POST);
-    $humedad = $this->Mequipo_especificaciones->get_humedad($_POST);
-    $peso = $this->Mequipo_especificaciones->get_peso($_POST);
-    $otro = $this->Mequipo_especificaciones->get_otro($_POST);
-    $archivo = $this->Mequipo_especificaciones->get_archivo($_POST);
-    $contactos = $this->Mequipo_contactos->get($_POST);
-    $fabricante = $this->Mequipo_contactos->get_fabricante($_POST);
-    $proveedor = $this->Mequipo_contactos->get_proveedor($_POST);
-    $representante = $this->Mequipo_contactos->get_representante($_POST);
-    $fabricante = $this->Mequipo_contactos->get_fabricante($_POST);
-    $representante = $this->Mequipo_contactos->get_representante($_POST);
-    $correctivos = $this->Mordenes->get($_POST);
-    $correctivos_generales = $this->Mcorrectivos_generales->get($_POST);
-    $observaciones = $this->Mobservaciones->get($_POST);
-    $bajas = $this->Mbajas->get_by_equipo($_POST);
-    $contingencias = $this->Mcontingencias->get($_POST);
-    $_POST['id'] = $_POST['equipo_id'];
-    $archivos = $this->Mequipo_archivos->get($_POST);
-    $cambios_hdv = $this->Mcambios_hdv->get_from_device($_POST);
+
+    $data['equipo_id'] = $data['id'];
+    unset($data['id']);
+
+    $preventivos = $this->getPreventivosData($data);
+    $calibraciones = $this->getCalibracionesData($data);
+    $repuestos = $this->getEquipoRepuestosData($data);
+    $especificaciones = $this->getEquipoEspecificacionesData($data);
+    $tension = $this->getEquipoEspecificacionesTensionData($data);
+    $potencia = $this->getEquipoEspecificacionesPotenciaData($data);
+    $presion = $this->getEquipoEspecificacionesPresionData($data);
+    $temperatura = $this->getEquipoEspecificacionesTemperaturaData($data);
+    $corriente = $this->getEquipoEspecificacionesCorrienteData($data);
+    $frecuencia = $this->getEquipoEspecificacionesFrecuenciaData($data);
+    $velocidad = $this->getEquipoEspecificacionesVelocidadData($data);
+    $humedad = $this->getEquipoEspecificacionesHumedadData($data);
+    $peso = $this->getEquipoEspecificacionesPesoData($data);
+    $otro = $this->getEquipoEspecificacionesOtroData($data);
+    $archivo = $this->getEquipoEspecificacionesArchivoData($data);
+    $contactos = $this->getEquipoContactosData($data);
+    $fabricante = $this->getEquipoContactosFabricanteData($data);
+    $proveedor = $this->getEquipoContactosProveedorData($data);
+    $representante = $this->getEquipoContactosRepresentanteData($data);
+    $correctivos = $this->getOrdenesData($data);
+    $correctivos_generales = $this->getCorrectivosGeneralesData($data);
+    $observaciones = $this->getObservacionesData($data);
+    $bajas = $this->getBajasByEquipoData($data);
+    $contingencias = $this->getContingenciasData($data);
+    $data['id'] = $data['equipo_id'];
+    $archivos = $this->getEquipoArchivosData($data);
+    $cambios_hdv = $this->getCambiosHdvFromDeviceData($data);
+
     $param = [
       'equipo' => $equipo,
       'preventivos' => $preventivos,
@@ -758,368 +2493,619 @@ class Cequipos extends CI_Controller
       'cambios_hdv' => $cambios_hdv,
       'frecuency_computed' => $frecuency_computed,
     ];
-    $this->load->view('equipos/detail', $param);
+
+    return view('equipos.detail', $param);
   }
 
-  public function show_file()
+  /**
+   * Mostrar vista de archivo de un equipo médico
+   * Vista específica para mostrar archivos del equipo
+   *
+   * @param Request $request
+   * @return \Illuminate\View\View
+   */
+  public function show_file(Request $request)
   {
-    $equipo = $this->Mequipos->getOne($_POST);
+    $equipo = $this->getOneEquipoData($request->all());
     $param = [
       'equipo' => $equipo,
     ];
-    $this->load->view('equipos/detail_file', $param);
+    return view('equipos.detail_file', $param);
   }
 
-  public function show_archivos()
+  /**
+   * Mostrar vista de archivos de un equipo médico
+   * Lista todos los archivos asociados al equipo
+   *
+   * @param Request $request
+   * @return \Illuminate\View\View
+   */
+  public function show_archivos(Request $request)
   {
-    $equipo_archivo = $this->Mequipo_archivos->get($_POST);
+    $equipo_archivo = $this->getEquipoArchivosData($request->all());
     $param = [
       'equipo_archivo' => $equipo_archivo,
     ];
-    $this->load->view('equipos/detail_archivos', $param);
+    return view('equipos.detail_archivos', $param);
   }
 
-  public function show_capacitaciones()
+  /**
+   * Mostrar vista de capacitaciones de un equipo médico
+   * Lista archivos de capacitación específicos del equipo
+   *
+   * @param Request $request
+   * @return \Illuminate\View\View
+   */
+  public function show_capacitaciones(Request $request)
   {
-    $equipo_archivo = $this->Mequipo_archivos->get_capacitaciones($_POST);
+    $equipo_archivo = $this->getEquipoArchivosCapacitacionesData($request->all());
     $param = [
       'equipo_archivo' => $equipo_archivo,
     ];
-    $this->load->view('equipos/detail_archivos', $param);
+    return view('equipos.detail_archivos', $param);
   }
 
-  /* CRUD CORRECTIVOS */
-  public function getCorrectivos()
+  /**
+   * Obtener correctivos de un equipo
+   * Lista de órdenes de trabajo correctivas
+   *
+   * @param Request $request
+   * @return JsonResponse
+   */
+  public function getCorrectivos(Request $request): JsonResponse
   {
-    echo json_encode($this->Mordenes->get($_POST));
+    return response()->json($this->getOrdenesData($request->all()));
   }
 
-  /* CRUD CORRECTIVOS GENERALES */
-  public function add_archivo_correctivo_general()
+  /**
+   * Agregar archivo a correctivo general
+   * Subida de archivos para correctivos generales
+   *
+   * @param Request $request
+   * @return JsonResponse
+   */
+  public function add_archivo_correctivo_general(Request $request): JsonResponse
   {
-    $config['upload_path'] = './assets/upload_correctivos_generales';
-    $config['allowed_types'] = '*';
-    $config['encrypt_name'] = true;
-    $this->load->library('upload', $config, 'uploadCorrectivoGeneral');
-    $this->uploadCorrectivoGeneral->initialize($config);
+    try {
+      if ($request->hasFile('file')) {
+        $file = $request->file('file');
+        $fileName = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+        $file->move(public_path('assets/upload_correctivos_generales'), $fileName);
 
-    if (!empty($_FILES['file']['name'])) {
-      $this->uploadCorrectivoGeneral->do_upload('file'); // Esto sube el archivo
-      $data = '';
-      $data = $this->uploadCorrectivoGeneral->data();
-      $_POST['file'] = $data['file_name'];
-      unset($_POST['equipo_id']);
+        $data = $request->all();
+        $data['file'] = $fileName;
+        unset($data['equipo_id']);
 
-      $this->Mcorrectivos_generales_archivos->add($_POST);
+        $this->addCorrectivoGeneralArchivoData($data);
+        return response()->json(['success' => true]);
+      }
+      return response()->json(['error' => 'No file uploaded'], 400);
+    } catch (\Exception $e) {
+      return response()->json(['error' => 'Error uploading file'], 500);
     }
   }
 
-  public function getArchivosCorrectivosGenerales()
+  /**
+   * Obtener archivos de correctivos generales
+   * Lista de archivos asociados a correctivos generales
+   *
+   * @param Request $request
+   * @return JsonResponse
+   */
+  public function getArchivosCorrectivosGenerales(Request $request): JsonResponse
   {
-    echo json_encode($this->Mcorrectivos_generales_archivos->get($_POST));
+    return response()->json($this->getCorrectivosGeneralesArchivosData($request->all()));
   }
 
-  public function deleteArchivoCorrectivoGeneral()
+  /**
+   * Eliminar archivo de correctivo general
+   * Elimina archivo del sistema y base de datos
+   *
+   * @param Request $request
+   * @return JsonResponse
+   */
+  public function deleteArchivoCorrectivoGeneral(Request $request): JsonResponse
   {
-    $archivo = $this->Mcorrectivos_generales_archivos->getOne($_POST);
-    $file = $archivo->file;
+    try {
+      $archivo = $this->getOneCorrectivoGeneralArchivoData($request->all());
+      $file = $archivo->file;
 
-    if ($this->Mcorrectivos_generales_archivos->delete($_POST['id'])) {
-      $this->load->helper('file');
-      unlink('./assets/upload_correctivos_generales/' . $file);
+      if ($this->deleteCorrectivoGeneralArchivoData($request->input('id'))) {
+        $filePath = public_path('assets/upload_correctivos_generales/' . $file);
+        if (file_exists($filePath)) {
+          unlink($filePath);
+        }
+        return response()->json(['success' => true]);
+      }
+      return response()->json(['error' => 'Could not delete file'], 500);
+    } catch (\Exception $e) {
+      return response()->json(['error' => 'Error deleting file'], 500);
     }
   }
 
-  /* CRUD OBSERVACIONES */
-  public function addObservacion()
+  /**
+   * Agregar observación a un equipo médico
+   * Incluye subida de archivos y manejo de repuestos pendientes
+   *
+   * @param Request $request
+   * @return JsonResponse
+   */
+  public function addObservacion(Request $request): JsonResponse
   {
-    $config['upload_path'] = './assets/upload_observaciones';
-    $config['allowed_types'] = '*';
-    $config['encrypt_name'] = true;
-    $this->load->library('upload', $config, 'uploadObservacion');
-    $this->uploadObservacion->initialize($config);
-    if (!empty($_FILES['file']['name'])) {
-      $this->uploadObservacion->do_upload('file'); // Esto sube el archivo
-      $data = '';
-      $data = $this->uploadObservacion->data();
-      $_POST['file'] = $data['file_name'];
-    }
-    if ($_POST['created_at'] != '' && $_POST['created_at'] != null && $_POST['created_at'] != null) {
-      $_POST['created_at'] = $_POST['created_at'] . ' ' . $_POST['hora_observacion'];
-      unset($_POST['hora_observacion']);
-    } else {
-      $_POST['created_at'] = date('Y-m-d h:i:s');
-      unset($_POST['hora_observacion']);
-    }
+    try {
+      $data = $request->all();
 
-    if (isset($_POST['repuesto_id']) && $_POST['repuesto_id'] != '' && $_POST['repuesto_id'] != null) {
-      $_POST['repuesto_pendiente'] = 'si';
-      $vector_actualizacion_equipo = [
-        'id' => $_POST['equipo_id'],
-        'repuesto_pendiente' => 'si',
+      // Manejo de archivos
+      if ($request->hasFile('file')) {
+        $file = $request->file('file');
+        $fileName = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+        $file->move(public_path('assets/upload_observaciones'), $fileName);
+        $data['file'] = $fileName;
+      }
+
+      // Manejo de fecha de creación
+      if (!empty($data['created_at']) && !empty($data['hora_observacion'])) {
+        $data['created_at'] = $data['created_at'] . ' ' . $data['hora_observacion'];
+        unset($data['hora_observacion']);
+      } else {
+        $data['created_at'] = now()->format('Y-m-d H:i:s');
+        unset($data['hora_observacion']);
+      }
+
+      // Manejo de repuestos pendientes
+      $vector_actualizacion_equipo = null;
+      if (isset($data['repuesto_id']) && !empty($data['repuesto_id'])) {
+        $data['repuesto_pendiente'] = 'si';
+        $vector_actualizacion_equipo = [
+          'id' => $data['equipo_id'],
+          'repuesto_pendiente' => 'si',
+        ];
+        $this->updateEquipoData($vector_actualizacion_equipo);
+      } else {
+        unset($data['repuesto_id']);
+      }
+
+      $ultimo_id = $this->addObservacionData($data);
+
+      $vector_respuesta = [
+        'observacion_id' => $ultimo_id,
+        'equipo_id' => $data['equipo_id'],
       ];
-      $this->Mequipos->update($vector_actualizacion_equipo); // Se actualiza el equipo indicando que tiene un repuesto pendiente
-    } else {
-      unset($_POST['repuesto_id']);
+      if ($vector_actualizacion_equipo) {
+        $vector_respuesta['repuesto_id'] = $data['repuesto_id'] ?? null;
+      }
+
+      return response()->json($vector_respuesta);
+    } catch (\Exception $e) {
+      return response()->json(['error' => 'Error al agregar observación'], 500);
     }
+  }
 
-    $ultimo_id = $this->Mobservaciones->add($_POST); // Agrego la observacion
+  /**
+   * Agregar archivo a una observación existente
+   * Subida de archivos adicionales para observaciones
+   *
+   * @param Request $request
+   * @return JsonResponse
+   */
+  public function addArchivoObservcion(Request $request): JsonResponse
+  {
+    try {
+      $observacion = $this->getOneObservacionData(['id' => $request->input('observacion_id')]);
+      $equipo_id = $observacion->equipo_id;
 
-    $vector_respuesta = [
-      'observacion_id' => $ultimo_id,
-      'equipo_id' => $_POST['equipo_id'],
-    ];
-    if (isset($vector_actualizacion_equipo)) {
-      $vector_respuesta['repuesto_id'] = $_POST['repuesto_id'];
+      $data = $request->all();
+      if ($request->hasFile('file')) {
+        $file = $request->file('file');
+        $fileName = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+        $file->move(public_path('assets/upload_observaciones'), $fileName);
+        $data['file'] = $fileName;
+      }
+
+      $this->addObservacionFileData($data);
+      return response()->json($equipo_id);
+    } catch (\Exception $e) {
+      return response()->json(['error' => 'Error al agregar archivo'], 500);
     }
-
-    // echo json_encode($_POST["equipo_id"]);
-    echo json_encode($vector_respuesta);
   }
 
-  public function addArchivoObservcion()
+  /**
+   * Obtener archivos de una observación
+   * Lista de archivos asociados a una observación específica
+   *
+   * @param Request $request
+   * @return JsonResponse
+   */
+  public function getArchivosObservacion(Request $request): JsonResponse
   {
-    $observacion = $this->Mobservaciones->getOne(['id' => $_POST['observacion_id']]);
-    $equipo_id = $observacion->equipo_id;
-    $config['upload_path'] = './assets/upload_observaciones';
-    $config['allowed_types'] = '*';
-    $config['max_size'] = 1000000;
-    $config['encrypt_name'] = true;
-    $this->load->library('upload', $config, 'uploadObservacion');
-    $this->uploadObservacion->initialize($config);
-    if (!empty($_FILES['file']['name'])) {
-      $this->uploadObservacion->do_upload('file'); // Esto sube el archivo
-      $data = '';
-      $data = $this->uploadObservacion->data();
-      $_POST['file'] = $data['file_name'];
-    }
-    $this->Mobservaciones->addFile($_POST);
-    echo json_encode($equipo_id);
+    return response()->json($this->getArchivosObservacionData($request->all()));
   }
 
-  public function getArchivosObservacion()
+  /**
+   * Obtener observaciones de un equipo
+   * Lista todas las observaciones del equipo
+   *
+   * @param Request $request
+   * @return JsonResponse
+   */
+  public function getObservaciones(Request $request): JsonResponse
   {
-    echo json_encode($this->Mobservaciones->getArchivosObservacion($_POST));
+    return response()->json($this->getObservacionesData($request->all()));
   }
 
-  public function getObservaciones()
+  /**
+   * Obtener una observación específica
+   * Información detallada de una observación
+   *
+   * @param Request $request
+   * @return JsonResponse
+   */
+  public function getOneObservacion(Request $request): JsonResponse
   {
-    echo json_encode($this->Mobservaciones->get($_POST));
+    return response()->json($this->getOneObservacionData($request->all()));
   }
 
-  public function getOneObservacion()
+  /**
+   * Actualizar una observación existente
+   * Incluye manejo de archivos y repuestos pendientes
+   *
+   * @param Request $request
+   * @return JsonResponse
+   */
+  public function updateObservacion(Request $request): JsonResponse
   {
-    echo json_encode($this->Mobservaciones->getOne($_POST));
-  }
-
-  public function updateObservacion()
-  {
-    if (isset($_POST)) {
-      $observacion_id = $_POST['id'];
-      $observacion = $this->Mobservaciones->getOne($_POST);
+    try {
+      $data = $request->all();
+      $observacion_id = $data['id'];
+      $observacion = $this->getOneObservacionData($data);
       $file_anterior = $observacion->file;
 
-      $config['upload_path'] = './assets/upload_observaciones';
-      $config['allowed_types'] = '*';
-      $config['encrypt_name'] = true;
-      $this->load->library('upload', $config, 'uploadObservacion');
-      $this->uploadObservacion->initialize($config);
-      if (!empty($_FILES['file']['name'])) {
-        $this->uploadObservacion->do_upload('file'); // Esto sube el archivo
-        $data = '';
-        $data = $this->uploadObservacion->data();
-        $_POST['file'] = $data['file_name'];
+      // Manejo de archivos
+      if ($request->hasFile('file')) {
+        $file = $request->file('file');
+        $fileName = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+        $file->move(public_path('assets/upload_observaciones'), $fileName);
+        $data['file'] = $fileName;
       }
 
+      // Verificar cambios en repuesto pendiente
       $cambio = 'no';
-
-      if ($_POST['repuesto_id'] != $observacion->repuesto_id) { // Hubo un cambio en el repuesto pendiente
+      if ($data['repuesto_id'] != $observacion->repuesto_id) {
         $cambio = 'si';
       }
-      if ($_POST['repuesto_id'] == '' || $_POST['repuesto_id'] == null) {
+      if (empty($data['repuesto_id'])) {
         $cambio = 'no';
       }
 
-      if ($this->Mobservaciones->update($_POST)) {
-        if (isset($_POST['file'])) {
-          if ($_POST['file'] != $file_anterior) {
-            $this->load->helper('file');
-            unlink('./assets/upload_observaciones/' . $file_anterior);
+      if ($this->updateObservacionData($data)) {
+        // Eliminar archivo anterior si se subió uno nuevo
+        if (isset($data['file']) && $data['file'] != $file_anterior && !empty($file_anterior)) {
+          $oldFilePath = public_path('assets/upload_observaciones/' . $file_anterior);
+          if (file_exists($oldFilePath)) {
+            unlink($oldFilePath);
           }
         }
-        echo json_encode(['equipo_id' => $_POST['equipo_id'], 'cambio' => $cambio, 'observacion_id' => $observacion_id]);
+        return response()->json([
+          'equipo_id' => $data['equipo_id'],
+          'cambio' => $cambio,
+          'observacion_id' => $observacion_id
+        ]);
       } else {
-        if (isset($_POST['file'])) {
-          $this->load->helper('file');
-          unlink('./assets/upload_observaciones/' . $_POST['file']);
+        // Eliminar archivo subido si falló la actualización
+        if (isset($data['file'])) {
+          $newFilePath = public_path('assets/upload_observaciones/' . $data['file']);
+          if (file_exists($newFilePath)) {
+            unlink($newFilePath);
+          }
         }
+        return response()->json(['error' => 'Error al actualizar observación'], 500);
       }
+    } catch (\Exception $e) {
+      return response()->json(['error' => 'Error al actualizar observación'], 500);
     }
   }
 
-  public function deleteObservacion()
+  /**
+   * Eliminar una observación
+   * Elimina observación y archivos asociados
+   *
+   * @param Request $request
+   * @return JsonResponse
+   */
+  public function deleteObservacion(Request $request): JsonResponse
   {
-    $vector = [
-      'id' => $_POST['id'],
-    ];
-    $observacion = $this->Mobservaciones->getOne($vector);
-    $file = $observacion->file;
-    if ($this->Mobservaciones->delete($_POST)) {
-      if ($file != '' && $file != null) {
-        $this->load->helper('file');
-        unlink('./assets/upload_observaciones/' . $file);
+    try {
+      $vector = ['id' => $request->input('id')];
+      $observacion = $this->getOneObservacionData($vector);
+      $file = $observacion->file;
+
+      if ($this->deleteObservacionData($request->all())) {
+        if (!empty($file)) {
+          $filePath = public_path('assets/upload_observaciones/' . $file);
+          if (file_exists($filePath)) {
+            unlink($filePath);
+          }
+        }
+        return response()->json(['success' => true]);
       }
+      return response()->json(['error' => 'Error al eliminar observación'], 500);
+    } catch (\Exception $e) {
+      return response()->json(['error' => 'Error al eliminar observación'], 500);
     }
   }
 
-  /* CRUD EQUIPO_REPUESTOS */
-  public function addEquipoRepuesto()
+  /**
+   * Agregar repuesto a un equipo médico
+   * Incluye subida de archivos de documentación
+   *
+   * @param Request $request
+   * @return JsonResponse
+   */
+  public function addEquipoRepuesto(Request $request): JsonResponse
   {
-    $config['upload_path'] = './assets/upload_equipo_repuestos';
-    $config['allowed_types'] = '*';
-    $config['encrypt_name'] = true;
-    $this->load->library('upload', $config, 'uploadEquipoRepuesto');
-    $this->uploadEquipoRepuesto->initialize($config);
-    if (!empty($_FILES['file']['name'])) {
-      $this->uploadEquipoRepuesto->do_upload('file'); // Esto sube el archivo
-      $data = '';
-      $data = $this->uploadEquipoRepuesto->data();
-      $_POST['file'] = $data['file_name'];
+    try {
+      $data = $request->all();
+
+      // Manejo de archivos
+      if ($request->hasFile('file')) {
+        $file = $request->file('file');
+        $fileName = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+        $file->move(public_path('assets/upload_equipo_repuestos'), $fileName);
+        $data['file'] = $fileName;
+      }
+
+      $data['usuario_id'] = Session::get('id');
+      $this->addEquipoRepuestoData($data);
+
+      return response()->json($data['equipo_id']);
+    } catch (\Exception $e) {
+      return response()->json(['error' => 'Error al agregar repuesto'], 500);
     }
-    $_POST['usuario_id'] = $this->session->userdata('id');
-    $this->Mequipo_repuestos->add($_POST);
-    echo json_encode($_POST['equipo_id']);
   }
 
-  public function addEquipoRepuestoCorrectivoGeneral()
+  /**
+   * Agregar repuesto a correctivo general
+   * Repuesto específico para correctivos generales
+   *
+   * @param Request $request
+   * @return JsonResponse
+   */
+  public function addEquipoRepuestoCorrectivoGeneral(Request $request): JsonResponse
   {
-    $config['upload_path'] = './assets/upload_equipo_repuestos';
-    $config['allowed_types'] = '*';
-    $config['encrypt_name'] = true;
-    $this->load->library('upload', $config, 'uploadEquipoRepuesto');
-    $this->uploadEquipoRepuesto->initialize($config);
-    if (!empty($_FILES['file']['name'])) {
-      $this->uploadEquipoRepuesto->do_upload('file'); // Esto sube el archivo
-      $data = '';
-      $data = $this->uploadEquipoRepuesto->data();
-      $_POST['file'] = $data['file_name'];
+    try {
+      $data = $request->all();
+
+      // Manejo de archivos
+      if ($request->hasFile('file')) {
+        $file = $request->file('file');
+        $fileName = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+        $file->move(public_path('assets/upload_equipo_repuestos'), $fileName);
+        $data['file'] = $fileName;
+      }
+
+      $data['usuario_id'] = Session::get('id');
+      $this->addEquipoRepuestoData($data);
+
+      return response()->json([
+        'correctivo_general_id' => $data['correctivo_general_id'],
+        'equipo_id' => $data['equipo_id']
+      ]);
+    } catch (\Exception $e) {
+      return response()->json(['error' => 'Error al agregar repuesto'], 500);
     }
-    $_POST['usuario_id'] = $this->session->userdata('id');
-    $this->Mequipo_repuestos->add($_POST);
-    echo json_encode(['correctivo_general_id' => $_POST['correctivo_general_id'], 'equipo_id' => $_POST['equipo_id']]);
   }
 
-  public function getOneEquipoRepuesto()
+  /**
+   * Obtener un repuesto específico de equipo
+   * Información detallada de un repuesto
+   *
+   * @param Request $request
+   * @return JsonResponse
+   */
+  public function getOneEquipoRepuesto(Request $request): JsonResponse
   {
-    echo json_encode($this->Mequipo_repuestos->getOne($_POST));
+    return response()->json($this->getOneEquipoRepuestoData($request->all()));
   }
 
-  public function getEquipoRepuestos()
+  /**
+   * Obtener repuestos de un equipo
+   * Lista todos los repuestos del equipo
+   *
+   * @param Request $request
+   * @return JsonResponse
+   */
+  public function getEquipoRepuestos(Request $request): JsonResponse
   {
-    echo json_encode($this->Mequipo_repuestos->get($_POST));
+    return response()->json($this->getEquipoRepuestosData($request->all()));
   }
 
-  public function getEquipoRepuestosCorrectivosgenerales()
+  /**
+   * Obtener repuestos de correctivos generales
+   * Lista repuestos asociados a correctivos generales
+   *
+   * @param Request $request
+   * @return JsonResponse
+   */
+  public function getEquipoRepuestosCorrectivosgenerales(Request $request): JsonResponse
   {
-    echo json_encode($this->Mequipo_repuestos->getEquipoRepuestosCorrectivosgenerales($_POST));
+    return response()->json($this->getEquipoRepuestosCorrectivosGeneralesData($request->all()));
   }
 
-  public function updateEquipoRepuesto()
+  /**
+   * Actualizar repuesto de equipo
+   * Incluye manejo de archivos y reemplazo de documentos
+   *
+   * @param Request $request
+   * @return JsonResponse
+   */
+  public function updateEquipoRepuesto(Request $request): JsonResponse
   {
-    if (isset($_POST)) {
-      // code...
-      $equipo_repuesto = $this->Mequipo_repuestos->getOne($_POST);
+    try {
+      $data = $request->all();
+      $equipo_repuesto = $this->getOneEquipoRepuestoData($data);
       $file_anterior = $equipo_repuesto->file;
 
-      $config['upload_path'] = './assets/upload_equipo_repuestos';
-      $config['allowed_types'] = '*';
-      $config['encrypt_name'] = true;
-      $this->load->library('upload', $config, 'uploadEquipoRepuesto');
-      $this->uploadEquipoRepuesto->initialize($config);
-      if (!empty($_FILES['file']['name'])) {
-        $this->uploadEquipoRepuesto->do_upload('file'); // Esto sube el archivo
-        $data = '';
-        $data = $this->uploadEquipoRepuesto->data();
-        $_POST['file'] = $data['file_name'];
+      // Manejo de archivos
+      if ($request->hasFile('file')) {
+        $file = $request->file('file');
+        $fileName = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+        $file->move(public_path('assets/upload_equipo_repuestos'), $fileName);
+        $data['file'] = $fileName;
       }
-      if ($this->Mequipo_repuestos->update($_POST)) {
-        if (isset($_POST['file'])) {
-          if ($_POST['file'] != $file_anterior) {
-            $this->load->helper('file');
-            unlink('./assets/upload_equipo_repuestos/' . $file_anterior);
+
+      if ($this->updateEquipoRepuestoData($data)) {
+        // Eliminar archivo anterior si se subió uno nuevo
+        if (isset($data['file']) && $data['file'] != $file_anterior && !empty($file_anterior)) {
+          $oldFilePath = public_path('assets/upload_equipo_repuestos/' . $file_anterior);
+          if (file_exists($oldFilePath)) {
+            unlink($oldFilePath);
           }
         }
-        echo json_encode($_POST['equipo_id']);
+        return response()->json($data['equipo_id']);
       } else {
-        if (isset($_POST['file'])) {
-          $this->load->helper('file');
-          unlink('./assets/upload_equipo_repuestos/' . $_POST['file']);
+        // Eliminar archivo subido si falló la actualización
+        if (isset($data['file'])) {
+          $newFilePath = public_path('assets/upload_equipo_repuestos/' . $data['file']);
+          if (file_exists($newFilePath)) {
+            unlink($newFilePath);
+          }
         }
+        return response()->json(['error' => 'Error al actualizar repuesto'], 500);
       }
+    } catch (\Exception $e) {
+      return response()->json(['error' => 'Error al actualizar repuesto'], 500);
     }
   }
 
-  public function deleteEquipoRepuesto()
+  /**
+   * Eliminar repuesto de equipo
+   * Elimina repuesto y archivos asociados
+   *
+   * @param Request $request
+   * @return JsonResponse
+   */
+  public function deleteEquipoRepuesto(Request $request): JsonResponse
   {
-    $vector = [
-      'id' => $_POST['id'],
-    ];
-    $equipo_repuesto = $this->Mequipo_repuestos->getOne($vector);
-    $file = $equipo_repuesto->file;
-    if ($this->Mequipo_repuestos->delete($_POST)) {
-      if ($file != '' && $file != null) {
-        $this->load->helper('file');
-        unlink('./assets/upload_equipo_repuestos/' . $file);
+    try {
+      $vector = ['id' => $request->input('id')];
+      $equipo_repuesto = $this->getOneEquipoRepuestoData($vector);
+      $file = $equipo_repuesto->file;
+
+      if ($this->deleteEquipoRepuestoData($request->all())) {
+        if (!empty($file)) {
+          $filePath = public_path('assets/upload_equipo_repuestos/' . $file);
+          if (file_exists($filePath)) {
+            unlink($filePath);
+          }
+        }
+        return response()->json(['success' => true]);
       }
+      return response()->json(['error' => 'Error al eliminar repuesto'], 500);
+    } catch (\Exception $e) {
+      return response()->json(['error' => 'Error al eliminar repuesto'], 500);
     }
   }
 
-  /* CRUD EQUIPO-ESPECIFICACION */
-
-  public function getEquipoEspecificaciones()
+  /**
+   * Obtener especificaciones de un equipo
+   * Lista todas las especificaciones técnicas del equipo
+   *
+   * @param Request $request
+   * @return JsonResponse
+   */
+  public function getEquipoEspecificaciones(Request $request): JsonResponse
   {
-    echo json_encode($this->Mequipo_especificaciones->get($_POST));
+    return response()->json($this->getEquipoEspecificacionesData($request->all()));
   }
 
-  public function addEquipoEspecificacion()
+  /**
+   * Agregar especificación a un equipo médico
+   * Incluye subida de archivos de documentación técnica
+   *
+   * @param Request $request
+   * @return JsonResponse
+   */
+  public function addEquipoEspecificacion(Request $request): JsonResponse
   {
-    $config['upload_path'] = './assets/upload_archivos';
-    $config['allowed_types'] = '*';
-    $config['max_size'] = 1000000;
-    $config['encrypt_name'] = true;
-    $this->load->library('upload', $config, 'uploadEspecificacion');
-    $this->uploadEspecificacion->initialize($config);
-    if (!empty($_FILES['file']['name'])) {
-      $this->uploadEspecificacion->do_upload('file'); // Esto sube el archivo
-      $data = '';
-      $data = $this->uploadEspecificacion->data();
-      $_POST['file'] = $data['file_name'];
+    try {
+      $data = $request->all();
+
+      // Manejo de archivos
+      if ($request->hasFile('file')) {
+        $file = $request->file('file');
+        $fileName = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+        $file->move(public_path('assets/upload_archivos'), $fileName);
+        $data['file'] = $fileName;
+      }
+
+      $this->addEquipoEspecificacionData($data);
+      return response()->json($data['equipo_id']);
+    } catch (\Exception $e) {
+      return response()->json(['error' => 'Error al agregar especificación'], 500);
     }
-
-    $this->Mequipo_especificaciones->add($_POST);
-    echo json_encode($_POST['equipo_id']);
   }
 
-  public function deleteEquipoEspecificacion()
+  /**
+   * Eliminar especificación de equipo
+   * Elimina especificación técnica del equipo
+   *
+   * @param Request $request
+   * @return JsonResponse
+   */
+  public function deleteEquipoEspecificacion(Request $request): JsonResponse
   {
-    $this->Mequipo_especificaciones->delete($_POST);
+    try {
+      $this->deleteEquipoEspecificacionData($request->all());
+      return response()->json(['success' => true]);
+    } catch (\Exception $e) {
+      return response()->json(['error' => 'Error al eliminar especificación'], 500);
+    }
   }
 
-  /* CRUD EQUIPO-CONTACTO */
-  public function getEquipoContactos()
+  /**
+   * Obtener contactos de un equipo
+   * Lista todos los contactos asociados al equipo
+   *
+   * @param Request $request
+   * @return JsonResponse
+   */
+  public function getEquipoContactos(Request $request): JsonResponse
   {
-    echo json_encode($this->Mequipo_contactos->get($_POST));
+    return response()->json($this->getEquipoContactosData($request->all()));
   }
 
-  public function addEquipoContacto()
+  /**
+   * Agregar contacto a un equipo médico
+   * Asocia un contacto (fabricante, proveedor, etc.) al equipo
+   *
+   * @param Request $request
+   * @return JsonResponse
+   */
+  public function addEquipoContacto(Request $request): JsonResponse
   {
-    $this->Mequipo_contactos->add($_POST);
-    echo json_encode($_POST['equipo_id']);
+    try {
+      $this->addEquipoContactoData($request->all());
+      return response()->json($request->input('equipo_id'));
+    } catch (\Exception $e) {
+      return response()->json(['error' => 'Error al agregar contacto'], 500);
+    }
   }
 
-  public function deleteEquipoContacto()
+  /**
+   * Eliminar contacto de equipo
+   * Elimina asociación de contacto con el equipo
+   *
+   * @param Request $request
+   * @return JsonResponse
+   */
+  public function deleteEquipoContacto(Request $request): JsonResponse
   {
-    $this->Mequipo_contactos->delete($_POST);
+    try {
+      $this->deleteEquipoContactoData($request->all());
+      return response()->json(['success' => true]);
+    } catch (\Exception $e) {
+      return response()->json(['error' => 'Error al eliminar contacto'], 500);
+    }
   }
   /* CRUD EQUIPO ARCHIVO */
 

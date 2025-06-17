@@ -8,73 +8,59 @@ use App\Models\Macciones;
 
 class Cacciones extends Controller
 {
-  private $permisos;
-  
-  function __construct()
-  {
-    $this->Macciones = new Macciones();
-  }
+    protected Macciones $Macciones;
 
-  public function getAll()
-  {
-  }
-  
-  public function getByUser()
-  {
-  }
-  
-  public function edit(Request $request)
-  {
-    $registro_acciones = $this->Macciones->getOne($request->all());
-
-    if ($request["accion"] == 1) {
-      if ($registro_acciones->leer == 1) {
-        $request["leer"] = 0;
-      } else {
-        $request["leer"] = 1;
-      }
-    } else if ($request["accion"] == 2) {
-      if ($registro_acciones->insertar == 1) {
-        $request["insertar"] = 0;
-      } else {
-        $request["insertar"] = 1;
-      }
-    } else if ($request["accion"] == 3) {
-      if ($registro_acciones->editar == 1) {
-        $request["editar"] = 0;
-      } else {
-        $request["editar"] = 1;
-      }
-    } else if ($request["accion"] == 4) {
-      if ($registro_acciones->eliminar == 1) {
-        $request["eliminar"] = 0;
-      } else {
-        $request["eliminar"] = 1;
-      }
+    public function __construct()
+    {
+        $this->Macciones = new Macciones();
     }
-    
-    $data = $request->except('accion');
-    $this->Macciones->edit($data);
-    return response()->json($this->Macciones->getByUser($registro_acciones->usuario_id));
-  }
-  /*
-  public function add(){// Este add no almacena directamente, lo que hace es llamar un formulario
-    $param=array(
-      'roles' => $this->Musuarios->getRoles(),
-      'menus' => $this->Mpermisos->getMenus()
-      
-      );
 
-    return view('layouts.app', [
-      'content' => view('permisos.add', $param)->render()
-    ]);
-  }
-  
-  public function delete($param){
-    if(!$this->Mpermisos->delete($param)){
-      return redirect()->to("administrador/Cpermisos");
+    public function getAll()
+    {
+        // Aquí puedes retornar todas las acciones si es necesario
+        // return response()->json($this->Macciones->all());
     }
-  }
-  */
+
+    public function getByUser()
+    {
+        // Si necesitas recibir ID por request, agrégalo como argumento
+        // return response()->json($this->Macciones->getByUser($userId));
+    }
+
+    public function edit(Request $request)
+    {
+        $registro_acciones = $this->Macciones->getOne($request->all());
+
+        $accion = $request->input('accion');
+
+        switch ($accion) {
+            case 1:
+                $request->merge([
+                    'leer' => $registro_acciones->leer == 1 ? 0 : 1,
+                ]);
+                break;
+            case 2:
+                $request->merge([
+                    'insertar' => $registro_acciones->insertar == 1 ? 0 : 1,
+                ]);
+                break;
+            case 3:
+                $request->merge([
+                    'editar' => $registro_acciones->editar == 1 ? 0 : 1,
+                ]);
+                break;
+            case 4:
+                $request->merge([
+                    'eliminar' => $registro_acciones->eliminar == 1 ? 0 : 1,
+                ]);
+                break;
+        }
+
+        $data = $request->except('accion');
+        $this->Macciones->edit($data);
+
+        return response()->json(
+            $this->Macciones->getByUser($registro_acciones->usuario_id)
+        );
+    }
 }
-

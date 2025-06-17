@@ -7,85 +7,78 @@ use Illuminate\Http\Request;
 use App\Models\Mpermisos;
 use App\Models\Musuarios;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Redirect;
 
 class Cpermisos extends Controller
 {
-  private $permisos;
-  private Mpermisos $Mpermisos;
-  private Musuarios $Musuarios;
-  
-  public function __construct()
-  {
-    $this->Mpermisos = new Mpermisos();
-    $this->Musuarios = new Musuarios();
-    // Asumiendo que backend_lib se ha migrado a un servicio de Laravel
-    // $this->permisos = app('backend_lib')->control();
-  }
-  
-  public function index()
-  {
-    if (!Session::has('login')) {
-      return redirect('Cauth');
-    }
-    
-    $permisos = $this->Mpermisos->get();
-    $param = [
-      'permisos_listado' => $permisos
-    ];
-    
-    return view('permisos.list', $param);
-  }
-  
-  public function add()
-  { // Este add no almacena directamente, lo que hace es llamar un formulario
-    $param = [
-      'roles' => $this->Musuarios->getRoles(),
-      'menus' => $this->Mpermisos->getMenus()
-    ];
+    protected Mpermisos $Mpermisos;
+    protected Musuarios $Musuarios;
 
-    return view('permisos.add', $param);
-  }
-  
-  public function save(Request $request)
-  {
-    if ($this->Mpermisos->save($request->all())) {
-      return redirect()->to("administrador/Cpermisos/add");
-    } else {
-      Session::flash("error", "No se pudo guardar la información");
-      return redirect()->to("administrador/Cpermisos");
+    public function __construct()
+    {
+        $this->Mpermisos = new Mpermisos();
+        $this->Musuarios = new Musuarios();
+        // Eliminado vestigio de CodeIgniter: backend_lib/control()
     }
-  }
-  
-  public function edit($param)
-  {
-    $param = [
-      'roles' => $this->Musuarios->getRoles(),
-      'menus' => $this->Mpermisos->getMenus(),
-      'permiso' => $this->Mpermisos->getOne($param)
-    ];
 
-    return view('permisos.edit', $param);
-  }
-  
-  public function update(Request $request)
-  {
-    $data = $request->except(['menu_id', 'rol_id']);
-    
-    if ($this->Mpermisos->update($data)) {
-      return redirect()->to("administrador/Cpermisos/add");
-    } else {
-      Session::flash("error", "No se pudo guardar la información");
-      return redirect()->to("administrador/Cpermisos");
+    public function index()
+    {
+        if (!Session::has('login')) {
+            return redirect()->route('Cauth');
+        }
+
+        $permisos = $this->Mpermisos->get();
+
+        return view('permisos.list', [
+            'permisos_listado' => $permisos
+        ]);
     }
-  }
-  
-  public function delete($param)
-  {
-    if (!$this->Mpermisos->delete($param)) {
-      return redirect()->to("administrador/Cpermisos");
+
+    public function add()
+    {
+        return view('permisos.add', [
+            'roles' => $this->Musuarios->getRoles(),
+            'menus' => $this->Mpermisos->getMenus()
+        ]);
     }
-    
-    return redirect()->to("administrador/Cpermisos");
-  }
+
+    public function save(Request $request)
+    {
+        $saved = $this->Mpermisos->save($request->all());
+
+        if ($saved) {
+            return redirect()->to('administrador/Cpermisos/add');
+        } else {
+            Session::flash('error', 'No se pudo guardar la información');
+            return redirect()->to('administrador/Cpermisos');
+        }
+    }
+
+    public function edit($id)
+    {
+        return view('permisos.edit', [
+            'roles' => $this->Musuarios->getRoles(),
+            'menus' => $this->Mpermisos->getMenus(),
+            'permiso' => $this->Mpermisos->getOne($id)
+        ]);
+    }
+
+    public function update(Request $request)
+    {
+        $data = $request->except(['menu_id', 'rol_id']);
+
+        if ($this->Mpermisos->update($data)) {
+            return redirect()->to('administrador/Cpermisos/add');
+        } else {
+            Session::flash('error', 'No se pudo guardar la información');
+            return redirect()->to('administrador/Cpermisos');
+        }
+    }
+
+    public function delete($id)
+    {
+        $this->Mpermisos->delete($id);
+
+        return redirect()->to('administrador/Cpermisos');
+    }
 }
-
