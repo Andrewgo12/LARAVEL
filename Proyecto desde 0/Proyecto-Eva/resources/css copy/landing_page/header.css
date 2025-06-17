@@ -1,0 +1,92 @@
+.eva-container .eva-icon {
+	background: url('/assets/template/eva.PNG') no-repeat center;
+	width: 100px;
+	height: 100px;
+	background-size: cover;
+	border-radius: 50%;
+}
+
+.eva-container .icon-book {
+	background: url('/assets/template/book-icon.png') no-repeat center;
+	background-size: cover;
+	width: 50px;
+	height: 50px;
+	transform: scale(0.5);
+}
+
+.icon-button {
+	background: url('/assets/template/button.jpg') no-repeat right;
+	background-size: cover;
+	height: 200px;
+	width: 600px;
+	background-size: cover;
+	margin-left: -6rem;
+	transform: scale(0.7);
+}
+
+.eva-container > .row:first-child {
+	border-bottom: 1px #dddddd solid;
+}
+
+.eva-container .eva-title {
+	color: rgb(65, 58, 80);
+	font-family: 'Crimson Pro', serif;
+	display: flex;
+	justify-content: center;
+}
+
+.eva-container .container-icon-title {
+	display: flex;
+	justify-content: center;
+	margin-top: -13em;
+}
+
+.icon-button {
+	transform: scale(0.6);
+}
+
+.container-icon-title,
+.eva-title {
+	height: 200px;
+}
+
+.eva-title {
+	align-items: center;
+	align-items: baseline;
+}
+
+.alert {
+	display: flex;
+	height: 60px;
+	align-items: center;
+	justify-content: flex-start;
+}
+
+.tabla_guias tbody a {
+	margin-left: 1em;
+	font-size: 15px;
+	color: cornflowerblue;
+}
+
+.tabla_guias tbody a:hover {
+	transform: scale(1.5);
+	transition: cubic-bezier(0.165, 0.84, 0.44, 1);
+	color: antiquewhite;
+}
+
+.tabla_guias tbody tr td:hover {
+	background-color: darkgoldenrod;
+	color: aliceblue;
+	font-weight: 100;
+}
+
+.panel-title:hover a {
+	color: indigo;
+	font-weight: 400;
+	transform: scale(1.1);
+}
+
+.row .col-lg-6:first-child {
+	border: 1px solid #dddddd;
+	padding-bottom: 11.7em;
+}

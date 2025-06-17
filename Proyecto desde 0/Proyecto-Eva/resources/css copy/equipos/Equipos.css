@@ -1,0 +1,44 @@
+.modal .modal-dialog {
+	overflow-x: auto;
+}
+
+.modal .modal-dialog {
+	width: 90%;
+}
+
+.search-form {
+	border-radius: 30px 0px 0px 30px;
+}
+
+.contenido_listado {
+	display: none;
+}
+
+.contenedor_listado:hover .contenido_listado {
+	display: block;
+}
+
+.contenido_riesgo {
+	display: none;
+}
+
+.contenedor_riesgo:hover .contenido_riesgo {
+	display: block;
+}
+
+.dataTables_wrapper .dataTables_filter {
+	float: left;
+	text-align: right;
+	padding-top: 0.25em;
+}
+
+@media screen and (max-width: 500px) {
+	.navbar a {
+		float: none;
+		display: block;
+	}
+}
+
+#modal_add_equipo_especificacion .contenedor_archivo {
+	display: none;
+}

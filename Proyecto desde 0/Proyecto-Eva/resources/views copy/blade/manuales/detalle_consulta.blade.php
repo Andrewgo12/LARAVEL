@@ -1,0 +1,20 @@
+<table class="table table-bordered datatable-manuales">
+	<thead>
+		<tr>
+			<th>Id</th>
+			<th>Descripción del manual</th>
+			<th>Url</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach($manuales_activos as $manual)
+			<tr>
+				<td>{{ $manual->id }}</td>
+				<td>{{ $manual->descripcion }}</td>
+				<td><a target="_blank" href="{{ $manual->url }}" class="fa fa-external-link-square btn btn-link"></a></td>
+				<td><a class="btn btn-success" onclick="asociar_manual({{ $manual->id }},event)"><i class="glyphicon glyphicon-ok"></i></a></td>
+			</tr>
+		@endforeach
+	</tbody>
+</table>

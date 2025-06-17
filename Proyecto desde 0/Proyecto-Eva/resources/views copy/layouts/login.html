@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>ElectromedicinaHuv | Ingreso</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  
+  <!-- base_url() = http://localhost/ventas_ci/-->
+
+  <!-- Bootstrap 3.3.7 -->
+  <link rel="stylesheet" href="<?php echo base_url();?>assets/template/bootstrap/css/bootstrap.min.css?n=<?=time();?>">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="<?php echo base_url();?>assets/template/font-awesome/css/font-awesome.min.css?n=<?=time();?>">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="<?php echo base_url();?>assets/template/dist/css/AdminLTE.min.css?n=<?=time();?>">
+  <!-- Select2. -->
+  <link rel="stylesheet" href="<?php echo base_url();?>assets/template/select2/dist/css/select2.min.css?n=<?=time();?>">  
+
+
+  <link rel="icon" type="image/png" href="<?php echo base_url();?>assets/template/login_css/favicon.ico"/>
+  <link rel="stylesheet" type="text/css" href="<?php echo base_url();?>assets/template/login_css/material-design-iconic-font.min.css?n=<?=time();?>">
+  <link rel="stylesheet" type="text/css" href="<?php echo base_url();?>assets/template/login_css/animate.css?n=<?=time();?>">
+  <link rel="stylesheet" type="text/css" href="<?php echo base_url();?>assets/template/login_css/hamburgers.min.css?n=<?=time();?>">
+  <link rel="stylesheet" type="text/css" href="<?php echo base_url();?>assets/template/login_css/animsition.min.css?n=<?=time();?>">
+  <link rel="stylesheet" type="text/css" href="<?php echo base_url();?>assets/template/login_css/daterangepicker.css?n=<?=time();?>">
+  <link rel="stylesheet" type="text/css" href="<?php echo base_url();?>assets/template/login_css/util.css?n=<?=time();?>">
+  <link rel="stylesheet" type="text/css" href="<?php echo base_url();?>assets/template/login_css/main.css?n=<?=time();?>">
+  <link rel="stylesheet" type="text/css" href="<?php echo base_url();?>assets/template/propio/propio.css?n=<?=time();?>">
+
+</head>
+<body class="hold-transition login-page" style="background-image: url(<?php echo base_url('assets/template/fondo.jpg');?>)">
+  <div class="login-box">
+
+    
+
+    <div class="limiter col-sm-offset-3" >
+      <div class="container-login100" >
+        <div class="wrap-login100 p-t-85 p-b-20">
+          <?php if ($this->session->flashdata('error')): ?>
+            <div class="alert">
+              <p style="font-color: white;"><?php echo $this->session->flashdata('error'); ?></p>
+            </div>
+
+          <?php endif ?>
+
+          <form action="<?=base_url();?>Cauth/login" method="post" class="login100-form validate-form">
+            <span class="login100-form-title p-b-70">
+              Bienvenido
+            </span>
+            <span class="login100-form-avatar">
+            <img src="<?=base_url();?>assets/template/login_css/Hospital.jpg" alt="HUV">
+            </span>
+
+            <div class="wrap-input100 validate-input m-t-85 m-b-35" data-validate = "Ingrese Nombre de usuario">
+              <input class="input100" type="text" name="username">
+              <span class="focus-input100" data-placeholder="Username"></span>
+            </div>
+
+            <div class="wrap-input100 validate-input m-b-50" data-validate="Ingrese contraseña">
+              <input class="input100" type="password" name="password">
+              <span class="focus-input100" data-placeholder="Password"></span>
+            </div>
+
+            <div class="container-login100-form-btn">
+              <button class="login100-form-btn">
+                Login
+              </button>
+            </div>
+
+            <ul class="login-more p-t-190">
+
+              <li>
+                <span class="txt1">
+                  No tienes una cuenta?
+                </span>
+                <button onclick="detener_submit(event)" data-toggle="modal" data-target="#modal_reg_usuario" type="submit" class="txt2">Registrarse</button>
+
+              </li>
+            </ul>
+          </form>
+        </div>
+      </div>
+    </div>
+
+
+    <div id="dropDownSelect1"></div>
+  </div>
+  <!-- /.login-box -->
+
+  <!-- jQuery 3 -->
+  <script src="<?php echo base_url();?>assets/template/jquery/jquery.min.js?n=<?=time();?>"></script>
+  <!-- Bootstrap 3.3.7 -->
+  <script src="<?php echo base_url();?>assets/template/bootstrap/js/bootstrap.min.js?n=<?=time();?>"></script>
+  <!-- Bootstrap Select 2  -->
+  <script src="<?php echo base_url();?>assets/template/select2/dist/js/select2.min.js?n=<?=time();?>"></script>
+  <!-- javascript Modal -->
+  <script src="<?php echo base_url();?>js/Register.js?n=<?=time();?>"></script>
+
+  <script src="<?php echo base_url();?>assets/template/login_js/animsition.min.js?n=<?=time();?>"></script>
+  <script src="<?php echo base_url();?>assets/template/login_js/popper.js?n=<?=time();?>"></script>
+  <script src="<?php echo base_url();?>assets/template/login_js/moment.min.js?n=<?=time();?>"></script>
+  <script src="<?php echo base_url();?>assets/template/login_js/daterangepicker.js?n=<?=time();?>"></script>
+  <script src="<?php echo base_url();?>assets/template/login_js/countdowntime.js?n=<?=time();?>"></script>
+  <script src="<?php echo base_url();?>assets/template/login_js/main.js?n=<?=time();?>"></script>
+
+
+</body>
+</html>
+

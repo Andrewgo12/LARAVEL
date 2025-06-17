@@ -1,0 +1,1 @@
+$status = $app->handleCommand(new ArgvInput());
