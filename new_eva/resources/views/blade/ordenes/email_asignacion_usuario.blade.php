@@ -5,7 +5,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 </head>
 <body style="margin: 0; padding: 0;">
-	<table border="0" cellpadding="0" cellspacing="0" width="100%"> 
+	<table border="0" cellpadding="0" cellspacing="0" width="100%">
 		<tr>
 			<td style="padding: 10px 0 30px 0;">
 				<table align="center" border="0" cellpadding="0" cellspacing="0" width="600" style="border: 1px solid #cccccc; border-collapse: collapse;">
@@ -35,11 +35,11 @@
 										</blockquote>
 										<blockquote>
 											<h4>Ubicación de referencia</h4>
-											<p><?php echo $orden->servicio; ?></p>
-											@if($orden->area!=""&&$orden->area!="null")
-												<footer style="font-size: 10px;"><strong>Area</strong>: <?php echo $orden->area; ?></footer>
-											<?php endif ?>
-										</blockquote>										
+											<p>{{ $orden->servicio }}</p>
+											@if($orden->area != "" && $orden->area != "null")
+												<footer style="font-size: 10px;"><strong>Área</strong>: {{ $orden->area }}</footer>
+											@endif
+										</blockquote>
 										<blockquote>
 											<h4>Informacion del equipo</h4>
 										</blockquote>
@@ -68,19 +68,19 @@
 
 											@if($orden->nombre_reportante!=""&&$orden->nombre_reportante!=NULL)
 											<h4>Información del solicitante</h4>
-											</blockquote>											
+											</blockquote>
 											<ul>
 												<li><strong>Nombre</strong>: <?php echo   $orden->nombre_reportante?> </li>
 												<li><strong>Centro de costo</strong>: <?php echo $orden->centro_costo_reportante;?></li>
-											</ul>		
+											</ul>
 											@else
 
 											<ul>
 												<li><strong>Nombre</strong>: <?php echo   $reportante->nombre;?> </li>
 												<li><strong>Apellido</strong>: <?php echo $reportante->apellido;?></li>
 												<li><strong>Telefono</strong>: <?php echo $reportante->telefono;?></li>
-											</ul>											
-																					
+											</ul>
+
 											<?php endif ?>
 
 											<h4>Asignado a la empresa:</h4><?php echo $empresa[0]->name; ?>
@@ -88,7 +88,7 @@
 											<ul>
 												<li><strong>Nombre</strong>: <?php echo   $asignado->nombre;?> </li>
 												<li><strong>Apellido</strong>: <?php echo $asignado->apellido;?></li>
-												<li><strong>Telefono</strong>: <?php echo $asignado->telefono;?></li>												
+												<li><strong>Telefono</strong>: <?php echo $asignado->telefono;?></li>
 											</ul>
 
 

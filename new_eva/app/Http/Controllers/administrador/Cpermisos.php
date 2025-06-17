@@ -1,87 +1,152 @@
 <?php
 
-defined('BASEPATH') or exit('El acceso directo no esta permitido');
 
 /**
- *
+ * Controlador Cpermisos - Sistema HUV
+ * Gestiona las funcionalidades del módulo correspondiente
  */
-class Cpermisos extends CI_Controller
+class Cpermisos extends Controller
 {
-  private $permisos;
-  function __construct()
-  {
-    parent::__construct();
-    $this->load->model('Mpermisos');
-    $this->load->model('Musuarios');
-    $this->permisos = $this->backend_lib->control();
-  }
-  public function index()
-  {
+    /**
+     * Permisos del controlador
+     */
+    protected $permisos = [];
 
-    if ($this->session->userdata('login')) {
-    } else {
-      redirect(base_url('Cauth'));
+    /**
+     * Constructor del controlador
+     */
+    public function __construct()
+    {
+        $this->permisos = Session::get('permisos', []);
     }
-    $permisos = $this->Mpermisos->get();
-    $param = array(
-      'permisos_listado' => $permisos
-    );
-    $this->load->view('layouts/header');
-    $this->load->view('layouts/aside');
-    $this->load->view('permisos/list', $param);
-    $this->load->view('layouts/footer');
-  }
-  public function add()
-  { // Este add no almacena directamente, lo que hace es llamar un formulario
-    $param = array(
-      'roles' => $this->Musuarios->getRoles(),
-      'menus' => $this->Mpermisos->getMenus()
 
-    );
+    /**
+namespace App\Http\Controllers\Administrador;
 
-    $this->load->view('layouts/header');
-    $this->load->view('layouts/aside');
-    $this->load->view('permisos/add', $param);
-    $this->load->view('layouts/footer');
-  }
-  public function save()
-  {
-    if ($this->Mpermisos->save($_POST)) {
-      redirect(base_url() . "administrador/Cpermisos/add");
-    } else {
-      $this->session->set_flashdata("error", "No se pudo guardar la información");
-      redirect(base_url() . "administrador/Cpermisos");
-    }
-  }
-  public function edit($param)
-  {
-    $param = array(
-      'roles' => $this->Musuarios->getRoles(),
-      'menus' => $this->Mpermisos->getMenus(),
-      'permiso' => $this->Mpermisos->getOne($param)
-    );
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
+use App\Models\Mpermisos;
 
-    $this->load->view('layouts/header');
-    $this->load->view('layouts/aside');
-    $this->load->view('permisos/edit', $param);
-    $this->load->view('layouts/footer');
-  }
-  public function update()
-  {
-    unset($_POST["menu_id"]);
-    unset($_POST["rol_id"]);
-    print_r($_POST);
-    if ($this->Mpermisos->update($_POST)) {
-      redirect(base_url() . "administrador/Cpermisos/add");
-    } else {
-      $this->session->set_flashdata("error", "No se pudo guardar la información");
-      redirect(base_url() . "administrador/Cpermisos");
+/* Sistema HUV */
+    public function index()
+    {
+        if (!Session::get('login')) {
+            return redirect()->route('huv.login');
+        }
+
+        $data = [
+            'permisos' => $this->permisos,
+            'acciones' => Session::get('acciones', [])
+        ];
+
+        return view('laravel.permisos.list', $data);
     }
-  }
-  public function delete($param)
-  {
-    if (!$this->Mpermisos->delete($param)) {
-      redirect(base_url() . "administrador/Cpermisos");
+
+    /* Sistema HUV */
+    public function getServerSide(Request $request): JsonResponse
+    {
+        try {
+            $params = $request->all();
+            $result = Mpermisos::getServerSide($params);
+
+            $response = [
+                'draw' => intval($request->input('draw')),
+                'recordsTotal' => $result['num_filas'],
+                'recordsFiltered' => $result['num_filas'],
+                'data' => $result['datos']
+            ];
+
+            return response()->json($response);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en servidor: ' . $e->getMessage()], 500);
+        }
     }
-  }
+
+    /* Sistema HUV */
+    public function getOne(Request $request): JsonResponse
+    {
+        try {
+            $id = $request->input('id');
+            $item = Mpermisos::getOne($id);
+            return response()->json($item, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al obtener registro: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function add(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $data['created_at'] = now();
+            $data['usuario_id'] = Session::get('id');
+
+            $result = Mpermisos::add($data);
+
+            if ($result) {
+                return response()->json(['success' => true, 'message' => 'Registro agregado exitosamente'], 201);
+            } else {
+                return response()->json(['error' => 'No se pudo agregar el registro'], 500);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al agregar: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function update(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $data['updated_at'] = now();
+
+            $result = Mpermisos::edit($data);
+
+            if ($result) {
+                return response()->json(['success' => true, 'message' => 'Registro actualizado exitosamente'], 200);
+            } else {
+                return response()->json(['error' => 'No se pudo actualizar el registro'], 500);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al actualizar: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function delete(Request $request): JsonResponse
+    {
+        try {
+            $id = $request->input('id');
+            $result = Mpermisos::remove($id);
+
+            if ($result) {
+                return response()->json(['success' => true, 'message' => 'Registro eliminado exitosamente'], 200);
+            } else {
+                return response()->json(['error' => 'No se pudo eliminar el registro'], 500);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al eliminar: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function getMenus(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $result = Mpermisos::getMenus($data);
+
+            return response()->json($result, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en getMenus: ' . $e->getMessage()], 500);
+        }
+    }
+
+}
+
 }

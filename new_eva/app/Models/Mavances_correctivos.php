@@ -1,47 +1,46 @@
-<?php 
+<?php
 
-defined ('BASEPATH') OR exit('El acceso directo no esta permitido');
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\DB;
+
 /**
-* 
-*/
-class Mavances_correctivos extends CI_Model
+ * Mavances_correctivos - Sistema HUV (Convertido automáticamente)
+ */
+class Mavances_correctivos extends Model
 {
-	
-	function __construct()
-	{
-		parent::__construct();
+    use HasFactory;
 
-	}
-	public function add($param){
-		return $this->db->insert("avances_correctivos",$param);
+    protected $table = 'avances_correctivos';
+    protected $fillable = [];
 
-	}
-	public function get(){
-	}
-	public function GetByDevice($param){
-		$this->db->select("avances_correctivos.*,usuarios.nombre as usuario");
-		$this->db->from("avances_correctivos");
-		$this->db->join("usuarios","usuarios.id=avances_correctivos.usuario_id","left");
-		$this->db->where("avances_correctivos.correctivo_general_id",$param['correctivo_general_id']);
-		$this->db->order_by("date","desc");
-		return $this->db->get()->result();
+    // Métodos básicos
+    public static function getAll()
+    {
+        return self::all();
+    }
 
-	}
-	public function GetByOrden($param){
-		$this->db->select("avances_correctivos.*,usuarios.nombre as usuario");
-		$this->db->from("avances_correctivos");
-		$this->db->join("usuarios","usuarios.id=avances_correctivos.usuario_id","left");
-		$this->db->where("avances_correctivos.orden_id",$param['orden_id']);
-		$this->db->order_by("date","desc");
-		return $this->db->get()->result();
+    public static function getOne($id)
+    {
+        return self::find($id);
+    }
 
-	}
-	public function delete($param){
-		$this->db->where("id",$param["id"]);
-		return $this->db->delete("avances_correctivos");
+    public static function add($data)
+    {
+        return self::create($data);
+    }
 
-	}
+    public static function edit($data)
+    {
+        $id = $data['id'];
+        unset($data['id']);
+        return self::where('id', $id)->update($data);
+    }
 
+    public static function remove($id)
+    {
+        return self::destroy($id);
+    }
 }
-
-?>

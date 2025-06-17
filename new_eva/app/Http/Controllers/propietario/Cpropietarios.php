@@ -1,134 +1,152 @@
 <?php
-defined('BASEPATH') or exit('El acceso directo no esta permitido');
+
 
 /**
- *
+ * Controlador Cpropietarios - Sistema HUV
+ * Gestiona las funcionalidades del módulo correspondiente
  */
-class Cpropietarios extends CI_Controller
+class Cpropietarios extends Controller
 {
-  function __construct()
-  {
-    parent::__construct();
-    $this->load->model('Mpropietarios');
-  }
-  public function index()
-  {
-    if ($this->session->userdata('login')) {
-    } else {
-      redirect(base_url('Cauth'));
+    /**
+     * Permisos del controlador
+     */
+    protected $permisos = [];
+
+    /**
+     * Constructor del controlador
+     */
+    public function __construct()
+    {
+        $this->permisos = Session::get('permisos', []);
     }
-    $acciones = $this->session->userdata("acciones");
-    $this->session->set_userdata('controlador', $this->uri->segment(2));
-    foreach ($acciones as $accion) {
-      if ($accion->modulo == "propietarios") {
-        if ($accion->leer != 1) {
-          redirect(base_url('Forbidden'));
+
+    /**
+namespace App\Http\Controllers\Propietario;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
+use App\Models\Mpropietarios;
+
+/* Sistema HUV */
+    public function index()
+    {
+        if (!Session::get('login')) {
+            return redirect()->route('huv.login');
         }
-      }
+
+        $data = [
+            'permisos' => $this->permisos,
+            'acciones' => Session::get('acciones', [])
+        ];
+
+        return view('laravel.propietarios.list', $data);
     }
 
-    $data = array(
-      "propietarios" => $this->Mpropietarios->getAll()
-    );
-    $this->load->view("layouts/header");
-    $this->load->view("layouts/aside");
-    $this->load->view("propietarios/list", $data);
-    $this->load->view("propietarios/modal_edit");
-    $this->load->view("propietarios/modal_add");
-    $this->load->view("layouts/footer");
-  }
-  public function getAll()
-  {
-    echo json_encode($this->Mpropietarios->getAll());
-  }
-  public function getOne()
-  {
-    echo json_encode($this->Mpropietarios->getOne($_POST));
-  }
-  public function add()
-  {
+    /* Sistema HUV */
+    public function getServerSide(Request $request): JsonResponse
+    {
+        try {
+            $params = $request->all();
+            $result = Mpropietarios::getServerSide($params);
 
-    $this->form_validation->set_rules("nombre", "Nombre del propietario", "is_unique[propietarios.nombre]|required|min_length[4]");
-    if ($this->form_validation->run()) {
-      $config['upload_path'] = "./assets/upload_imagenes"; //Evaluacion del archivo
-      $config['allowed_types'] = 'gif|jpg|png';
-      $config['encrypt_name'] = TRUE;
-      $this->load->library('upload', $config, 'uploadImage');
-      $this->uploadImage->initialize($config);
+            $response = [
+                'draw' => intval($request->input('draw')),
+                'recordsTotal' => $result['num_filas'],
+                'recordsFiltered' => $result['num_filas'],
+                'data' => $result['datos']
+            ];
 
-      if (!empty($_FILES["logo"]["name"])) {
-        $this->uploadImage->do_upload("logo"); //
-        $data = "";
-        $data = $this->uploadImage->data();
-        $_POST["logo"] = $data["file_name"];
-      }
-      if ($this->Mpropietarios->add($_POST)) {
-      } else {
-        if (isset($_POST["logo"])) {
-          $this->load->helper("file");
-          unlink("./assets/upload_imagenes/" . $_POST["logo"]);
+            return response()->json($response);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en servidor: ' . $e->getMessage()], 500);
         }
-      }
-      $vector_respuesta = array(
-        "caso" => 1
-      );
-    } else {
-      $informacion_error = validation_errors();
-      $vector_respuesta = array(
-        "caso" => 2,
-        "informacion_error" => $informacion_error
-      );
-    }
-    echo json_encode($vector_respuesta);
-  }
-  public function update()
-  {
-
-    if ($this->Mpropietarios->getOne($_POST)->nombre == $_POST["nombre"]) {
-      $this->form_validation->set_rules("nombre", "Nombre del propietario", "required|min_length[4]");
-    } else {
-      $this->form_validation->set_rules("nombre", "Nombre del propietario", "is_unique[propietarios.nombre]|required|min_length[4]");
     }
 
-    if ($this->form_validation->run()) {
-      $config['upload_path'] = "./assets/upload_imagenes"; //Evaluacion del archivo
-      $config['allowed_types'] = 'gif|jpg|png';
-      $config['encrypt_name'] = TRUE;
-      $this->load->library('upload', $config, 'uploadImage');
-      $this->uploadImage->initialize($config);
-
-      if (!empty($_FILES["logo"]["name"])) {
-        $this->uploadImage->do_upload("logo"); //Esto sube el excel en la carpeta
-        $data = "";
-        $data = $this->uploadImage->data();
-        $_POST["logo"] = $data["file_name"];
-      }
-      if ($this->Mpropietarios->update($_POST)) {
-      } else {
-        if (isset($_POST["logo"])) {
-          $this->load->helper("file");
-          unlink("./assets/upload_imagenes/" . $_POST["logo"]);
+    /* Sistema HUV */
+    public function getOne(Request $request): JsonResponse
+    {
+        try {
+            $id = $request->input('id');
+            $item = Mpropietarios::getOne($id);
+            return response()->json($item, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al obtener registro: ' . $e->getMessage()], 500);
         }
-      }
-      $vector_respuesta = array(
-        "caso" => 1
-      );
-    } else {
-      $informacion_error = validation_errors();
-      $vector_respuesta = array(
-
-        "caso" => 2,
-        "informacion_error" => $informacion_error
-      );
     }
-    echo json_encode($vector_respuesta);
-  }
-  public function delete()
-  {
-    // $this->Minvimas->delete($_POST);
-  }
-  public function activate()
-  {
-    // $this->Minvimas->activate($_POST);
-  }
+
+    /* Sistema HUV */
+    public function add(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $data['created_at'] = now();
+            $data['usuario_id'] = Session::get('id');
+
+            $result = Mpropietarios::add($data);
+
+            if ($result) {
+                return response()->json(['success' => true, 'message' => 'Registro agregado exitosamente'], 201);
+            } else {
+                return response()->json(['error' => 'No se pudo agregar el registro'], 500);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al agregar: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function update(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $data['updated_at'] = now();
+
+            $result = Mpropietarios::edit($data);
+
+            if ($result) {
+                return response()->json(['success' => true, 'message' => 'Registro actualizado exitosamente'], 200);
+            } else {
+                return response()->json(['error' => 'No se pudo actualizar el registro'], 500);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al actualizar: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function delete(Request $request): JsonResponse
+    {
+        try {
+            $id = $request->input('id');
+            $result = Mpropietarios::remove($id);
+
+            if ($result) {
+                return response()->json(['success' => true, 'message' => 'Registro eliminado exitosamente'], 200);
+            } else {
+                return response()->json(['error' => 'No se pudo eliminar el registro'], 500);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al eliminar: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function getAll(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $result = Mpropietarios::getAll($data);
+
+            return response()->json($result, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en getAll: ' . $e->getMessage()], 500);
+        }
+    }
+
+}
+
 }

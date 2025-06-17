@@ -1,34 +1,33 @@
     <!-- ./wrapper -->
     <!-- jQuery 3 -->
-    <!-- <script src="https://code.jquery.com/jquery-3.4.0.min.js?n=<?= time(); ?>"></script> -->
-    <script src="{{ asset('') }}assets/template/jquery/jquery.min.js?n=<?= time(); ?>"></script>
+    <script src="{{ asset('assets/template/jquery/jquery.min.js') }}?v={{ time() }}"></script>
     <!-- jQuery UI -->
-    <script src="{{ asset('') }}assets/template/jquery-ui/jquery-ui.min.js?n=<?= time(); ?>"></script>
+    <script src="{{ asset('assets/template/jquery-ui/jquery-ui.min.js') }}?v={{ time() }}"></script>
     <!-- Bootstrap 3.3.7 -->
-    <script src="{{ asset('') }}assets/template/bootstrap/js/bootstrap.min.js?n=<?= time(); ?>"></script>
+    <script src="{{ asset('assets/template/bootstrap/js/bootstrap.min.js') }}?v={{ time() }}"></script>
     <!-- SlimScroll -->
-    <script src="{{ asset('') }}assets/template/jquery-slimscroll/jquery.slimscroll.min.js?n=<?= time(); ?>"></script>
+    <script src="{{ asset('assets/template/jquery-slimscroll/jquery.slimscroll.min.js') }}?v={{ time() }}"></script>
     <!-- FastClick -->
-    <script src="{{ asset('') }}assets/template/fastclick/lib/fastclick.js?n=<?= time(); ?>"></script>
+    <script src="{{ asset('assets/template/fastclick/lib/fastclick.js') }}?v={{ time() }}"></script>
     <!-- AdminLTE App -->
-    <script src="{{ asset('') }}assets/template/dist/js/adminlte.min.js?n=<?= time(); ?>"></script>
+    <script src="{{ asset('assets/template/dist/js/adminlte.min.js') }}?v={{ time() }}"></script>
     <!-- AdminLTE for demo purposes -->
-    <script src="{{ asset('') }}assets/template/dist/js/demo.js?n=<?= time(); ?>"></script>
+    <script src="{{ asset('assets/template/dist/js/demo.js') }}?v={{ time() }}"></script>
     <!-- Datatables  -->
-    <script src="{{ asset('') }}assets/template/datatables.net/js/jquery.dataTables.min.js?n=<?= time(); ?>"></script>
-    <script src="{{ asset('') }}assets/template/datatables.net/js/dataTables.responsive.min.js?n=<?= time(); ?>"></script>
-    <script src="{{ asset('') }}assets/template/datatables.net-bs/js/dataTables.bootstrap.min.js?n=<?= time(); ?>"></script>
+    <script src="{{ asset('assets/template/datatables.net/js/jquery.dataTables.min.js') }}?v={{ time() }}"></script>
+    <script src="{{ asset('assets/template/datatables.net/js/dataTables.responsive.min.js') }}?v={{ time() }}"></script>
+    <script src="{{ asset('assets/template/datatables.net-bs/js/dataTables.bootstrap.min.js') }}?v={{ time() }}"></script>
     <!-- Bootstrap notify-Jgrowl  -->
-    <script src="{{ asset('') }}assets/template/bootstrap/js/bootstrap-notify.min.js?n=<?= time(); ?>"></script>
+    <script src="{{ asset('assets/template/bootstrap/js/bootstrap-notify.min.js') }}?v={{ time() }}"></script>
     <!-- Bootstrap Select 2  -->
-    <script src="{{ asset('') }}assets/template/select2/dist/js/select2.min.js?n=<?= time(); ?>"></script>
+    <script src="{{ asset('assets/template/select2/dist/js/select2.min.js') }}?v={{ time() }}"></script>
     <!-- Jquery-print  -->
-    <script src="{{ asset('') }}assets/template/jquery-print/jquery.print.js?n=<?= time(); ?>"></script>
+    <script src="{{ asset('assets/template/jquery-print/jquery.print.js') }}?v={{ time() }}"></script>
     <!-- Bootstrap-file  -->
-    <script src="{{ asset('') }}assets/template/bootstrap-file/js/fileinput.min.js?n=<?= time(); ?>"></script>
-    <script src="{{ asset('') }}assets/template/bootstrap-file/js/locales/es.js?n=<?= time(); ?>"></script>
+    <script src="{{ asset('assets/template/bootstrap-file/js/fileinput.min.js') }}?v={{ time() }}"></script>
+    <script src="{{ asset('assets/template/bootstrap-file/js/locales/es.js') }}?v={{ time() }}"></script>
     <!--light box-->
-    <script src="{{ asset('') }}assets/template/lightbox2-master/dist/js/lightbox.min.js?n=<?= time(); ?>"></script>
+    <script src="{{ asset('assets/template/lightbox2-master/dist/js/lightbox.min.js') }}?v={{ time() }}"></script>
 
     <script>
         $(document).ready(function() {

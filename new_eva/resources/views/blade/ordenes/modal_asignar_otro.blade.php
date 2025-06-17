@@ -1,61 +1,86 @@
 <div id="modal_asignar_orden_otro" class="modal fade" role="dialog">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title">Actualizar....</h4>
-			</div>
-			<div class="modal-body">
-				<div class="row">
-					<div class="col-md-12">
-						<div class="box box-info">
-							<div class="box-header with-border">
-								<h3 class="box-title">orden
-								</h3>
-							</div>
+  <div class="modal-dialog">
+    <div class="modal-content">
 
-							<div class="box-body form-horizontal">
+      {{-- Encabezado del modal --}}
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Asignar orden de trabajo</h4>
+      </div>
 
-								<!--  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+      {{-- Cuerpo del modal --}}
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="box box-info">
 
-								<form action="{{ asset('') }}orden/Cordenes/update" id="form_asignacion_otro" name="form_asignacion_otro" enctype="multipart/form-data" method="post">
-      @csrf
-									<!-- id orden -->
-									<input type="hidden" id="id"  name="id">
-									<br><p></p>
-									<div class="row">
-										<div class="col-sm-6">
-												<label for="trabajo_id" class="">Asignar tipo de arreglo</label>
-												<br>
-												<div class="">
-													<select onchange="seleccionar_tecnicos()" style="width: 80%;" name="trabajo_id" id="trabajo_id" class="form-control trabajo_id" style="width:60%" required="">
-													</select>
-												</div>
-										</div>
-										<div class="col-sm-6">
-												<label for="tecnico_id" class="">Asignar responsable</label><br>
-												<div class="contenedor_hijo_asignacion">
-													<select style="width: 80%;" name="tecnico_id" id="tecnico_id" class="form-control tecnico_id" style="width:60%" required="">
-													</select>
-												</div>
-										</div>
-									</div>
-									<div class="box-footer">
-										<button class="btn btn-primary" id="btn_asignar_orden">Asignar</button>
-									</div>
-								</form>
-								<!--  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
-							</div>
-							<br>
-						</div>
-					</div>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-					<!-- <button type="button" class="btn btn-success" id="actualizar">Agregar</button> -->
-				</div>
+              <div class="box-header with-border">
+                <h3 class="box-title">Asignación de responsabilidad</h3>
+              </div>
 
-			</div>
-		</div>
-	</div>
-</div> 
+              <div class="box-body form-horizontal">
+
+                {{-- Formulario --}}
+                <form action="{{ url('orden/Cordenes/update') }}"
+                      id="form_asignacion_otro"
+                      name="form_asignacion_otro"
+                      method="POST"
+                      enctype="multipart/form-data">
+                  @csrf
+
+                  {{-- ID oculto --}}
+                  <input type="hidden" id="id" name="id">
+
+                  <div class="row">
+                    {{-- Tipo de trabajo --}}
+                    <div class="col-sm-6">
+                      <div class="form-group">
+                        <label for="trabajo_id">Tipo de arreglo</label>
+                        <select name="trabajo_id"
+                                id="trabajo_id"
+                                class="form-control trabajo_id"
+                                onchange="seleccionar_tecnicos()"
+                                required>
+                          {{-- Opciones se cargan dinámicamente --}}
+                        </select>
+                      </div>
+                    </div>
+
+                    {{-- Técnico responsable --}}
+                    <div class="col-sm-6">
+                      <div class="form-group">
+                        <label for="tecnico_id">Responsable técnico</label>
+                        <div class="contenedor_hijo_asignacion">
+                          <select name="tecnico_id"
+                                  id="tecnico_id"
+                                  class="form-control tecnico_id"
+                                  required>
+                            {{-- Opciones se cargan dinámicamente --}}
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {{-- Botón --}}
+                  <div class="box-footer">
+                    <button type="submit" class="btn btn-primary" id="btn_asignar_orden">Asignar</button>
+                  </div>
+
+                </form>
+
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {{-- Pie del modal --}}
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+      </div>
+
+    </div>
+  </div>
+</div>

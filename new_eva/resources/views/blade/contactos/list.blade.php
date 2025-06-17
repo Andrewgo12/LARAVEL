@@ -77,6 +77,6 @@
   </section>
 </div>
 <script>
-  var base_url = "<?= base_url(); ?>";
-  var controlador = "<?php echo {{ session('controlador') }}; ?>";
+  var base_url = "{{ url('/') }}/";
+  var controlador = "{{ session('controlador') }}";
 </script>

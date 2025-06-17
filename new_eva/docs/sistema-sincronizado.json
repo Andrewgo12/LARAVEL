@@ -1,0 +1,19 @@
+{
+    "sistema": "HUV - Hospital Management System",
+    "version": "2.0.0",
+    "framework": "Laravel 10+",
+    "controladores": 111,
+    "modelos": 111,
+    "rutas": 555,
+    "estado": "Sincronizado",
+    "fecha_sincronizacion": "2025-06-13 09:18:51",
+    "modulos": {
+        "administrador": "Gesti\u00f3n de usuarios y permisos",
+        "equipos": "Gesti\u00f3n de equipos biom\u00e9dicos",
+        "ordenes": "\u00d3rdenes de trabajo",
+        "mantenimientos": "Preventivos y correctivos",
+        "reportes": "Reportes y estad\u00edsticas",
+        "api": "Servicios web",
+        "mobile": "Aplicaci\u00f3n m\u00f3vil"
+    }
+}

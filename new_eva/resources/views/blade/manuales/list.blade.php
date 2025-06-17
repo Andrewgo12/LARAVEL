@@ -1,18 +1,18 @@
 <div class="content-wrapper">
   <section class="content-header">
-    <h3>Manuals</h3> <small>List</small>
+    <h3>Manuales</h3> <small>Listado</small>
   </section>
   <section class="content">
     <div class="container-fluid">
       <div class="card">
         <div class="card-body">
-          <?php if (!empty($manuales)) : ?>
+          @if (!empty($manuales))
             <div class="row">
               <div class="col-sm-12">
                 <div class="table-responsive">
                   <div class="custom-row">
                     <button data-toggle="modal" data-target="#modal_add_manual" type="button" class="custom-btn-figure">
-                      <li class="fa fa-plus"></li>
+                      <i class="fa fa-plus"></i>
                     </button>
                   </div>
                   <br>
@@ -20,32 +20,30 @@
                     <thead>
                       <tr>
                         <th>Id</th>
-                        <th>Descripcion</th>
-                        <th>url</th>
-                        <th></th>
+                        <th>Descripción</th>
+                        <th>URL</th>
+                        <th>Acciones</th>
                       </tr>
                     </thead>
                     <tbody>
+                      <!-- Los datos se cargan dinámicamente mediante JavaScript -->
                     </tbody>
                   </table>
                 </div>
               </div>
             </div>
           @else
-            <span style="font-size: 50px;">No existen registros!</span>
-          <?php endif ?>
-
+            <div class="alert alert-info text-center">
+              <h4><i class="icon fa fa-info"></i> No existen registros</h4>
+            </div>
+          @endif
         </div>
       </div>
     </div>
   </section>
-
-
-
-
 </div>
 <!-- /.content-wrapper -->
 <script>
-  var base_url = "<?= base_url(); ?>";
-  var controlador = "<?php echo {{ session('controlador') }}; ?>";
+  var base_url = "{{ url('/') }}/";
+  var controlador = "{{ session('controlador') }}";
 </script>

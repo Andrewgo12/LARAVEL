@@ -1,44 +1,46 @@
-<?php 
+<?php
 
-defined ('BASEPATH') OR exit('El acceso directo no esta permitido');
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\DB;
+
 /**
-* 
-*/
-class Mproveedores_mantenimiento extends CI_Model
+ * Mproveedores_mantenimiento - Sistema HUV (Convertido automáticamente)
+ */
+class Mproveedores_mantenimiento extends Model
 {
-	
-	function __construct()
-	{
-		parent::__construct();
+    use HasFactory;
 
-	}
-	public function get(){
-		// $this->db->select("*");
-		// $this->db->from("invimas");
-		// $this->db->where("status",1);
-		// $this->db->order_by("invima",'asc');
-		// return $this->db->get()->result();
-	}
-	public function getAll(){
-		$this->db->select("*");
-		$this->db->from("proveedores_mantenimiento pm");
-		$this->db->where("pm.status=1");
-		$this->db->order_by("pm.name","asc");
-		return $this->db->get()->result();
+    protected $table = 'proveedores_mantenimiento';
+    protected $fillable = [];
 
-	}
+    // Métodos básicos
+    public static function getAll()
+    {
+        return self::all();
+    }
 
-	public function getOne($param){
-		// $this->db->where("id",$param["id"]);
-		// return $this->db->get("invimas")->row();
-	}
-	public function delete($param){
-		// $this->db->where("id",$param["id"]);
-		// unset($param["id"]);
-		// $param["status"]=0;
-		// $this->db->update("invimas",$param);
-	}	
+    public static function getOne($id)
+    {
+        return self::find($id);
+    }
 
+    public static function add($data)
+    {
+        return self::create($data);
+    }
+
+    public static function edit($data)
+    {
+        $id = $data['id'];
+        unset($data['id']);
+        return self::where('id', $id)->update($data);
+    }
+
+    public static function remove($id)
+    {
+        return self::destroy($id);
+    }
 }
-
-?>

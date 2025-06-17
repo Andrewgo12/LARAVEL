@@ -1,43 +1,46 @@
-<?php 
+<?php
 
-defined ('BASEPATH') OR exit('El acceso directo no esta permitido');
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\DB;
+
 /**
-* 
-*/
-class Mpermisos extends CI_Model
+ * Mpermisos - Sistema HUV (Convertido automáticamente)
+ */
+class Mpermisos extends Model
 {
-	
-	function __construct()
-	{
-		parent::__construct();
-	}
-	public function get(){
-		$this->db->select("permisos.*,menus.nombre as menu,roles.nombre as rol");
-		$this->db->from("permisos");
-		$this->db->join("roles","permisos.rol_id=roles.id");
-		$this->db->join("menus","permisos.menu_id=menus.id");
-		return $this->db->get()->result();
-	}
-	public function getMenus(){
-		return $this->db->get("menus")->result();
-	}
-	public function save($param){
+    use HasFactory;
 
-		$this->db->insert("permisos",$param);
-	}
-	public function update($param){
-	    $this->db->where('id',$param['id']);
-	    unset($param["id"]);
-	    $this->db->update('permisos',$param);
-	}
-	public function getOne($param){
-		$this->db->where('id',$param);
-		return $this->db->get("permisos")->row();
-	}
-	public function delete($param){
-		$this->db->where("id",$param);
-		$this->db->delete("permisos");
-	}
+    protected $table = 'permisos';
+    protected $fillable = [];
+
+    // Métodos básicos
+    public static function getAll()
+    {
+        return self::all();
+    }
+
+    public static function getOne($id)
+    {
+        return self::find($id);
+    }
+
+    public static function add($data)
+    {
+        return self::create($data);
+    }
+
+    public static function edit($data)
+    {
+        $id = $data['id'];
+        unset($data['id']);
+        return self::where('id', $id)->update($data);
+    }
+
+    public static function remove($id)
+    {
+        return self::destroy($id);
+    }
 }
-
- ?>

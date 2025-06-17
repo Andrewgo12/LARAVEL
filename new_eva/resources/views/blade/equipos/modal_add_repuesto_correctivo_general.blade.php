@@ -94,13 +94,12 @@
 									<div class="col-sm-2">
 										<label for="fecha">Fecha de instalacion</label>
 									</div>
-									<?php
-									$fecha_superior = date("Y-m-d", strtotime(date("Y-m-d") . "+ 1 day"));
-									?>
+									@php
+										$fecha_superior = date("Y-m-d", strtotime(date("Y-m-d") . "+ 1 day"));
+									@endphp
 									<div class="col-sm-4">
 										<input type="date" name="fecha" id="fecha" required="" min="2015-01-01" max="{{ $fecha_superior }}">
 									</div>
-
 								</div>
 								<div class="row">
 									<div class="row">
@@ -125,7 +124,7 @@
 				</div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
 				<!-- <button type="button" class="btn btn-success" id="actualizar">Agregar</button> -->
 			</div>
 

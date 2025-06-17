@@ -1,73 +1,106 @@
 <?php
-// defined ('BASEPATH') OR exit('El acceso directo no esta permitido');
+
+namespace App\Http\Controllers\Aplicacion;
+
+use Illuminate\Support\Facades\Validator;
+
+use Illuminate\Support\Facades\Session;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
+use App\Models\Mequipos;
 
 /**
- * 
+ * API REST para equipos - Convertido a Laravel
  */
-require APPPATH . 'libraries/REST_Controller.php';
-
-class Requipos extends REST_Controller
+class Requipos extends Controller
 {
-  function __construct()
-  {
-    parent::__construct();
-    $this->load->model('Mequipos');
-  }
+    public function __construct()
+    {
+        // Constructor Laravel
+    }
 
-  public function comunicacion_get($id = 0)
-  {
-    header('Access-Control-Allow-Origin: *');
-    /*   
-        if($id!=0){
-            $data = $this->db->get_where("equipos", ['id' => $id])->row_array();
-        }else{
-            $data = $this->db->get("equipos")->result();
+    /**
+     * Obtener equipos (GET)
+     */
+    public function comunicacion(Request $request, $id = null): JsonResponse
+    {
+        try {
+            if ($id) {
+                $data = DB::table('equipos')->where('id', $id)->first();
+                if (!$data) {
+                    return response()->json(['error' => 'Equipo no encontrado'], 404);
+                }
+            } else {
+                $data = DB::select("
+                    SELECT
+                        e.name AS nombre,
+                        e.marca AS marca,
+                        e.modelo AS modelo,
+                        e.code AS codigo,
+                        e.serial AS serie,
+                        s.name AS servicio,
+                        sed.name AS sede,
+                        a.name AS area
+                    FROM
+                        equipos e
+                    LEFT JOIN servicios s ON s.id = e.servicio_id
+                    LEFT JOIN sedes sed ON sed.id = s.sede_id
+                    LEFT JOIN areas a ON e.area_id = a.id
+                    WHERE
+                        e.tipo_id = 1
+                ");
+            }
+
+            return response()->json($data, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al obtener equipos: ' . $e->getMessage()], 500);
         }
-        */
-    $query = "
-        SELECT
-            e.name AS nombre,
-            e.marca AS marca,
-            e.modelo AS modelo,
-            e.code AS codigo,
-            e.serial AS serie,
-            s.name AS servicio,
-            sed.name AS sede,
-            a.name AS area
-        FROM
-            equipos e
-        LEFT JOIN servicios s ON
-            s.id = e.servicio_id
-        LEFT JOIN sedes sed ON
-            sed.id = s.sede_id
-        LEFT JOIN areas a ON
-            e.area_id = a.id
-        WHERE
-            e.tipo_id = 1
-    ";
-    $datos = $this->db->query($query)->result();
+    }
 
-    $this->response($datos, REST_Controller::HTTP_OK);
-    //$this->response($data, REST_Controller::HTTP_OK);
-  }
-  public function comunicacion_post()
-  {
-    $input = $this->input->post();
-    $this->db->insert('equipos', $input);
+    /**
+     * Crear equipo (POST)
+     */
+    public function store(Request $request): JsonResponse
+    {
+        try {
+            $input = $request->all();
+            DB::table('equipos')->insert($input);
 
-    $this->response(['Pais insertado exitosamente.'], REST_Controller::HTTP_OK);
-  }
-  public function comunicacion_put($id)
-  {
-    $input = $this->put();
-    $this->db->update('equipos', $input, array('id' => $id));
+            return response()->json(['message' => 'Equipo insertado exitosamente'], 201);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al crear equipo: ' . $e->getMessage()], 500);
+        }
+    }
 
-    $this->response(['Pais actualizado exitosamente.'], REST_Controller::HTTP_OK);
-  }
-  public function comunicacion_delete($id)
-  {
-    $this->db->delete('equipos', array('id' => $id));
+    /**
+     * Actualizar equipo (PUT)
+     */
+    public function update(Request $request, $id): JsonResponse
+    {
+        try {
+            $input = $request->all();
+            DB::table('equipos')->where('id', $id)->update($input);
 
-    $this->response(['pais eliminado exitosamente.'], REST_Controller::HTTP_OK);
-  }
+            return response()->json(['message' => 'Equipo actualizado exitosamente'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al actualizar equipo: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /**
+     * Eliminar equipo (DELETE)
+     */
+    public function destroy($id): JsonResponse
+    {
+        try {
+            DB::table('equipos')->where('id', $id)->delete();
+
+            return response()->json(['message' => 'Equipo eliminado exitosamente'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al eliminar equipo: ' . $e->getMessage()], 500);
+        }
+    }
 }

@@ -1,26 +1,24 @@
 <?php
 
-defined('BASEPATH') or exit('El acceso directo no esta permitido');
+namespace App\Http\Controllers;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 /**
- * 
+ * Dashboard - Sistema HUV (Convertido automáticamente)
  */
-class Dashboard extends CI_Controller
+class Dashboard extends Controller
 {
-
-  function __construct()
-  {
-    parent::__construct();
-    if (!$this->session->userdata('id')) {
-      redirect('Cauth');
+    public function __construct()
+    {
+        // Constructor Laravel
     }
-  }
-  public function index()
-  {
 
-    $this->load->view("layouts/header");
-    $this->load->view("layouts/aside");
-    $this->load->view('admin/dashboard');
-    $this->load->view('layouts/footer');
-  }
+    public function index()
+    {
+        // Método index convertido
+        return view('laravel.dashboard');
+    }
 }

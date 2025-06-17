@@ -3,7 +3,7 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title">Viusalizar Hoja de Vida</h4>
+				<h4 class="modal-title">Visualizar Hoja de Vida</h4>
 			</div>
 			<div class="modal-body" style="height: 800px;">
 			<div class="row">
@@ -29,11 +29,11 @@
 				</div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
 				<!-- <button type="button" class="btn btn-success" id="actualizar">Agregar</button> -->
 			</div>
 
 		</div>
 	</div>
 </div>
-</div> 
+</div>

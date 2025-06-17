@@ -6,13 +6,12 @@
 				<h4 class="modal-title">Listado de registros activos</h4>
 			</div>
 			<div class="modal-body">
-				<span style="font-size: 20px;font-weight: 700;">Cargando...
-				</span><p></p>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				</div>
-
+				<span style="font-size: 20px;font-weight: 700;">Cargando <span class="fa fa-refresh fa-spin"></span></span>
+				<p></p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
 			</div>
 		</div>
 	</div>
-</div> 
+</div>

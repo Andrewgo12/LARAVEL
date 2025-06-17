@@ -1,6 +1,5 @@
-
 <input type="hidden" name="invima_id" value="{{ $invima_id }}">
-<table border="1" class="table table-condensed invima-asociacion-especifico" >
+<table border="1" class="table table-condensed invima-asociacion-especifico">
   <thead>
     <tr>
       <th>Id</th>
@@ -8,24 +7,23 @@
       <th>Marca</th>
       <th>Modelo</th>
       <th>Codigo</th>
-      <th>Seried</th>
+      <th>Serie</th>
       <th></th>
     </tr>
   </thead>
   <tbody>
     @foreach($equipos as $equipo)
       <tr>
-        <td><?php echo $equipo->id; ?></td>
-        <td><?php echo $equipo->name; ?></td>
-        <td><?php echo $equipo->marca; ?></td>
-        <td><?php echo $equipo->modelo; ?></td>
-        <td><?php echo $equipo->code; ?></td>
-        <td><?php echo $equipo->serial; ?></td>
-        <td><input type="checkbox" name="seleccion[]" value="<?php echo $equipo->id; ?>"></td>
-        </tr>
-      <?php endforeach ?>
-    </tbody>
-  </table>
+        <td>{{ $equipo->id }}</td>
+        <td>{{ $equipo->name }}</td>
+        <td>{{ $equipo->marca }}</td>
+        <td>{{ $equipo->modelo }}</td>
+        <td>{{ $equipo->code }}</td>
+        <td>{{ $equipo->serial }}</td>
+        <td><input type="checkbox" name="seleccion[]" value="{{ $equipo->id }}"></td>
+      </tr>
+    @endforeach
+  </tbody>
+</table>
 
-  <button class="btn btn-default">Desvincular</button>
-
+<button type="submit" class="btn btn-primary">Desvincular</button>

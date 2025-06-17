@@ -1,49 +1,24 @@
-<?php 
-defined ('BASEPATH') OR exit('El acceso directo no esta permitido');
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 /**
-* 
-*/
-class Cproveedores_mantenimiento extends CI_Controller
+ * Cproveedores_mantenimiento - Sistema HUV (Convertido automáticamente)
+ */
+class Cproveedores_mantenimiento extends Controller
 {
-	function __construct()
-	{
-		parent::__construct();
-		$this->load->model('Mproveedores_mantenimiento');
-	}
-	public function index(){
-		if($this->session->userdata('login')){
+    public function __construct()
+    {
+        // Constructor Laravel
+    }
 
-		}else{
-			redirect(base_url('Cauth'));
-		}
-
-
-	}
-	public function get(){
-		// echo json_encode($this->Minvimas->get());
-	}
-	public function getAll(){
-		echo json_encode($this->Mproveedores_mantenimiento->getAll());
-	}
-	public function getOne(){
-		// echo json_encode($this->Minvimas->getOne($_POST));
-	}
-
-	public function add(){
-
-	}
-	public function update(){
-
-	}
-
-	public function delete(){
-		// $this->Minvimas->delete($_POST);
-	}
-
-	public function show(){
-
-	}
-
+    public function index()
+    {
+        // Método index convertido
+        return view('laravel.dashboard');
+    }
 }
-?>

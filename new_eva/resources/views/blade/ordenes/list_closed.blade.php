@@ -1,15 +1,20 @@
+@extends('layouts.app')
+
+@section('content')
 <div class="content-wrapper">
   <section class="content-header">
     <h3>Closed</h3> <small>List</small>
-    <input class="rol" type="hidden" value=<?= {{ session('rol_id') }} ?>>
-    <input class="usuario_id" type="hidden" value=<?= {{ session('id') }} ?>>
+    <input class="rol" type="hidden" value="{{ session('rol_id') }}">
+    <input class="usuario_id" type="hidden" value="{{ session('id') }}">
   </section>
+
   <section class="content">
     <div class="box box-solid orden_cerrada">
       <div class="box-body">
-        <div class="row">
-        </div>
+        <div class="row"></div>
+
         <hr>
+
         <div class="row">
           <div class="col-md-12 table-responsive">
             <div class="row">
@@ -24,6 +29,7 @@
                 </div>
               </div>
             </div>
+
             <table class="table table-info container-table" id="tblOrdenes">
               <thead>
                 <tr>
@@ -43,7 +49,10 @@
     </div>
   </section>
 </div>
+
 <script>
-  var base_url = "<?= base_url(); ?>";
-  var controlador = "<?php echo {{ session('controlador') }}; ?>";
+  const base_url = "{{ url('/') }}";
+  const controlador = "{{ session('controlador') }}";
 </script>
+@endsection
+

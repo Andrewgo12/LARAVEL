@@ -16,22 +16,21 @@
 		<tbody>
 			@foreach($calibraciones as $calibracion)
 				<tr>
-					<td><?php echo $calibracion->codigo; ?></td>
-					<td><?php echo $calibracion->fecha_ejecucion; ?></td>
-					<td><?php echo $calibracion->equipo; ?></td>
-					<td><?php echo $calibracion->marca; ?></td>
-					<td><?php echo $calibracion->modelo; ?></td>
-					<td><?php echo $calibracion->serial; ?></td>
-					<td><?php echo $calibracion->code; ?></td>
-					<td><?php echo $calibracion->ubicacion; ?></td>
-					@if($calibracion->archivo!=""&&$calibracion->archivo!=null)
-						<td><?php echo "<a target='__blank' class='glyphicon glyphicon-file' href='".base_url()."assets/upload_calibraciones/".$calibracion->archivo."'></a>"; ?></td>
+					<td>{{ $calibracion->codigo }}</td>
+					<td>{{ $calibracion->fecha_ejecucion }}</td>
+					<td>{{ $calibracion->equipo }}</td>
+					<td>{{ $calibracion->marca }}</td>
+					<td>{{ $calibracion->modelo }}</td>
+					<td>{{ $calibracion->serial }}</td>
+					<td>{{ $calibracion->code }}</td>
+					<td>{{ $calibracion->ubicacion }}</td>
+					@if($calibracion->archivo != "" && $calibracion->archivo != null)
+						<td><a target="__blank" class="glyphicon glyphicon-file" href="{{ asset('assets/upload_calibraciones/') }}/{{ $calibracion->archivo }}"></a></td>
 					@else
 						<td></td>
-					<?php endif ?>
-
+					@endif
 				</tr>
-			<?php endforeach ?>
+			@endforeach
 		</tbody>
 	</table>
 </div>

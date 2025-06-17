@@ -1,83 +1,46 @@
-<?php 
+<?php
 
-defined ('BASEPATH') OR exit('El acceso directo no esta permitido');
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\DB;
+
 /**
-* 
-*/
-class Mpropietarios extends CI_Model
+ * Mpropietarios - Sistema HUV (Convertido automáticamente)
+ */
+class Mpropietarios extends Model
 {
-	
-	function __construct()
-	{
-		parent::__construct();
+    use HasFactory;
 
-	}
-	public function get(){
-		$this->db->select("*");
-		$this->db->from("invimas");
-		$this->db->where("status",1);
-		$this->db->order_by("invima",'asc');
-		return $this->db->get()->result();
-	}
-	public function getAll(){
-		$this->db->select("*");
-		$this->db->from("propietarios p");
-		$this->db->order_by("p.nombre","asc");
-		return $this->db->get()->result();
-	}
-	public function getWithNumberDevices(){
-		$query="
-		SELECT
-		invimas.*,
-		(
-		SELECT COUNT(*)
-		FROM
-		equipos
-		WHERE
-		equipos.invima_id = invimas.id  
+    protected $table = 'propietarios';
+    protected $fillable = [];
 
+    // Métodos básicos
+    public static function getAll()
+    {
+        return self::all();
+    }
 
-		)as cuenta
+    public static function getOne($id)
+    {
+        return self::find($id);
+    }
 
-		FROM
-		invimas LEFT JOIN equipos on equipos.invima_id=invimas.id
-		WHERE invimas.id!=1
-		GROUP BY invimas.invima
-		";
-		return $this->db->query($query)->result();
-	}
-	public function getOne($param){
-		$this->db->where("id",$param["id"]);
-		return $this->db->get("propietarios")->row();
-	}
-	public function getdescriptionlike($param){
-		$query="select invima from invimas where description like '%".$param["consulta"]."%'";
-		return $this->db->query($query)->result();
-	}
-	public function add($param){
-		return($this->db->insert("propietarios",$param));
-	}
-	public function update($param){
-		$this->db->where("id",$param["id"]);
-		unset($param["id"]);
-		return($this->db->update("propietarios",$param));
-	}
-	public function delete($param){
-		$this->db->where("id",$param["id"]);
-		unset($param["id"]);
-		$param["status"]=0;
-		$this->db->update("invimas",$param);
-	}	
-	public function activate($param){
-		$this->db->where("id",$param["id"]);
-		unset($param["id"]);
-		$param["status"]=1;
-		$this->db->update("invimas",$param);
-	}	
-	// public function delete($param){
-	// 	$this->db->where("id",$param["id"]);
-	// 	$this->db->delete("invimas");
-	// }	
+    public static function add($data)
+    {
+        return self::create($data);
+    }
+
+    public static function edit($data)
+    {
+        $id = $data['id'];
+        unset($data['id']);
+        return self::where('id', $id)->update($data);
+    }
+
+    public static function remove($id)
+    {
+        return self::destroy($id);
+    }
 }
-
-?>

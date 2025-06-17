@@ -16,16 +16,19 @@
     <!-- jQuery UI 1.11.4 -->
     <script src="{{ asset('') }}assets/bower_components/jquery-ui/jquery-ui.min.js?n=<?= time(); ?>" type="text/javascript"></script>
     <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+    <script>
+      $.widget.bridge('uibutton', $.ui.button);
+    </script>
     <!-- Bootstrap 3.3.7 -->
     <script src="{{ asset('') }}assets/bower_components/bootstrap/dist/js/bootstrap.min.js?n=<?= time(); ?>" type="text/javascript"></script>
     <!-- Data Table -->
     <script src="{{ asset('') }}assets/bower_components/datatables.net/js/jquery.dataTables.min.js?n=<?= time(); ?>" type="text/javascript"></script>
     <script src="{{ asset('') }}assets/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js?n=<?= time(); ?>" type="text/javascript"></script>
-    <!-- Morris.js?n=<?= time(); ?>  charts -->
+    <!-- Morris.js charts -->
     <script src="{{ asset('') }}assets/bower_components/raphael/raphael.min.js?n=<?= time(); ?>" type="text/javascript"></script>
-    <script src="{{ asset('') }}assets/bower_components/morris.js?n=<?= time(); ?>/ morris.min.js?n=<?= time(); ?>" type="text/javascript"></script>
+    <script src="{{ asset('') }}assets/bower_components/morris.js/morris.min.js?n=<?= time(); ?>" type="text/javascript"></script>
     <!-- Sparkline -->
-    <script src="{{ asset('') }}assets/bower_components/jquery-sparkline/dist/jquery.sparkline.min.js?n=<?= time(); ?>" type="text/javascript"> </script>
+    <script src="{{ asset('') }}assets/bower_components/jquery-sparkline/dist/jquery.sparkline.min.js?n=<?= time(); ?>" type="text/javascript"></script>
     <!-- jvectormap -->
     <script src="{{ asset('') }}assets/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js?n=<?= time(); ?>" type="text/javascript"></script>
     <script src="{{ asset('') }}assets/plugins/jvectormap/jquery-jvectormap-world-mill-en.js?n=<?= time(); ?>" type="text/javascript"></script>
@@ -52,13 +55,9 @@
     <script src="{{ asset('') }}assets/plugins/select2/js/select2.min.js?n=<?= time(); ?>" type="text/javascript"></script>
 
     <script type="text/javascript" src="{{ asset('') }}js/equipos.js?n=<?= time(); ?>"></script>
-
     <script type="text/javascript" src="{{ asset('') }}js/Ordenes.js?n=<?= time(); ?>"></script>
-
     <script type="text/javascript" src="{{ asset('') }}js/Ordenes_active.js?n=<?= time(); ?>"></script>
-
     <script type="text/javascript" src="{{ asset('') }}js/Ordenes_closed.js?n=<?= time(); ?>"></script>
 
     </body>
-
     </html>

@@ -3,14 +3,15 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">×</span></button>
+          <span aria-hidden="true">×</span>
+        </button>
         <div class="modal-title text-center" style="background-color: #888888;color: white;font-family: 'calibri';font-size: 30px;"></div>
       </div>
       <div class="modal-body">
 
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-danger pull-left close" data-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cerrar</button>
       </div>
     </div>
   </div>

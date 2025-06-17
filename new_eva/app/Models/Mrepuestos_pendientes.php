@@ -1,40 +1,46 @@
 <?php
-defined('BASEPATH') or exit('El acceso directo no esta permitido');
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\DB;
+
 /**
- * 
+ * Mrepuestos_pendientes - Sistema HUV (Convertido automáticamente)
  */
-class Mrepuestos_pendientes extends CI_Model
+class Mrepuestos_pendientes extends Model
 {
-    function __construct()
+    use HasFactory;
+
+    protected $table = 'repuestos_pendientes';
+    protected $fillable = [];
+
+    // Métodos básicos
+    public static function getAll()
     {
-        defined('BASEPATH') or exit('El acceso directo no esta permitido');
-        parent::__construct();
-    }
-    public function getOne($param)
-    {
-        $this->db->where("id", $param["repuesto_pendiente_id"]);
-        return $this->db->get("repuestos_pendientes")->row();
-    }
-    public function getAll($param)
-    {
-        $this->db->where("correctivo_general_id", $param["correctivo_general_id"]);
-        $this->db->order_by("created_at", "asc");
-        return $this->db->get("repuestos_pendientes")->result();
+        return self::all();
     }
 
-    public function add($param)
+    public static function getOne($id)
     {
-        $this->db->insert("repuestos_pendientes", $param);
+        return self::find($id);
     }
-    public function update($param)
+
+    public static function add($data)
     {
+        return self::create($data);
     }
-    public function delete($param)
+
+    public static function edit($data)
     {
+        $id = $data['id'];
+        unset($data['id']);
+        return self::where('id', $id)->update($data);
     }
-    public function toggle_state_repuesto_pendiente($param)
+
+    public static function remove($id)
     {
-        $query = "UPDATE repuestos_pendientes SET status = status ^ 1 WHERE id = " . $param["repuesto_pendiente_id"];
-        return $this->db->query($query);
+        return self::destroy($id);
     }
 }

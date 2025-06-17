@@ -1,17 +1,24 @@
 <?php
-defined('BASEPATH') or exit('El acceso directo no esta permitido');
+
+namespace App\Http\Controllers;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
+
 /**
- *
+ * Ctrabajos - Sistema HUV (Convertido automáticamente)
  */
-class Ctrabajos extends CI_Controller
+class Ctrabajos extends Controller
 {
-  function __construct()
-  {
-    parent::__construct();
-    $this->load->model("Mtrabajos");
-  }
-  public function getAll()
-  {
-    echo json_encode($this->Mtrabajos->getAll());
-  }
+    public function __construct()
+    {
+        // Constructor Laravel
+    }
+
+    public function index()
+    {
+        // Método index convertido
+        return view('laravel.dashboard');
+    }
 }

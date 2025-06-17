@@ -6,7 +6,7 @@
           <span aria-hidden="true">×</span></button>
           <div class="modal-title text-center" style="background-color: #888888;color: white;font-family: 'calibri';font-size: 30px;"></div>
         </div>
-        <div class="modal-body impresion">        
+        <div class="modal-body impresion">
 
         </div>
         <div class="modal-footer">

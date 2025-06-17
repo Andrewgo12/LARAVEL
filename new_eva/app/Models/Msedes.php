@@ -1,36 +1,46 @@
 <?php
-defined('BASEPATH') or exit('El acceso directo no esta permitido');
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\DB;
+
 /**
- * 
+ * Msedes - Sistema HUV (Convertido automáticamente)
  */
-class Msedes extends CI_Model
+class Msedes extends Model
 {
+    use HasFactory;
 
-	function __construct()
-	{
-		defined('BASEPATH') or exit('El acceso directo no esta permitido');
-		parent::__construct();
-	}
+    protected $table = 'sedes';
+    protected $fillable = [];
 
-	/* Refactoring */
-	public function getOneService($id)
-	{
-		$this->db->select('sedes.*');
-		$this->db->from('sedes');
-		$this->db->where('sedes.id', $id);
-		return $this->db->get()->row();
-	}
-	public function getAllServices()
-	{
-		$this->db->select("sedes.*");
-		$this->db->from("sedes");
-		$this->db->order_by("name", "asc");
-		return $this->db->get()->result();
-	}
+    // Métodos básicos
+    public static function getAll()
+    {
+        return self::all();
+    }
 
-	public function getAll()
-	{
-		$this->db->order_by("name", "asc");
-		return $this->db->get("sedes")->result();
-	}
+    public static function getOne($id)
+    {
+        return self::find($id);
+    }
+
+    public static function add($data)
+    {
+        return self::create($data);
+    }
+
+    public static function edit($data)
+    {
+        $id = $data['id'];
+        unset($data['id']);
+        return self::where('id', $id)->update($data);
+    }
+
+    public static function remove($id)
+    {
+        return self::destroy($id);
+    }
 }

@@ -1,0 +1,11 @@
+{
+    "nombre": "Sistema HUV",
+    "version": "2.0.0",
+    "framework": "Laravel 10+",
+    "descripcion": "Sistema de Gesti\u00f3n Hospitalaria",
+    "controladores_objetivo": 256,
+    "modelos_objetivo": 256,
+    "vistas_objetivo": 256,
+    "estado": "En desarrollo",
+    "ultima_actualizacion": "2025-06-13 09:12:50"
+}

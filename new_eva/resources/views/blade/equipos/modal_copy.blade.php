@@ -10,34 +10,26 @@
 					<div class="col-md-12">
 						<div class="box box-info">
 							<div class="box-header with-border">
-								<h3 class="box-title">Equipo biomedico
-								</h3>
+								<h3 class="box-title">Equipo biomedico</h3>
 							</div>
 
 							<div class="box-body form-horizontal">
-
-								<!--  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
-
 								<form action="{{ asset('') }}equipo/Cequipos/add" id="form_equipo_copy" name="form_equipo_copy" enctype="multipart/form-data" method="post">
-      @csrf
-
-
+									@csrf
 									<input type="hidden" id="id" name="id" class="form-control">
 									<input type="hidden" id="tipo_id" name="tipo_id" class="form-control" value="{{ $tipo_id }}">
 									<br>
 									<div class="table-responsive">
-
 										<div class="tg-wrap">
 											<table class="tg">
 												<tr>
-													<th class="tg-5xx9" colspan="10">REGISTRO DE EQUIPOS <?php echo ($tipo_id == 1) ? "BIOMEDICOS" : "INDUSTRIALES"; ?> HOSPITAL UNIVERSITARIO DEL VALLE “EVARISTO GARCÍA”</th>
+													<th class="tg-5xx9" colspan="10">REGISTRO DE EQUIPOS {{ $tipo_id == 1 ? "BIOMEDICOS" : "INDUSTRIALES" }} HOSPITAL UNIVERSITARIO DEL VALLE "EVARISTO GARCÍA"</th>
 												</tr>
 												<tr>
 													<td class="tg-d4yz" colspan="10">IDENTIFICACIÓN DEL EQUIPO</td>
 												</tr>
 												<tr>
 													<td class="tg-g8x9">Nombre del equipo:</td>
-
 													<td class="tg-0pky text-center" colspan="4">
 														<input autocomplete="off" type="text" class="form-control" name="name" id="name" placeholder="Nombre" list="listadoNombresFromCopy">
 														<datalist id="listadoNombresFromCopy" class="datalistNombreEquipos"></datalist>
@@ -54,79 +46,57 @@
 													<td class="tg-ng7p" colspan="5" rowspan="9">
 														<img class="imagen_guardada" width="350px" height="280px" src="" alt="">
 														<input type="hidden" name="image" id="image">
-
-														<!--<input type="file" class="file"  id="image" name="image" onchange="return validacionImagen()" data-browse-on-zone-click="true">		-->
 													</td>
 												</tr>
 												<tr>
 													<td class="tg-g8x9">INV/Activo:</td>
 													<td class="tg-fymr" colspan="2">Antiguo:<input class="form-control" type="text" name="codigo_antiguo" id="codigo_antiguo" placeholder="Codigo antiguo"></td>
 													<td class="tg-fymr" colspan="2">Nuevo:<input type="text" class="form-control" placeholder="Codigo de inventario" name="code" id="code"></td>
-
 												</tr>
 												<tr>
 													<td class="tg-g8x9">Marca:</td>
-
-													<td class="tg-0pky" colspan="4"><input autocomplete="off" type="text" class="form-control input-sm" placeholder="Marca" name="marca" id="marca" list="listadoMarcasFromCopy">
+													<td class="tg-0pky" colspan="4">
+														<input autocomplete="off" type="text" class="form-control input-sm" placeholder="Marca" name="marca" id="marca" list="listadoMarcasFromCopy">
 														<datalist id="listadoMarcasFromCopy" class="datalistMarcaEquipos"></datalist>
-
 													</td>
 												</tr>
 												<tr>
 													<td class="tg-g8x9">Modelo:</td>
-													<td class="tg-0pky" colspan="4"><input autocomplete="off" type="text" class="form-control input-sm" placeholder="modelo" name="modelo" id="modelo" list="listadoModelosFromCopy">
+													<td class="tg-0pky" colspan="4">
+														<input autocomplete="off" type="text" class="form-control input-sm" placeholder="modelo" name="modelo" id="modelo" list="listadoModelosFromCopy">
 														<datalist id="listadoModelosFromCopy" class="datalistModeloEquipos"></datalist>
-
 													</td>
 												</tr>
 												<tr>
 													<td class="tg-g8x9">R.Invima:</td>
 													<td class="tg-0pky" colspan="4">
-
-														<!--
-													<input type="text" class="form-control" placeholder="Registro sanitario" name="invima" id="invima"><input type="file" name="archivo_invima" id="archivo_invima" onchange="return validacionArchivoPdf()">
-
-												-->
-														<div><span title="Agregar nuevo invima" class="glyphicon glyphicon-plus" style="font-size: 10px;font-weight: 900;" data-toggle="modal" data-target="#modal_add_invima"></span><select onchange="funcion_cambio_select_copy();" style="width:300px;" class="form-control select_especial" name="invima_id" id="invima_id"></select><span class="file_registro_sanitario"></span>
-
-															<!-- <button onclick="consultar_registro(event)" class="consultar glyphicon glyphicon-search"></button> -->
+														<div>
+															<span title="Agregar nuevo invima" class="glyphicon glyphicon-plus" style="font-size: 10px;font-weight: 900;" data-toggle="modal" data-target="#modal_add_invima"></span>
+															<select onchange="funcion_cambio_select_copy();" style="width:300px;" class="form-control select_especial" name="invima_id" id="invima_id"></select>
+															<span class="file_registro_sanitario"></span>
 															<a data-toggle="modal" data-target="#modal_consulta_invima" onclick="show_consulta_invima(event)" class="consultar btn btn-success glyphicon glyphicon-search"></a>
-
 														</div>
-
 													</td>
 												</tr>
 												<tr>
 													<td class="tg-g8x9">Ubicación:</td>
 													<td class="tg-0pky" colspan="4">
 														<label for="sede_id">Sede:</label>
-
 														<select required style="width: 70%;" class="form-control sede" id="sede_id" name="sede_id">
 															<option value="1">Sede principal</option>
 															<option value="1">Sede norte</option>
 														</select>
 														<label for="servicio_id">Servicio:</label>
-
-														<?php
-														foreach ($acciones as $accion) {
-															if ($accion->modulo == "servicios" && $accion->insertar == 1) {
-														?>
+														@foreach ($acciones as $accion)
+															@if($accion->modulo == "servicios" && $accion->insertar == 1)
 																<a style="font-size: 10px;font-weight: 900;color: black;" data-toggle='modal' data-target='#modal_add_servicio' class="glyphicon glyphicon-plus"></a>
-														<?php
-															}
-														}
-														?>
-														<select required="" class="form-control servicio_id" style="width:100%;" name="servicio_id" id="servicio_id">
-														</select>
+															@endif
+														@endforeach
+														<select required="" class="form-control servicio_id" style="width:100%;" name="servicio_id" id="servicio_id"></select>
 
 														<label for="area_id">Area:</label>
 														<a style="font-size: 10px;font-weight: 900;color: black;" data-toggle='modal' data-target='#modal_add_area' class="glyphicon glyphicon-plus"></a>
-														<select name="area_id" id="area_id" class="form-control area_id">
-
-														</select>
-
-
-
+														<select name="area_id" id="area_id" class="form-control area_id"></select>
 													</td>
 												</tr>
 												<tr>
@@ -157,18 +127,12 @@
 												<tr>
 													<td class="tg-0akb">Forma de adquisición:</td>
 													<td class="tg-0pky" colspan="3">
-
 														<select onchange="seleccion_contenedor_adquisicion_copy(event)" class="form-control tadquisicion_id" style="width: 90%;" name="tadquisicion_id" id="tadquisicion_id" required="">
 															<option value="">--SELECCIONE--</option>
 														</select>
 														<span class="contenedor_adquisicion_compra">
 															<span class="contenedor_orden_compra"></span>
 														</span>
-
-														<!-- 														<select class="form-control tadquisicion_id" style="width: 90%;" name="tadquisicion_id" id="tadquisicion_id" required="">
-															<option value="">--SELECCIONE--</option>
-														</select> -->
-
 													</td>
 													<td class="tg-0pky"><span style="font-weight:700">Garantia:</span></td>
 													<td class="tg-0akb" colspan="5"><select name="garantia" id="garantia" class="periodos_garantias form-control"></select></td>
@@ -179,21 +143,21 @@
 												</tr>
 												<tr>
 													<td class="tg-0akb">Fecha de adquisición:</td>
-													<td class="tg-0pky" colspan="2"><input type="date" min="1950-01-31" max="<?php echo date('Y-m-d'); ?>" class="form-control" name="fecha_ad" id="fecha_ad"></td>
+													<td class="tg-0pky" colspan="2"><input type="date" min="1950-01-31" max="{{ date('Y-m-d') }}" class="form-control" name="fecha_ad" id="fecha_ad"></td>
 													<td class="tg-pwly"><span style="font-weight:700">Fecha acta de recibo:</span></td>
-													<td class="tg-0pky" colspan="6"><input type="date" min="1950-01-31" max="<?php echo date('Y-m-d'); ?>" class="form-control" name="fecha_acta_recibo" id="fecha_acta_recibo"></td>
+													<td class="tg-0pky" colspan="6"><input type="date" min="1950-01-31" max="{{ date('Y-m-d') }}" class="form-control" name="fecha_acta_recibo" id="fecha_acta_recibo"></td>
 												</tr>
 												<tr>
 													<td class="tg-0akb">Fecha de instalación:</td>
-													<td class="tg-0pky" colspan="2"><input type="date" min="1950-01-31" max="<?php echo date('Y-m-d'); ?>" class="form-control" name="fecha_instalacion" id="fecha_instalacion"></td>
+													<td class="tg-0pky" colspan="2"><input type="date" min="1950-01-31" max="{{ date('Y-m-d') }}" class="form-control" name="fecha_instalacion" id="fecha_instalacion"></td>
 													<td class="tg-pwly"><span style="font-weight:700">Fecha de inicio operación:</span></td>
-													<td class="tg-0pky" colspan="6"><input type="date" min="1950-01-31" max="<?php echo date('Y-m-d'); ?>" class="form-control" name="fecha_inicio_operacion" id="fecha_inicio_operacion"></td>
+													<td class="tg-0pky" colspan="6"><input type="date" min="1950-01-31" max="{{ date('Y-m-d') }}" class="form-control" name="fecha_inicio_operacion" id="fecha_inicio_operacion"></td>
 												</tr>
 												<tr>
 													<td class="tg-0akb">Fecha recepción almacen:</td>
-													<td class="tg-0pky" colspan="2"><input type="date" min="1950-01-31" max="<?php echo date('Y-m-d'); ?>" class="form-control" name="fecha_recepcion_almacen" id="fecha_recepcion_almacen"></td>
+													<td class="tg-0pky" colspan="2"><input type="date" min="1950-01-31" max="{{ date('Y-m-d') }}" class="form-control" name="fecha_recepcion_almacen" id="fecha_recepcion_almacen"></td>
 													<td class="tg-pwly"><span style="font-weight:700">Fecha de fabricación:</span></td>
-													<td class="tg-0pky" colspan="6"><input type="date" min="1950-01-31" max="<?php echo date('Y-m-d'); ?>" class="form-control" name="fecha_fabricacion" id="fecha_fabricacion"></td>
+													<td class="tg-0pky" colspan="6"><input type="date" min="1950-01-31" max="{{ date('Y-m-d') }}" class="form-control" name="fecha_fabricacion" id="fecha_fabricacion"></td>
 												</tr>
 												<tr>
 													<td class="tg-0akb">Costo:</td>
@@ -213,10 +177,6 @@
 													<td class="tg-0pky" colspan="8"><select required="" class="form-control tecnologia_id" name="tecnologia_id" id="tecnologia_id"></select></td>
 												</tr>
 												<tr>
-												</tr>
-												<tr>
-												</tr>
-												<tr>
 													<td class="tg-0akb">Evaluación de desempeño:</td>
 													<td class="tg-0pky">
 														<select class="form-control" id="evaluacion_desempenio" name="evaluacion_desempenio">
@@ -224,7 +184,6 @@
 															<option value="SI">SI</option>
 															<option value="NO">NO</option>
 														</select>
-
 													</td>
 													<td class="tg-0akb">Se realiza calibración ?</td>
 													<td class="tg-0pky">
@@ -243,9 +202,7 @@
 													<td class="tg-0akb">Frecuencia de mantenimiento:</td>
 													<td class="tg-0pky" colspan="9"><select required="" class="form-control frecuencia_id" name="frecuencia_id" id="frecuencia_id"></select></td>
 												</tr>
-
 												<tr>
-
 													<td class="tg-0akb"><span style="font-weight: 900;">Estado actual del equipo</span>:</td>
 													<td class="tg-0pky" colspan="9">
 														<div class="row">
@@ -337,7 +294,7 @@
 														<td class="tg-0pky"><span style="font-weight:700">Clasificación de acuerdo al riesgo:</span></td>
 														<td class="tg-0pky" colspan="5"><select required="" class="form-control criesgo_id" name="criesgo_id" id="criesgo_id"></select></td>
 													</tr>
-												<?php endif ?>
+												@endif
 												<tr>
 													<td class="tg-hk8r" colspan="10">COMPONENTES</td>
 												</tr>
@@ -358,40 +315,30 @@
 												<tr>
 													<td class="tg-0akb">Propietario:</td>
 													<td class="tg-0pky" colspan="9">
-														<!-- 														<select required="" class="form-control" id="propiedad" name="propiedad">
-														<option value="">------Seleccione-------</option>
-														<option value="PROPIO">PROPIO</option>
-														<option value="UNIVALLE">UNIVALLE</option>
-														<option value="BAXTER">BAXTER</option>
-														<option value="DEPARTAMENTO">DEPARTAMENTO</option>
-														<option value="OTROS">OTROS</option> -->
 														<div class="row">
 															<div class="col-sm-11">
 																<select style="width: 100%" required="" name="propietario_id" id="propietario_id" class="propietario_id form-control"></select>
 															</div>
 															<div class="col-sm-1">
-																<?php
-																foreach ($acciones as $accion) {
-																	if ($accion->modulo == "propietarios" && $accion->insertar == 1) {
-																?>
-																		<span title="Agregar nuevo popietario" class="glyphicon glyphicon-plus" style="font-size: 10px;font-weight: 900;" data-toggle="modal" data-target="#modal_add_propietario"></span>
-																<?php
-																	}
-																}
-																?>
+																@foreach ($acciones as $accion)
+																	@if($accion->modulo == "propietarios" && $accion->insertar == 1)
+																		<span title="Agregar nuevo propietario" class="glyphicon glyphicon-plus" style="font-size: 10px;font-weight: 900;" data-toggle="modal" data-target="#modal_add_propietario"></span>
+																	@endif
+																@endforeach
 															</div>
 														</div>
-
 													</td>
 												</tr>
 												<tr>
 													<td class="tg-ppov"><span style="font-weight:bold">Verificacion fisica:</span></td>
-													<td class="tg-0lax" colspan="9"><select class="form-control" id="verificacion_inventario" name="verificacion_inventario">
+													<td class="tg-0lax" colspan="9">
+														<select class="form-control" id="verificacion_inventario" name="verificacion_inventario">
 															<option value="">--------</option>
 															<option value="NO">NO</option>
 															<option value="SI">SI</option>
 															<option value="NUEVO">NUEVO</option>
-														</select></td>
+														</select>
+													</td>
 												</tr>
 												<tr>
 													<td class="tg-gj0n" colspan="10">OBSERVACIONES</td>
@@ -405,33 +352,28 @@
 											</table>
 										</div>
 
-
 										<div class="row" id="" class="mensaje"></div>
 
 										<div class="box-footer">
-											<button class="btn btn-primary" id="btn_copy_equipo">Copiar</button>
+											<button type="submit" class="btn btn-primary" id="btn_copy_equipo">Copiar</button>
 										</div>
 										<div class="errores"></div>
-
 									</div>
-
 								</form>
-
-
-
 								<!--  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
 							</div>
 							<br>
-
 						</div>
 					</div>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-					<!-- <button type="button" class="btn btn-success" id="actualizar">Agregar</button> -->
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
 				</div>
-
 			</div>
 		</div>
 	</div>
 </div>
+
+
+
+

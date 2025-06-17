@@ -1,25 +1,46 @@
 <?php
 
-defined('BASEPATH') or exit('El acceso directo no esta permitido');
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\DB;
 
 /**
- * 
+ * Mpisos - Sistema HUV (Convertido automáticamente)
  */
-class Mpisos extends CI_Model
+class Mpisos extends Model
 {
+    use HasFactory;
 
-	function __construct()
-	{
-		parent::__construct();
-	}
-	public function getAllPisos()
-	{
-		$this->db->where("status", 1);
-		return $this->db->get("pisos")->result();
-	}
-	public function get()
-	{
-		$this->db->where("status", 1);
-		return $this->db->get("pisos")->result();
-	}
+    protected $table = 'pisos';
+    protected $fillable = [];
+
+    // Métodos básicos
+    public static function getAll()
+    {
+        return self::all();
+    }
+
+    public static function getOne($id)
+    {
+        return self::find($id);
+    }
+
+    public static function add($data)
+    {
+        return self::create($data);
+    }
+
+    public static function edit($data)
+    {
+        $id = $data['id'];
+        unset($data['id']);
+        return self::where('id', $id)->update($data);
+    }
+
+    public static function remove($id)
+    {
+        return self::destroy($id);
+    }
 }

@@ -1,27 +1,24 @@
 <?php
-defined('BASEPATH') or exit('El acceso directo no esta permitido');
+
+namespace App\Http\Controllers;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 /**
- *
+ * Cmodulos - Sistema HUV (Convertido automáticamente)
  */
-class Cmodulos extends CI_Controller
+class Cmodulos extends Controller
 {
-  function __construct()
-  {
-    parent::__construct();
-    $this->load->model('Mmodulos');
-    $this->load->model('Macciones');
-  }
-  public function getAll()
-  {
-    echo json_encode($this->Mmodulos->getAll());
-  }
-  public function getWithAccount()
-  {
-    echo json_encode($this->Mmodulos->getWithAccount());
-  }
-  public function setear_acciones()
-  {
-    $this->Macciones->setear_acciones($_POST);
-  }
+    public function __construct()
+    {
+        // Constructor Laravel
+    }
+
+    public function index()
+    {
+        // Método index convertido
+        return view('laravel.dashboard');
+    }
 }

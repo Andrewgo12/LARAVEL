@@ -8,8 +8,8 @@
         @foreach($acciones as $accion)
           @if($accion->modulo == "guias rapidas" && $accion->insertar == 1)
             <div class="custom-row"><a class="custom-btn-figure" href="" data-toggle="modal" data-target="#modal_add"><i class="fa fa-plus"></i></a></div>
-          <?php endif ?>
-        <?php endforeach ?>
+          @endif
+        @endforeach
         <div class="row">
           <div class="col-md-12">
             <span class="mensaje-guia-exito"></span>
@@ -24,23 +24,23 @@
         </ul>
         <div class="tab-content">
           <div id="guias" class="tab-pane fade in active">
-            <?php if (!empty($guias)) : ?>
+            @if(!empty($guias))
               <div class="row">
                 <div class="col-sm-12">
                   <div class="table-responsive">
-                    <input id="controlador" type="hidden" value="<?php echo {{ session('controlador') }}; ?>">
+                    <input id="controlador" type="hidden" value="{{ session('controlador') }}">
                     <p class="cobertura_biomedicos">
                       COBERTURA DE GUIAS RAPIDAS EQUIPOS BIOMEDICOS:
-                      <strong style="font-size: 20px;"><?php echo $cobertura_biomedicos->cobertura; ?>
+                      <strong style="font-size: 20px;">{{ $cobertura_biomedicos->cobertura }}
                       </strong>
-                      &nbsp; Cumplen criterios : <?php echo $cantidad_cumple_criterios->cantidad; ?>
-                      &nbsp; Cumplen criterios con guia : <?php echo $cantidad_cumple_criterios_con_guia->cantidad; ?>
+                      &nbsp; Cumplen criterios : {{ $cantidad_cumple_criterios->cantidad }}
+                      &nbsp; Cumplen criterios con guia : {{ $cantidad_cumple_criterios_con_guia->cantidad }}
                     </p>
-                    <a href="{{ asset('') }}guia/Cguias/exportarPriorizados" class="btn btn-success fa fa-file">Exportar Priorizados</a>
-                    <a href="{{ asset('') }}guia/Cguias/exportarPriorizadosGuia" class="btn btn-success fa fa-file">Exportar Priorizados con guia rapida</a>
-                    <a href="{{ asset('') }}guia/Cguias/exportPrioritizedWithoutGuide" class="btn btn-success fa fa-file">Exportar Priorizados sin guia rapida</a>
-                    <a href="{{ asset('') }}guia/Cguias/exportarPriorizadosGrupo" class="btn btn-success fa fa-file">Exportar Priorizados por grupo</a>
-                    <!--<p class="cobertura_industriales">COBERTURA DE GUIAS RAPIDAS EQUIPOS INDUSTRIALES: <strong style="font-size: 20px;"><?php echo $cobertura_industriales->cobertura; ?></strong></p>-->
+                    <a href="{{ asset('guia/Cguias/exportarPriorizados') }}" class="btn btn-success"><i class="fa fa-file"></i> Exportar Priorizados</a>
+                    <a href="{{ asset('guia/Cguias/exportarPriorizadosGuia') }}" class="btn btn-success"><i class="fa fa-file"></i> Exportar Priorizados con guia rapida</a>
+                    <a href="{{ asset('guia/Cguias/exportPrioritizedWithoutGuide') }}" class="btn btn-success"><i class="fa fa-file"></i> Exportar Priorizados sin guia rapida</a>
+                    <a href="{{ asset('guia/Cguias/exportarPriorizadosGrupo') }}" class="btn btn-success"><i class="fa fa-file"></i> Exportar Priorizados por grupo</a>
+                    <!--<p class="cobertura_industriales">COBERTURA DE GUIAS RAPIDAS EQUIPOS INDUSTRIALES: <strong style="font-size: 20px;">{{ $cobertura_industriales->cobertura }}</strong></p>-->
                     <table class="table table-info container-table tblguias">
                       <thead>
                         <tr>
@@ -56,11 +56,10 @@
                     </table>
                   </div>
                 </div>
-
               </div>
             @else
               <span style="font-size: 50px;">No existen registros!</span>
-            <?php endif ?>
+            @endif
           </div>
           <div id="nombres" class="tab-pane fade">
             <div class="row">
@@ -78,10 +77,8 @@
                 </tr>
               </thead>
               <tbody>
-
               </tbody>
             </table>
-
           </div>
           <div id="detallados" class="tab-pane fade">
             <table border="1" class="tbl-detallados">
@@ -109,7 +106,6 @@
                     </tr>
                   </thead>
                   <tbody>
-
                   </tbody>
                 </table>
               </div>
@@ -121,14 +117,12 @@
                     </tr>
                   </thead>
                   <tbody>
-
                   </tbody>
                 </table>
               </div>
             </div>
           </div>
         </div>
-
       </div>
       <!-- /.box-body -->
     </div>
@@ -139,14 +133,11 @@
 <!-- /.content-wrapper -->
 <script>
   var base_url = "<?= base_url(); ?>";
-  var controlador = "<?php echo {{ session('controlador') }}; ?>";
-
-
-
-  var editar_equipo = "<?php print_r({{ session('acciones') }}[0]->editar); ?>"; //equipos
-
-
-  var insertar_guia = "<?php print_r({{ session('acciones') }}[21]->insertar); ?>";
-  var editar_guia = "<?php print_r({{ session('acciones') }}[21]->editar); ?>";
-  var eliminar_guia1 = "<?php print_r({{ session('acciones') }}[21]->eliminar); ?>";
+  var controlador = "{{ session('controlador') }}";
+  var editar_equipo = "{{ session('acciones')[0]->editar }}"; //equipos
+  var insertar_guia = "{{ session('acciones')[21]->insertar }}";
+  var editar_guia = "{{ session('acciones')[21]->editar }}";
+  var eliminar_guia1 = "{{ session('acciones')[21]->eliminar }}";
 </script>
+
+

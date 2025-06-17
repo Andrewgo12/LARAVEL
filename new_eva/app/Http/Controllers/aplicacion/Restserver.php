@@ -1,38 +1,53 @@
 <?php
-// defined ('BASEPATH') OR exit('El acceso directo no esta permitido');
+
+namespace App\Http\Controllers\Aplicacion;
+
+use Illuminate\Support\Facades\Validator;
+
+use Illuminate\Support\Facades\Session;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use App\Models\Mequipos;
 
 /**
- * 
+ * REST Server - Convertido a Laravel
  */
-require APPPATH . 'libraries/REST_Controller.php';
-
-class Restserver extends REST_Controller
+class Restserver extends Controller
 {
-  function __construct()
-  {
-    parent::__construct();
-    $this->load->model('Mequipos');
+    public function __construct()
+    {
+        // Constructor Laravel
+    }
 
-    //$this->permisos=$this->backend_lib->control();
-  }
+    public function test(): JsonResponse
+    {
+        try {
+            $array = Mequipos::getSome();
+            return response()->json($array, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al obtener datos'], 500);
+        }
+    }
 
-  public function test_get()
-  {
-    $array = $this->Mequipos->get_some();
-    //echo "sdfsd";
-    //header("Access-Control-Origin: http://localhost:8100");
-    //header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
-    $this->response($array);
-  }
-  public function user_post()
-  {
-    $data = "algo";
-    $this->response($data);
-  }
-  public function indext_get()
-  {
-    $data = "algo";
+    public function user(Request $request): JsonResponse
+    {
+        try {
+            $data = "algo";
+            return response()->json($data, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en servidor'], 500);
+        }
+    }
 
-    $this->response($data, REST_Controller::HTTP_OK);
-  }
+    public function index(): JsonResponse
+    {
+        try {
+            $data = "algo";
+            return response()->json($data, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en servidor'], 500);
+        }
+    }
 }

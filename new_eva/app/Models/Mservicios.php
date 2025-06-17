@@ -1,145 +1,101 @@
 <?php
-defined('BASEPATH') or exit('El acceso directo no esta permitido');
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
+
 /**
- * 
+ * Modelo Mservicios - Sistema HUV
+ * Gestiona los datos para el módulo servicios
  */
-class Mservicios extends CI_Model
+class Mservicios extends Model
 {
+    use HasFactory;
 
-	function __construct()
-	{
-		defined('BASEPATH') or exit('El acceso directo no esta permitido');
-		parent::__construct();
-	}
+    /**
+     * Tabla asociada al modelo
+     */
+    protected $table = 'servicios';
 
-	/* Refactoring */
-	public function getOneService($id)
-	{
-		$this->db->select('servicios.*');
-		$this->db->from('servicios');
-		$this->db->where('servicios.id', $id);
-		return $this->db->get()->row();
-	}
-	public function getAllServices()
-	{
-		$this->db->select(
-			"
-		servicios.*,
-		pisos.name as piso,
-		zonas.name as zona,
-		centros.name as centro,
-		sedes.name as sede,
-		(select count(*) from areas where areas.servicio_id=servicios.id)as cantidad_areas,
-		(select count(*) from equipos where equipos.servicio_id=servicios.id)as cantidad_equipos"
-		);
-		$this->db->from("servicios");
-		$this->db->join("pisos", "pisos.id=servicios.piso_id", 'left');
-		$this->db->join("zonas", "servicios.zona_id=zonas.id", 'left');
-		$this->db->join("centros", "servicios.centro_id=centros.id", 'left');
-		$this->db->join("sedes", "servicios.sede_id=sedes.id", 'left');
-		$this->db->where("servicios.status=1");
-		$this->db->order_by("name", "asc");
-		return $this->db->get()->result();
-	}
-	public function getBySede($id)
-	{
-		$this->db->select(
-			"
-		servicios.*,
-		pisos.name as piso,
-		zonas.name as zona,
-		centros.name as centro,
-		sedes.name as sede,
-		(select count(*) from areas where areas.servicio_id=servicios.id)as cantidad_areas,
-		(select count(*) from equipos where equipos.servicio_id=servicios.id)as cantidad_equipos"
-		);
-		$this->db->from("servicios");
-		$this->db->join("pisos", "pisos.id=servicios.piso_id", 'left');
-		$this->db->join("zonas", "servicios.zona_id=zonas.id", 'left');
-		$this->db->join("centros", "servicios.centro_id=centros.id", 'left');
-		$this->db->join("sedes", "servicios.sede_id=sedes.id", 'left');
-		$this->db->where("servicios.status=1");
-		$this->db->where('servicios.sede_id', $id);
-		$this->db->order_by("servicios.name", "asc");
-		return $this->db->get()->result();
-	}
-	public function add($param)
-	{
-		return ($this->db->insert("servicios", $param));
-	}
-	public function update($param)
-	{
-		$this->db->where("id", $param["id"]);
-		unset($param["id"]);
-		$this->db->update("servicios", $param);
-	}
-	public function delete($param)
-	{
-		$this->db->where('id', $param['id']);
-		$this->db->delete('servicios');
-	}
+    /**
+     * Campos que se pueden asignar masivamente
+     */
+    protected $fillable = [
+        'nombre', 'descripcion', 'estado', 'usuario_id', 'created_at', 'updated_at'
+    ];
 
+    /**
+     * Campos que deben ser tratados como fechas
+     */
+    protected $dates = ['created_at', 'updated_at'];
 
+    /**
+     * Obtener todos los registros
+     */
+    public static function getAll()
+    {
+        return self::where('estado', '!=', 0)->get();
+    }
 
+    /**
+     * Obtener registros para DataTables
+     */
+    public static function getServerSide($params)
+    {
+        $query = self::where('estado', '!=', 0);
+        
+        if (isset($params['search']['value']) && $params['search']['value']) {
+            $search = $params['search']['value'];
+            $query->where(function($q) use ($search) {
+                $q->where('nombre', 'like', "%{$search}%")
+                  ->orWhere('descripcion', 'like', "%{$search}%");
+            });
+        }
+        
+        $totalRecords = $query->count();
+        $datos = $query->offset($params['start'])->limit($params['length'])->get();
+        
+        return [
+            'datos' => $datos,
+            'num_filas' => $totalRecords,
+            'num_filas_limit' => count($datos)
+        ];
+    }
 
+    /**
+     * Obtener un registro específico
+     */
+    public static function getOne($id)
+    {
+        return self::find($id);
+    }
 
-	public function get_datatable()
-	{
-		$this->db->select("servicios.*,
-		pisos.name as piso,
-		zonas.name as zona,
-		centros.name as centro,
-		sedes.name as sede,
-		(select count(*) from equipos where equipos.servicio_id=servicios.id)as cantidad_equipos");
-		$this->db->from("servicios");
-		$this->db->join("pisos", "pisos.id=servicios.piso_id", 'left');
-		$this->db->join("zonas", "servicios.zona_id=zonas.id", 'left');
-		$this->db->join("centros", "servicios.centro_id=centros.id", 'left');
-		$this->db->join("sedes", "servicios.sede_id=sedes.id", 'left');
-		$this->db->where("servicios.status=1");
-		$this->db->order_by("name", "asc");
-		return $this->db->get()->result();
-	}
-	public function get()
-	{
-		$this->db->where("servicios.status=1");
-		$this->db->order_by("name", "asc");
-		return $this->db->get("servicios")->result();
-	}
-	public function getOne($param)
-	{
-		$this->db->where("id", $param["id"]);
-		return $this->db->get("servicios")->row();
-	}
-	public function getUbicacion($param)
-	{
-		$this->db->select("servicios.*,pisos.name as piso,centros.name as centro,sedes.name as sede,centros.code as codigo_centro");
-		$this->db->from("servicios");
-		$this->db->join("pisos", "pisos.id=servicios.piso_id", 'left');
-		$this->db->join("centros", "servicios.centro_id=centros.id", 'left');
-		$this->db->join("sedes", "servicios.sede_id=sedes.id", 'left');
-		$this->db->where("servicios.status=1 and servicios.id=" . $param["id"]);
-		return $this->db->get()->row();
-	}
+    /**
+     * Agregar nuevo registro
+     */
+    public static function add($data)
+    {
+        $item = self::create($data);
+        return $item->id;
+    }
 
+    /**
+     * Actualizar registro
+     */
+    public static function edit($data)
+    {
+        $id = $data['id'];
+        unset($data['id']);
+        return self::where('id', $id)->update($data);
+    }
 
-	/* 	public function delete($param)
-	{
-		$this->db->where("id", $param["id"]);
-		unset($param["id"]);
-		$this->db->update("servicios", $param);
-	} */
-	public function getFromSede($param)
-	{
-
-		if ($param["sede_id"] != "") { // Se indica cual es la sede
-			if ($param["sede_id"] == 3) {
-				$param["sede_id"] = "";
-			}
-			$this->db->where("servicios.sede_id LIKE '%" . $param["sede_id"] . "%' and servicios.status=1 order by servicios.name asc");
-		} else { // No se indica cual es la sede (caso de equipos)
-			$this->db->where("servicios.sede_id LIKE '%" . $this->session->userdata("sede_id") . "%' and servicios.status=1");
-		}
-		return $this->db->get("servicios")->result();
-	}
+    /**
+     * Eliminar registro (cambiar estado)
+     */
+    public static function remove($id)
+    {
+        return self::where('id', $id)->update(['estado' => 0]);
+    }
 }

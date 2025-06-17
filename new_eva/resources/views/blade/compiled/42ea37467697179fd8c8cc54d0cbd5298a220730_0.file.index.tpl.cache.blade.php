@@ -7,16 +7,16 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.40',
   'unifunc' => 'content_619af0a15fc957_71224008',
   'has_nocache_code' => false,
-  'file_dependency' => 
+  'file_dependency' =>
   array (
-    '42ea37467697179fd8c8cc54d0cbd5298a220730' => 
+    '42ea37467697179fd8c8cc54d0cbd5298a220730' =>
     array (
       0 => '/var/www/html/application/views/index.tpl',
       1 => 1637543725,
       2 => 'file',
     ),
   ),
-  'includes' => 
+  'includes' =>
   array (
   ),
 ),false)) {
@@ -27,11 +27,11 @@ $_smarty_tpl->compiled->nocache_hash = '304232335619af0a15f3f81_57125120';
 ?>
 
 
-<?php 
+<?php
 $_smarty_tpl->inheritance->instanceBlock($_smarty_tpl, 'Block_1922141414619af0a15fae55_75785327', 'title');
 ?>
 
-<?php 
+<?php
 $_smarty_tpl->inheritance->instanceBlock($_smarty_tpl, 'Block_2104149873619af0a15fc183_04914146', 'body');
 $_smarty_tpl->inheritance->endChild($_smarty_tpl, 'layouts/main.tpl');
 }
@@ -39,7 +39,7 @@ $_smarty_tpl->inheritance->endChild($_smarty_tpl, 'layouts/main.tpl');
 class Block_1922141414619af0a15fae55_75785327 extends Smarty_Internal_Block
 {
 public $subBlocks = array (
-  'title' => 
+  'title' =>
   array (
     0 => 'Block_1922141414619af0a15fae55_75785327',
   ),
@@ -56,7 +56,7 @@ public function callBlock(Smarty_Internal_Template $_smarty_tpl) {
 class Block_2104149873619af0a15fc183_04914146 extends Smarty_Internal_Block
 {
 public $subBlocks = array (
-  'body' => 
+  'body' =>
   array (
     0 => 'Block_2104149873619af0a15fc183_04914146',
   ),

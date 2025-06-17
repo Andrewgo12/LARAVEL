@@ -7,16 +7,16 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.40',
   'unifunc' => 'content_619aed8641f7c2_80401431',
   'has_nocache_code' => false,
-  'file_dependency' => 
+  'file_dependency' =>
   array (
-    '2d6202f114e3e48e7bb191da7cf9585d9f1a804d' => 
+    '2d6202f114e3e48e7bb191da7cf9585d9f1a804d' =>
     array (
       0 => '/var/www/html/application/views/layouts/main.html',
       1 => 1637543298,
       2 => 'file',
     ),
   ),
-  'includes' => 
+  'includes' =>
   array (
   ),
 ),false)) {
@@ -33,7 +33,7 @@ $_smarty_tpl->inheritance->init($_smarty_tpl, false);
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Hugo 0.88.1">
-    <title><?php 
+    <title><?php
 $_smarty_tpl->inheritance->instanceBlock($_smarty_tpl, 'Block_918473901619aed8641bd55_07494635', 'title');
 ?>
 </title>
@@ -43,7 +43,7 @@ $_smarty_tpl->inheritance->instanceBlock($_smarty_tpl, 'Block_918473901619aed864
 " rel="stylesheet">
     <link href="{{ asset('assets/css/custom.css') }}
 " rel="stylesheet">
-    <?php 
+    <?php
 $_smarty_tpl->inheritance->instanceBlock($_smarty_tpl, 'Block_1740593915619aed8641dc27_08127456', 'css');
 ?>
 
@@ -98,7 +98,7 @@ $_smarty_tpl->inheritance->instanceBlock($_smarty_tpl, 'Block_1740593915619aed86
     </header>
 
     <!-- Begin page content -->
-    <?php 
+    <?php
 $_smarty_tpl->inheritance->instanceBlock($_smarty_tpl, 'Block_1009966537619aed8641e731_89109587', 'body');
 ?>
 
@@ -115,7 +115,7 @@ $_smarty_tpl->inheritance->instanceBlock($_smarty_tpl, 'Block_1009966537619aed86
  src="{{ asset('assets/js/bootstrap.js') }}
 "><?php echo '</script'; ?>
 >
-    <?php 
+    <?php
 $_smarty_tpl->inheritance->instanceBlock($_smarty_tpl, 'Block_1981937148619aed8641f177_84723741', 'scripts');
 ?>
 
@@ -127,7 +127,7 @@ $_smarty_tpl->inheritance->instanceBlock($_smarty_tpl, 'Block_1981937148619aed86
 class Block_918473901619aed8641bd55_07494635 extends Smarty_Internal_Block
 {
 public $subBlocks = array (
-  'title' => 
+  'title' =>
   array (
     0 => 'Block_918473901619aed8641bd55_07494635',
   ),
@@ -142,7 +142,7 @@ Default<?php
 class Block_1740593915619aed8641dc27_08127456 extends Smarty_Internal_Block
 {
 public $subBlocks = array (
-  'css' => 
+  'css' =>
   array (
     0 => 'Block_1740593915619aed8641dc27_08127456',
   ),
@@ -155,7 +155,7 @@ public function callBlock(Smarty_Internal_Template $_smarty_tpl) {
 class Block_1009966537619aed8641e731_89109587 extends Smarty_Internal_Block
 {
 public $subBlocks = array (
-  'body' => 
+  'body' =>
   array (
     0 => 'Block_1009966537619aed8641e731_89109587',
   ),
@@ -168,7 +168,7 @@ public function callBlock(Smarty_Internal_Template $_smarty_tpl) {
 class Block_1981937148619aed8641f177_84723741 extends Smarty_Internal_Block
 {
 public $subBlocks = array (
-  'scripts' => 
+  'scripts' =>
   array (
     0 => 'Block_1981937148619aed8641f177_84723741',
   ),

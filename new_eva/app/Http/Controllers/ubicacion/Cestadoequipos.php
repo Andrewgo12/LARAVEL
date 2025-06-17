@@ -1,126 +1,152 @@
-<?php 
-defined ('BASEPATH') OR exit('El acceso directo no esta permitido');
+<?php
+
 
 /**
-* 
-*/
-class Cestadoequipos extends CI_Controller
+ * Controlador Cestadoequipos - Sistema HUV
+ * Gestiona las funcionalidades del módulo correspondiente
+ */
+class Cestadoequipos extends Controller
 {
-	private $estadoequipos;
-	function __construct()
-	{
-		parent::__construct();
-		$this->load->model("Mestadoequipos");
-		$this->load->model("Mtipos_estados");
-		$this->permisos=$this->backend_lib->control();
-		
-	}
-	public function index(){
-		if($this->session->userdata('login')){
+    /**
+     * Permisos del controlador
+     */
+    protected $permisos = [];
 
-		}else{
-			redirect(base_url('Cauth'));
-		}			
-		$acciones=$this->session->userdata("acciones");
-		$this->session->set_userdata('controlador', $this->uri->segment(2));
+    /**
+     * Constructor del controlador
+     */
+    public function __construct()
+    {
+        $this->permisos = Session::get('permisos', []);
+    }
 
-		
-		foreach ($acciones as $accion) {
-			if ($accion->modulo=="estado equipos") {
-				if ($accion->leer!=1) {
-					redirect(base_url('Forbidden'));
-				}
-			}
-		}
+    /**
+namespace App\Http\Controllers\Ubicacion;
 
-		$this->load->view("layouts/header");
-		if ($this->session->userdata("rol_id")==1) {
-			$this->load->view("layouts/aside");
-		}elseif($this->session->userdata("rol_id")==2){
-			$this->load->view("layouts/admin_aside");
-		}elseif($this->session->userdata("rol_id")==3){
-			$this->load->view("layouts/advance_aside");
-		}else{
-			$this->load->view("layouts/basic_aside");
-		}
-		
-		$this->load->view("estadoequipos/list");
-		$this->load->view("layouts/footer");
-	}
-	public function get_datatable(){
-		echo json_encode($this->Mestadoequipos->get_datatable());
-	}
-	public function get(){
-		echo json_encode($this->Mestadoequipos->get());
-	}
-	public function get_usados(){
-		echo json_encode($this->Mestadoequipos->get_usados());
-	}	
-	public function getOne(){
-		echo json_encode($this->Mestadoequipos->getOne($_POST));
-	}
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
+use App\Models\Mestadoequipos;
 
-	public function update(){
-		$estado = $this->Mestadoequipos->getOne($_POST);
-		if ($estado->name == $_POST["name"]) {
-			$this->form_validation->set_rules("name","Nombre del estado","required|min_length[3]");
-		}else{
-			$this->form_validation->set_rules("name","Nombre del estado","required|min_length[3]|is_unique[estadoequipos.name]");
-		}
-		if ($this->form_validation->run()) {
-			$this->Mestadoequipos->update($_POST);
-			$vector=array(
-				'respuesta'=>1,
-				'informacion'=>""
-			);	
-		}else{
-			$vector=array(
-				'respuesta'=>2,
-				'informacion'=>validation_errors()
-			);
-		}
-		echo json_encode($vector);
-	}
-	public function add(){
+/* Sistema HUV */
+    public function index()
+    {
+        if (!Session::get('login')) {
+            return redirect()->route('huv.login');
+        }
 
-		if (isset($_POST["id"])) {
-			unset($_POST["id"]);
-		}
-		$this->form_validation->set_rules("name","Nombre del estado","is_unique[estadoequipos.name]|required|min_length[3]");
+        $data = [
+            'permisos' => $this->permisos,
+            'acciones' => Session::get('acciones', [])
+        ];
 
-		if ($this->form_validation->run()) {
-			$vector=array(
-				'respuesta'=>1,
-				'informacion'=>""
-			);
-			$this->Mestadoequipos->add($_POST);
-		}else{
-			$vector=array(
-				'respuesta'=>2,
-				'informacion'=>validation_errors()
-			);
-		}
-		echo json_encode($vector);
-	}
-	public function delete(){
-		$_POST["status"]=2;
-		$this->Mestadoequipos->delete($_POST);
-	}
-	public function active(){
-		$_POST["status"]=1;
-		$this->Mestadoequipos->active($_POST);
-	}
-	public function getFuncionalidad(){
-		echo json_encode($this->Mestadoequipos->getFuncionalidad());
-	}
-	public function getDisponibilidad(){
+        return view('laravel.estadoequipos.list', $data);
+    }
 
-		echo json_encode($this->Mestadoequipos->getDisponibilidad());
-	}
-	public function getTipoEstado(){
-		echo json_encode($this->Mtipos_estados->get());
-	}
+    /* Sistema HUV */
+    public function getServerSide(Request $request): JsonResponse
+    {
+        try {
+            $params = $request->all();
+            $result = Mestadoequipos::getServerSide($params);
+
+            $response = [
+                'draw' => intval($request->input('draw')),
+                'recordsTotal' => $result['num_filas'],
+                'recordsFiltered' => $result['num_filas'],
+                'data' => $result['datos']
+            ];
+
+            return response()->json($response);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en servidor: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function getOne(Request $request): JsonResponse
+    {
+        try {
+            $id = $request->input('id');
+            $item = Mestadoequipos::getOne($id);
+            return response()->json($item, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al obtener registro: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function add(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $data['created_at'] = now();
+            $data['usuario_id'] = Session::get('id');
+
+            $result = Mestadoequipos::add($data);
+
+            if ($result) {
+                return response()->json(['success' => true, 'message' => 'Registro agregado exitosamente'], 201);
+            } else {
+                return response()->json(['error' => 'No se pudo agregar el registro'], 500);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al agregar: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function update(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $data['updated_at'] = now();
+
+            $result = Mestadoequipos::edit($data);
+
+            if ($result) {
+                return response()->json(['success' => true, 'message' => 'Registro actualizado exitosamente'], 200);
+            } else {
+                return response()->json(['error' => 'No se pudo actualizar el registro'], 500);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al actualizar: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function delete(Request $request): JsonResponse
+    {
+        try {
+            $id = $request->input('id');
+            $result = Mestadoequipos::remove($id);
+
+            if ($result) {
+                return response()->json(['success' => true, 'message' => 'Registro eliminado exitosamente'], 200);
+            } else {
+                return response()->json(['error' => 'No se pudo eliminar el registro'], 500);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al eliminar: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function getAll(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $result = Mestadoequipos::getAll($data);
+
+            return response()->json($result, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en getAll: ' . $e->getMessage()], 500);
+        }
+    }
 
 }
 
-?>
+}

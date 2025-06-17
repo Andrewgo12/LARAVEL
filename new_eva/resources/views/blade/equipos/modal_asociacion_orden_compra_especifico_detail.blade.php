@@ -1,8 +1,7 @@
-
 <input type="hidden" name="orden_compra_id" value="{{ $orden_compra_id }}">
 <a class="btn btn-info" href="{{ asset('') }}ordenes_compra/Cordenes_compra/ExportarExcel/{{ $orden_compra_id }}" target="_blank">Exportar</a><br><br>
 
-<table border="1" class="table table-condensed orden-compra-asociacion-especifico" >
+<table border="1" class="table table-condensed orden-compra-asociacion-especifico">
   <thead>
     <tr>
       <th>Id</th>
@@ -20,20 +19,19 @@
   <tbody>
     @foreach($equipos as $equipo)
       <tr>
-        <td><?php echo $equipo->id; ?></td>
-        <td><?php echo $equipo->name; ?></td>
-        <td><?php echo $equipo->marca; ?></td>
-        <td><?php echo $equipo->modelo; ?></td>
-        <td><?php echo $equipo->code; ?></td>
-        <td><?php echo $equipo->serial; ?></td>
-        <td><?php echo $equipo->servicio; ?></td>
-        <td><?php echo $equipo->area; ?></td>
-        <td><?php echo $equipo->fecha_instalacion; ?></td>
-        <td><input type="checkbox" name="seleccion[]" value="<?php echo $equipo->id; ?>"></td>
+        <td>{{ $equipo->id }}</td>
+        <td>{{ $equipo->name }}</td>
+        <td>{{ $equipo->marca }}</td>
+        <td>{{ $equipo->modelo }}</td>
+        <td>{{ $equipo->code }}</td>
+        <td>{{ $equipo->serial }}</td>
+        <td>{{ $equipo->servicio }}</td>
+        <td>{{ $equipo->area }}</td>
+        <td>{{ $equipo->fecha_instalacion }}</td>
+        <td><input type="checkbox" name="seleccion[]" value="{{ $equipo->id }}"></td>
       </tr>
-    <?php endforeach ?>
+    @endforeach
   </tbody>
 </table>
 
-<button class="btn btn-default">Desvincular</button>
-
+<button type="submit" class="btn btn-primary">Desvincular</button>

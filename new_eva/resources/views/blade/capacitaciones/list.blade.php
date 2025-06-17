@@ -25,11 +25,11 @@
                   <tbody>
                     @foreach($capacitaciones_equipo as $registro)
                       <tr>
-                        <td><?php echo $registro->mes; ?></td>
-                        <td><?php echo $registro->equipo; ?></td>
-                        <td><?php echo $registro->cantidad; ?></td>
+                        <td>{{ $registro->mes }}</td>
+                        <td>{{ $registro->equipo }}</td>
+                        <td>{{ $registro->cantidad }}</td>
                       </tr>
-                    <?php endforeach ?>
+                    @endforeach
                   </tbody>
                 </table>
               </div>
@@ -42,13 +42,12 @@
                     </tr>
                   </thead>
                   <tbody>
-
                     @foreach($capacitaciones_mes as $registro)
                       <tr>
-                        <td><?php echo $registro->mes; ?></td>
-                        <td><?php echo $registro->cantidad; ?></td>
+                        <td>{{ $registro->mes }}</td>
+                        <td>{{ $registro->cantidad }}</td>
                       </tr>
-                    <?php endforeach ?>
+                    @endforeach
                   </tbody>
                 </table>
               </div>
@@ -71,14 +70,14 @@
                   <tbody>
                     @foreach($capacitaciones_realizadas as $capacitacion_realizada)
                       <tr>
-                        <td><?php echo $capacitacion_realizada->equipo; ?></td>
-                        <td><?php echo $capacitacion_realizada->marca; ?></td>
-                        <td><?php echo $capacitacion_realizada->modelo; ?></td>
-                        <td><?php echo $capacitacion_realizada->servicio; ?></td>
-                        <td><?php echo $capacitacion_realizada->cantidad; ?></td>
-                        <td><a target="__blank" class="glyphicon glyphicon-file" href="{{ asset('') }}/assets/upload_equipo_archivos/<?php echo $capacitacion_realizada->vinculo ?>"></a></td>
+                        <td>{{ $capacitacion_realizada->equipo }}</td>
+                        <td>{{ $capacitacion_realizada->marca }}</td>
+                        <td>{{ $capacitacion_realizada->modelo }}</td>
+                        <td>{{ $capacitacion_realizada->servicio }}</td>
+                        <td>{{ $capacitacion_realizada->cantidad }}</td>
+                        <td><a target="__blank" class="glyphicon glyphicon-file" href="{{ asset('') }}/assets/upload_equipo_archivos/{{ $capacitacion_realizada->vinculo }}"></a></td>
                       </tr>
-                    <?php endforeach ?>
+                    @endforeach
                   </tbody>
                 </table>
               </div>
@@ -101,15 +100,14 @@
                   <tbody>
                     @foreach($capacitaciones_archivo as $capacitacion_archivo)
                       <tr>
-                        <td><?php echo $capacitacion_archivo->id; ?></td>
-                        <td><a target="__blank" class="glyphicon glyphicon-file" href="{{ asset('') }}/assets/upload_equipo_archivos/<?php echo $capacitacion_archivo->vinculo ?>"></a></td>
-                        <td><?php echo $capacitacion_archivo->fecha_ingreso; ?></td>
-                        <td><?php echo $capacitacion_archivo->equipo; ?></td>
-                        <td><?php echo $capacitacion_archivo->marca; ?></td>
-                        <td><?php echo $capacitacion_archivo->servicio; ?></td>
+                        <td>{{ $capacitacion_archivo->id }}</td>
+                        <td><a target="__blank" class="glyphicon glyphicon-file" href="{{ asset('') }}/assets/upload_equipo_archivos/{{ $capacitacion_archivo->vinculo }}"></a></td>
+                        <td>{{ $capacitacion_archivo->fecha_ingreso }}</td>
+                        <td>{{ $capacitacion_archivo->equipo }}</td>
+                        <td>{{ $capacitacion_archivo->marca }}</td>
+                        <td>{{ $capacitacion_archivo->servicio }}</td>
                       </tr>
-                    <?php endforeach ?>
-
+                    @endforeach
                   </tbody>
                 </table>
               </div>
@@ -122,5 +120,5 @@
   </section>
 </div>
 <script>
-  var base_url = "<?= base_url(); ?>";
+  var base_url = "{{ url('/') }}/";
 </script>

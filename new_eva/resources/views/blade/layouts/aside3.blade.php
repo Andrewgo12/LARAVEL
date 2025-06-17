@@ -46,7 +46,7 @@
             </a>
               <?php $acciones={{ session('acciones') }}; ?>
             <ul class="nav nav-treeview">
-                        
+
                 @foreach($acciones as $accion)
                 @if($accion->modulo=="equipos"&&$accion->leer==1)
                   <li class="nav-item">
@@ -395,49 +395,49 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="pages/examples/e-commerce.html" class="nav-link">
+                <a href="{{ url('pages/examples/e-commerce.html') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>E-commerce</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="pages/examples/projects.html" class="nav-link">
+                <a href="{{ url('pages/examples/projects.html') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Projects</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="pages/examples/project-add.html" class="nav-link">
+                <a href="{{ url('pages/examples/project-add.html') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Project Add</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="pages/examples/project-edit.html" class="nav-link">
+                <a href="{{ url('pages/examples/project-edit.html') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Project Edit</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="pages/examples/project-detail.html" class="nav-link">
+                <a href="{{ url('pages/examples/project-detail.html') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Project Detail</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="pages/examples/contacts.html" class="nav-link">
+                <a href="{{ url('pages/examples/contacts.html') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Contacts</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="pages/examples/faq.html" class="nav-link">
+                <a href="{{ url('pages/examples/faq.html') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>FAQ</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="pages/examples/contact-us.html" class="nav-link">
+                <a href="{{ url('pages/examples/contact-us.html') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Contact us</p>
                 </a>
@@ -463,25 +463,25 @@
                 </a>
                 <ul class="nav nav-treeview">
                   <li class="nav-item">
-                    <a href="pages/examples/login.html" class="nav-link">
+                    <a href="{{ url('pages/examples/login.html') }}" class="nav-link">
                       <i class="far fa-circle nav-icon"></i>
                       <p>Login v1</p>
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a href="pages/examples/register.html" class="nav-link">
+                    <a href="{{ url('pages/examples/register.html') }}" class="nav-link">
                       <i class="far fa-circle nav-icon"></i>
                       <p>Register v1</p>
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a href="pages/examples/forgot-password.html" class="nav-link">
+                    <a href="{{ url('pages/examples/forgot-password.html') }}" class="nav-link">
                       <i class="far fa-circle nav-icon"></i>
                       <p>Forgot Password v1</p>
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a href="pages/examples/recover-password.html" class="nav-link">
+                    <a href="{{ url('pages/examples/recover-password.html') }}" class="nav-link">
                       <i class="far fa-circle nav-icon"></i>
                       <p>Recover Password v1</p>
                     </a>
@@ -498,25 +498,25 @@
                 </a>
                 <ul class="nav nav-treeview">
                   <li class="nav-item">
-                    <a href="pages/examples/login-v2.html" class="nav-link">
+                    <a href="{{ url('pages/examples/login-v2.html') }}" class="nav-link">
                       <i class="far fa-circle nav-icon"></i>
                       <p>Login v2</p>
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a href="pages/examples/register-v2.html" class="nav-link">
+                    <a href="{{ url('pages/examples/register-v2.html') }}" class="nav-link">
                       <i class="far fa-circle nav-icon"></i>
                       <p>Register v2</p>
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a href="pages/examples/forgot-password-v2.html" class="nav-link">
+                    <a href="{{ url('pages/examples/forgot-password-v2.html') }}" class="nav-link">
                       <i class="far fa-circle nav-icon"></i>
                       <p>Forgot Password v2</p>
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a href="pages/examples/recover-password-v2.html" class="nav-link">
+                    <a href="{{ url('pages/examples/recover-password-v2.html') }}" class="nav-link">
                       <i class="far fa-circle nav-icon"></i>
                       <p>Recover Password v2</p>
                     </a>

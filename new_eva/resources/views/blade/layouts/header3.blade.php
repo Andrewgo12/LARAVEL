@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -8,82 +8,83 @@
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
-  <link rel="stylesheet" href="<?=base_url();?>plugins/fontawesome-free/css/all.min.css">
+  <link rel="stylesheet" href="{{ base_url() }}plugins/fontawesome-free/css/all.min.css">
   <!-- daterange picker -->
-  <link rel="stylesheet" href="<?=base_url();?>plugins/daterangepicker/daterangepicker.css"> 
+  <link rel="stylesheet" href="{{ base_url() }}plugins/daterangepicker/daterangepicker.css">
   <!-- iCheck for checkboxes and radio inputs -->
-  <link rel="stylesheet" href="<?=base_url();?>plugins/icheck-bootstrap/icheck-bootstrap.min.css"> 
+  <link rel="stylesheet" href="{{ base_url() }}plugins/icheck-bootstrap/icheck-bootstrap.min.css">
   <!-- Bootstrap Color Picker -->
-  <link rel="stylesheet" href="<?=base_url();?>plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css">  
+  <link rel="stylesheet" href="{{ base_url() }}plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css">
   <!-- Tempusdominus Bootstrap 4 -->
-  <link rel="stylesheet" href="<?=base_url();?>plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+  <link rel="stylesheet" href="{{ base_url() }}plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
   <!-- Select2 -->
-  <link rel="stylesheet" href="<?=base_url();?>plugins/select2/css/select2.min.css">
-  <link rel="stylesheet" href="<?=base_url();?>plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+  <link rel="stylesheet" href="{{ base_url() }}plugins/select2/css/select2.min.css">
+  <link rel="stylesheet" href="{{ base_url() }}plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
   <!-- Bootstrap4 Duallistbox -->
-  <link rel="stylesheet" href="<?=base_url();?>plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css">  
+  <link rel="stylesheet" href="{{ base_url() }}plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css">
   <!-- BS Stepper -->
-  <link rel="stylesheet" href="<?=base_url();?>plugins/bs-stepper/css/bs-stepper.min.css">
+  <link rel="stylesheet" href="{{ base_url() }}plugins/bs-stepper/css/bs-stepper.min.css">
   <!-- dropzonejs -->
-  <link rel="stylesheet" href="<?=base_url();?>plugins/dropzone/min/dropzone.min.css">  
+  <link rel="stylesheet" href="{{ base_url() }}plugins/dropzone/min/dropzone.min.css">
   <!-- DataTables -->
-  <link rel="stylesheet" href="<?=base_url();?>plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
-  <link rel="stylesheet" href="<?=base_url();?>plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
-  <link rel="stylesheet" href="<?=base_url();?>plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
-  <!--ligth-box -->
-  <link rel="stylesheet" href="{{ asset('') }}plugins/lightbox2-master/dist/css/lightbox.min.css?n=<?=time();?>">  
+  <link rel="stylesheet" href="{{ base_url() }}plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+  <link rel="stylesheet" href="{{ base_url() }}plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+  <link rel="stylesheet" href="{{ base_url() }}plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+  <!-- Lightbox -->
+  <link rel="stylesheet" href="{{ asset('plugins/lightbox2-master/dist/css/lightbox.min.css') }}?v={{ time() }}">
   <!-- Theme style -->
-  <link rel="stylesheet" href="<?=base_url();?>dist/css/adminlte.min.css">
+  <link rel="stylesheet" href="{{ base_url() }}dist/css/adminlte.min.css">
   <!-- Estilos hoja de vida detalle-->
-  <link rel="stylesheet" type="text/css" href="{{ asset('') }}dist/css/hoja_vida/Hoja_de_vida.css?n=<?=time();?>">  
+  <link rel="stylesheet" href="{{ asset('dist/css/hoja_vida/Hoja_de_vida.css') }}?v={{ time() }}">
   <!-- Estilos hoja de vida edición-->
-  <link rel="stylesheet" type="text/css" href="{{ asset('') }}dist/css/hoja_vida/Hoja_de_vida_edicion.css?n=<?=time();?>">   
+  <link rel="stylesheet" href="{{ asset('dist/css/hoja_vida/Hoja_de_vida_edicion.css') }}?v={{ time() }}">
   <!-- Bootstrap file -->
-  <link rel="stylesheet" href="{{ asset('') }}plugins/bootstrap-file/css/fileinput.min.css">  
+  <link rel="stylesheet" href="{{ asset('plugins/bootstrap-file/css/fileinput.min.css') }}">
 
+  @if ($this->uri->segment(2) == 'Cinvimas')
+    <link rel="stylesheet" href="{{ asset('css/invimas/Invimas.css') }}?v={{ time() }}">
+  @endif
 
-      <?php if ($this->uri->segment(2)=='Cinvimas'):?>
-        <link rel="stylesheet" type="text/css" href="{{ asset('') }}css/invimas/Invimas.css?n=<?=time();?>">    
-      <?php endif ?>
+  @if ($this->uri->segment(2) == 'Cordenes_compra')
+    <link rel="stylesheet" href="{{ asset('css/ordenes_compra/Ordenes_compra.css') }}?v={{ time() }}">
+  @endif
 
-      <?php if ($this->uri->segment(2)=='Cordenes_compra'):?>
-        <link rel="stylesheet" type="text/css" href="{{ asset('') }}css/ordenes_compra/Ordenes_compra.css?n=<?=time();?>">    
-      <?php endif ?>
+  @if ($this->uri->segment(2) == 'Cusuarios')
+    <link rel="stylesheet" href="{{ asset('css/usuarios/Usuarios.css') }}?v={{ time() }}">
+  @endif
 
-      <?php if ($this->uri->segment(2)=='Cusuarios'):?>
-        <link rel="stylesheet" type="text/css" href="{{ asset('') }}css/usuarios/Usuarios.css?n=<?=time();?>">    
-      <?php endif ?>
-      <?php if ($this->uri->segment(2)=='Cordenes'):?>
-        <link rel="stylesheet" type="text/css" href="{{ asset('') }}css/tickets/Tickets.css?n=<?=time();?>">    
-      <?php endif ?>
-      <?php if ($this->uri->segment(2)=='Cequipos'):?>
-        <link rel="stylesheet" type="text/css" href="{{ asset('') }}css/tickets/Tickets.css?n=<?=time();?>">    
-        <link rel="stylesheet" type="text/css" href="{{ asset('') }}css/equipos/Equipos.css?n=<?=time();?>">    
-      <?php endif ?>
-      <?php if ($this->uri->segment(2)=='Cequipos_ind'):?>
-        <link rel="stylesheet" type="text/css" href="{{ asset('') }}css/tickets/Tickets.css?n=<?=time();?>">    
-        <link rel="stylesheet" type="text/css" href="{{ asset('') }}css/equipos/Equipos.css?n=<?=time();?>">    
-      <?php endif ?>
-      <?php if ($this->uri->segment(2)=='Crepuestos'):?>
-        <link rel="stylesheet" type="text/css" href="{{ asset('') }}css/repuestos/Repuestos.css?n=<?=time();?>">    
-      <?php endif ?>
+  @if ($this->uri->segment(2) == 'Cordenes')
+    <link rel="stylesheet" href="{{ asset('css/tickets/Tickets.css') }}?v={{ time() }}">
+  @endif
 
-      <?php if ($this->uri->segment(1)=='Forbidden'):?>
-        <link rel="stylesheet" type="text/css" href="{{ asset('') }}css/Forbidden.css?n=<?=time();?>">    
-      <?php endif ?>
+  @if ($this->uri->segment(2) == 'Cequipos')
+    <link rel="stylesheet" href="{{ asset('css/tickets/Tickets.css') }}?v={{ time() }}">
+    <link rel="stylesheet" href="{{ asset('css/equipos/Equipos.css') }}?v={{ time() }}">
+  @endif
 
-      <?php if ($this->uri->segment(1)=='guia'):?>
-        <link rel="stylesheet" type="text/css" href="{{ asset('') }}css/guias/Guias.css?n=<?=time();?>">    
-      <?php endif ?>
+  @if ($this->uri->segment(2) == 'Cequipos_ind')
+    <link rel="stylesheet" href="{{ asset('css/tickets/Tickets.css') }}?v={{ time() }}">
+    <link rel="stylesheet" href="{{ asset('css/equipos/Equipos.css') }}?v={{ time() }}">
+  @endif
 
+  @if ($this->uri->segment(2) == 'Crepuestos')
+    <link rel="stylesheet" href="{{ asset('css/repuestos/Repuestos.css') }}?v={{ time() }}">
+  @endif
 
+  @if ($this->uri->segment(1) == 'Forbidden')
+    <link rel="stylesheet" href="{{ asset('css/Forbidden.css') }}?v={{ time() }}">
+  @endif
+
+  @if ($this->uri->segment(1) == 'guia')
+    <link rel="stylesheet" href="{{ asset('css/guias/Guias.css') }}?v={{ time() }}">
+  @endif
 </head>
 <body class="hold-transition sidebar-mini layout-footer-fixed layout-navbar-fixed">
 <div class="wrapper">
 
   <!-- Preloader -->
   <div class="preloader flex-column justify-content-center align-items-center">
-    <img class="animation__shake" src="<?= base_url();?>dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60">
+    <img class="animation__shake" src="{{ base_url() }}dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60">
   </div>
 
   <!-- Navbar -->
@@ -135,7 +136,7 @@
           <a href="#" class="dropdown-item">
             <!-- Message Start -->
             <div class="media">
-              <img src="<?= base_url();?>dist/img/user1-128x128.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle">
+              <img src="{{ base_url() }}dist/img/user1-128x128.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle">
               <div class="media-body">
                 <h3 class="dropdown-item-title">
                   Brad Diesel
@@ -151,7 +152,7 @@
           <a href="#" class="dropdown-item">
             <!-- Message Start -->
             <div class="media">
-              <img src="<?= base_url();?>dist/img/user8-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
+              <img src="{{ base_url() }}dist/img/user8-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
               <div class="media-body">
                 <h3 class="dropdown-item-title">
                   John Pierce
@@ -167,7 +168,7 @@
           <a href="#" class="dropdown-item">
             <!-- Message Start -->
             <div class="media">
-              <img src="<?= base_url();?>dist/img/user3-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
+              <img src="{{ base_url() }}dist/img/user3-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
               <div class="media-body">
                 <h3 class="dropdown-item-title">
                   Nora Silvester
@@ -223,3 +224,4 @@
     </ul>
   </nav>
   <!-- /.navbar -->
+

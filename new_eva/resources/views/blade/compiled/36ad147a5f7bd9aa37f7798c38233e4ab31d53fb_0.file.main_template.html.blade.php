@@ -7,16 +7,16 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.40',
   'unifunc' => 'content_619b2591a169f6_20846776',
   'has_nocache_code' => false,
-  'file_dependency' => 
+  'file_dependency' =>
   array (
-    '36ad147a5f7bd9aa37f7798c38233e4ab31d53fb' => 
+    '36ad147a5f7bd9aa37f7798c38233e4ab31d53fb' =>
     array (
       0 => '/var/www/html/application/views/layouts/main_template.html',
       1 => 1637557647,
       2 => 'file',
     ),
   ),
-  'includes' => 
+  'includes' =>
   array (
   ),
 ),false)) {
@@ -30,7 +30,7 @@ $_smarty_tpl->inheritance->init($_smarty_tpl, false);
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title><?php 
+    <title><?php
 $_smarty_tpl->inheritance->instanceBlock($_smarty_tpl, 'Block_925933517619b2591a0c577_77211813', 'title');
 ?>
 </title>
@@ -516,7 +516,7 @@ $_smarty_tpl->inheritance->instanceBlock($_smarty_tpl, 'Block_925933517619b2591a
             <section class="content">
                 <div class="container-fluid">
                     <!-- Small boxes (Stat box) -->
-                    <?php 
+                    <?php
 $_smarty_tpl->inheritance->instanceBlock($_smarty_tpl, 'Block_753799622619b2591a11803_85826297', 'content');
 ?>
 
@@ -634,7 +634,7 @@ $_smarty_tpl->inheritance->instanceBlock($_smarty_tpl, 'Block_753799622619b2591a
 class Block_925933517619b2591a0c577_77211813 extends Smarty_Internal_Block
 {
 public $subBlocks = array (
-  'title' => 
+  'title' =>
   array (
     0 => 'Block_925933517619b2591a0c577_77211813',
   ),
@@ -647,7 +647,7 @@ public function callBlock(Smarty_Internal_Template $_smarty_tpl) {
 class Block_753799622619b2591a11803_85826297 extends Smarty_Internal_Block
 {
 public $subBlocks = array (
-  'content' => 
+  'content' =>
   array (
     0 => 'Block_753799622619b2591a11803_85826297',
   ),

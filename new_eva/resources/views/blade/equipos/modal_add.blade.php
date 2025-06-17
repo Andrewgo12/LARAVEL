@@ -10,12 +10,11 @@
 					<div class="col-md-12">
 						<div class="box box-info">
 							<div class="box-header with-border">
-								<?php if ({{ session('tipo_id') }} == 1) : ?>
-									<h3 class="box-title">Equipo biomedico
-									@else
-										<h3 class="box-title">Equipo industrial
-										<?php endif ?>
-										</h3>
+								@if(session('tipo_id') == 1)
+									<h3 class="box-title">Equipo biomedico</h3>
+								@else
+									<h3 class="box-title">Equipo industrial</h3>
+								@endif
 							</div>
 
 							<div class="box-body form-horizontal">
@@ -34,7 +33,7 @@
 										<div class="tg-wrap">
 											<table class="tg">
 												<tr>
-													<th class="tg-5xx9" colspan="10">REGISTRO DE EQUIPOS <?php echo ($tipo_id == 1) ? "BIOMEDICOS" : "INDSUTRIALES" ?> HOSPITAL UNIVERSITARIO DEL VALLE “EVARISTO GARCÍA”</th>
+													<th class="tg-5xx9" colspan="10">REGISTRO DE EQUIPOS {{ $tipo_id == 1 ? "BIOMEDICOS" : "INDUSTRIALES" }} HOSPITAL UNIVERSITARIO DEL VALLE "EVARISTO GARCÍA"</th>
 												</tr>
 												<tr>
 													<td class="tg-d4yz" colspan="10">IDENTIFICACIÓN DEL EQUIPO</td>
@@ -106,19 +105,12 @@
 																</select>
 															</li>
 															<li class="list-inline-item">
-
 																<label for="servicio_id">Servicio:</label>
-
-																<?php
-																foreach ($acciones as $accion) {
-																	if ($accion->modulo == "servicios" && $accion->insertar == 1) {
-																?>
-
+																@foreach($acciones as $accion)
+																	@if($accion->modulo == "servicios" && $accion->insertar == 1)
 																		<a style="font-size: 10px;font-weight: 900;color: black;" data-toggle='modal' data-target='#modal_add_servicio' class="glyphicon glyphicon-plus"></a>
-																<?php
-																	}
-																}
-																?>
+																	@endif
+																@endforeach
 																<select required="" class="form-control servicio_id" style="width:100%;" name="servicio_id" id="servicio_id">
 																</select>
 															</li>
@@ -177,9 +169,9 @@
 												</tr>
 												<tr>
 													<td class="tg-0akb">Fecha de adquisición:</td>
-													<td class="tg-0pky" colspan="2"><input type="date" min="1950-01-31" max="<?php echo date('Y-m-d'); ?>" class="form-control" name="fecha_ad" id="fecha_ad"></td>
+													<td class="tg-0pky" colspan="2"><input type="date" min="1950-01-31" max="{{ date('Y-m-d') }}" class="form-control" name="fecha_ad" id="fecha_ad"></td>
 													<td class="tg-pwly"><span style="font-weight:700">Fecha acta de recibo:</span></td>
-													<td class="tg-0pky" colspan="6"><input type="date" min="1950-01-31" max="<?php echo date('Y-m-d'); ?>" class="form-control" name="fecha_acta_recibo" id="fecha_acta_recibo"></td>
+													<td class="tg-0pky" colspan="6"><input type="date" min="1950-01-31" max="{{ date('Y-m-d') }}" class="form-control" name="fecha_acta_recibo" id="fecha_acta_recibo"></td>
 												</tr>
 												<tr>
 													<td class="tg-0akb">Fecha de instalación:</td>
@@ -296,8 +288,6 @@
 												</tr>
 												<tr>
 												</tr>
-												<tr>
-												</tr>
 												@if($tipo_id == 1)
 													<tr>
 														<td class="tg-46fy" colspan="2">Clasificación biomedica:</td>
@@ -340,15 +330,11 @@
 																<select style="width: 100%" required="" name="propietario_id" id="propietario_id" class="propietario_id form-control"></select>
 															</div>
 															<div class="col-sm-1">
-																<?php
-																foreach ($acciones as $accion) {
-																	if ($accion->modulo == "propietarios" && $accion->insertar == 1) {
-																?>
-																		<span title="Agregar nuevo popietario" class="glyphicon glyphicon-plus" style="font-size: 10px;font-weight: 900;" data-toggle="modal" data-target="#modal_add_propietario"></span>
-																<?php
-																	}
-																}
-																?>
+																@foreach($acciones as $accion)
+																	@if($accion->modulo == "propietarios" && $accion->insertar == 1)
+																		<span title="Agregar nuevo propietario" class="glyphicon glyphicon-plus" style="font-size: 10px;font-weight: 900;" data-toggle="modal" data-target="#modal_add_propietario"></span>
+																	@endif
+																@endforeach
 															</div>
 														</div>
 
@@ -397,7 +383,7 @@
 					</div>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
 					<!-- <button type="button" class="btn btn-success" id="actualizar">Agregar</button> -->
 				</div>
 
@@ -405,3 +391,4 @@
 		</div>
 	</div>
 </div>
+

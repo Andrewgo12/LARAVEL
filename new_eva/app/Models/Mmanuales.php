@@ -1,105 +1,46 @@
 <?php
-defined('BASEPATH') or exit('El acceso directo no esta permitido');
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\DB;
+
 /**
- * 
+ * Mmanuales - Sistema HUV (Convertido automáticamente)
  */
-class Mmanuales extends CI_Model
+class Mmanuales extends Model
 {
+    use HasFactory;
 
-	function __construct()
-	{
-		parent::__construct();
-	}
+    protected $table = 'manuales';
+    protected $fillable = [];
 
-	// Refactoring
-	public function getOneManual($id)
-	{
-		$this->db->select('manuales.*');
-		$this->db->from('manuales');
-		$this->db->where('manuales.id', $id);
-		return $this->db->get()->row();
-	}
-	public function getAllManuals()
-	{
-		$this->db->select("manuales.*");
-		$this->db->from("manuales");
-		$this->db->where("manuales.id != ", 0);
-		$this->db->order_by("manuales.descripcion", "asc");
-		return $this->db->get()->result();
-	}
-	public function delete($param)
-	{
-		$this->db->where('id', $param['id']);
-		$this->db->delete('manuales');
-	}
+    // Métodos básicos
+    public static function getAll()
+    {
+        return self::all();
+    }
 
-	public function get()
-	{
-		$this->db->select("*");
-		$this->db->from("manuales");
-		$this->db->where("status", 1);
-		$this->db->order_by("descripcion", 'asc');
-		return $this->db->get()->result();
-	}
-	public function getAll()
-	{
-		$this->db->select("*");
-		$this->db->from("manuales");
-		$this->db->order_by("descripcion", 'asc');
-		return $this->db->get()->result();
-	}
-	public function getWithNumberDevices()
-	{
-		$query = "
-		SELECT
-		invimas.*,
-		(
-		SELECT COUNT(*)
-		FROM
-		equipos
-		WHERE
-		equipos.invima_id = invimas.id  
+    public static function getOne($id)
+    {
+        return self::find($id);
+    }
 
+    public static function add($data)
+    {
+        return self::create($data);
+    }
 
-		)as cuenta
+    public static function edit($data)
+    {
+        $id = $data['id'];
+        unset($data['id']);
+        return self::where('id', $id)->update($data);
+    }
 
-		FROM
-		invimas LEFT JOIN equipos on equipos.invima_id=invimas.id
-		WHERE invimas.id!=1
-		GROUP BY invimas.invima
-		";
-		return $this->db->query($query)->result();
-	}
-	public function getOne($param)
-	{
-		$this->db->where("id", $param["id"]);
-		return $this->db->get("manuales")->row();
-	}
-	public function getdescriptionlike($param)
-	{
-		$query = "select invima from invimas where description like '%" . $param["consulta"] . "%'";
-		return $this->db->query($query)->result();
-	}
-	public function add($param)
-	{
-		return ($this->db->insert("manuales", $param));
-	}
-	public function update($param)
-	{
-		$this->db->where("id", $param["id"]);
-		unset($param["id"]);
-		return ($this->db->update("manuales", $param));
-	}
-
-	public function activate($param)
-	{
-		$this->db->where("id", $param["id"]);
-		unset($param["id"]);
-		$param["status"] = 1;
-		$this->db->update("invimas", $param);
-	}
-	// public function delete($param){
-	// 	$this->db->where("id",$param["id"]);
-	// 	$this->db->delete("invimas");
-	// }	
+    public static function remove($id)
+    {
+        return self::destroy($id);
+    }
 }

@@ -8,8 +8,8 @@
 	</thead>
 	<tbody>
 		<tr>
-			<td><?php echo $id ?></td>
-			<td><?php echo $guia->name; ?></td>
+			<td>{{ $id }}</td>
+			<td>{{ $guia->name }}</td>
 		</tr>
 	</tbody>
 </table>
@@ -19,17 +19,15 @@
  			<th>Combinación</th>
  			<th>Cantidad</th>
  			<th></th>
-
  		</tr>
  	</thead>
  	<tbody>
- 			@foreach($combinaciones as $combinacion)
- 				<tr>
- 					<td><?php echo $combinacion->consulta; ?></td>
- 					<td><?php echo $combinacion->cuenta; ?></td>
- 					<td><a onclick="relacionar_guia_con_equipos({{ $id }},'<?php echo $combinacion->name;?>','<?php echo $combinacion->marca;?>','<?php echo $combinacion->modelo;?>',event)" class="btn btn-success" href=""><i class="glyphicon glyphicon-ok"></i></a></td>
- 				</tr>
- 			<?php endforeach ?>
- 		
+ 		@foreach($combinaciones as $combinacion)
+ 			<tr>
+ 				<td>{{ $combinacion->consulta }}</td>
+ 				<td>{{ $combinacion->cuenta }}</td>
+ 				<td><a onclick="relacionar_guia_con_equipos({{ $id }}, '{{ $combinacion->name }}', '{{ $combinacion->marca }}', '{{ $combinacion->modelo }}', event)" class="btn btn-success" href=""><i class="glyphicon glyphicon-ok"></i></a></td>
+ 			</tr>
+ 		@endforeach
  	</tbody>
  </table>

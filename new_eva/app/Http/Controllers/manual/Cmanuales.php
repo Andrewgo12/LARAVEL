@@ -1,120 +1,204 @@
 <?php
-defined('BASEPATH') or exit('El acceso directo no esta permitido');
+
+
 /**
- * 
+ * Controlador Cmanuales - Sistema HUV
+ * Gestiona las funcionalidades del módulo correspondiente
  */
-class Cmanuales extends CI_Controller
+class Cmanuales extends Controller
 {
-  function __construct()
-  {
-    parent::__construct();
-    $this->load->model('Mmanuales');
-  }
-  public function index()
-  {
-    if ($this->session->userdata('login')) {
-    } else {
-      redirect(base_url('Cauth'));
+    /**
+     * Permisos del controlador
+     */
+    protected $permisos = [];
+
+    /**
+     * Constructor del controlador
+     */
+    public function __construct()
+    {
+        $this->permisos = Session::get('permisos', []);
     }
-    $acciones = $this->session->userdata("acciones");
-    $this->session->set_userdata('controlador', $this->uri->segment(2));
-    foreach ($acciones as $accion) {
-      if ($accion->modulo == "manuales") {
-        if ($accion->leer != 1) {
-          redirect(base_url('Forbidden'));
+
+    /**
+namespace App\Http\Controllers\Manual;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
+use App\Models\Mmanuales;
+
+/* Sistema HUV */
+    public function index()
+    {
+        if (!Session::get('login')) {
+            return redirect()->route('huv.login');
         }
-      }
+
+        $data = [
+            'permisos' => $this->permisos,
+            'acciones' => Session::get('acciones', [])
+        ];
+
+        return view('laravel.manuales.list', $data);
     }
 
-    $data = array(
-      "manuales" => $this->Mmanuales->getAll()
-    );
-    $this->load->view("layouts/header");
-    $this->load->view("layouts/aside");
-    $this->load->view("manuales/list", $data);
-    $this->load->view("manuales/modal_edit");
-    $this->load->view("manuales/modal_add");
-    $this->load->view("manuales/modal_consulta");
-    $this->load->view("manuales/detalle_consulta");
-    $this->load->view("layouts/footer");
-  }
+    /* Sistema HUV */
+    public function getServerSide(Request $request): JsonResponse
+    {
+        try {
+            $params = $request->all();
+            $result = Mmanuales::getServerSide($params);
 
-  // Refactoring
-  public function ServiceGetAll()
-  {
-    echo json_encode($this->Mmanuales->getAllManuals());
-  }
-  public function ServiceGetOne($id)
-  {
-    echo json_encode($this->Mmanuales->getOneManual($id));
-  }
-  public function delete($id)
-  {
-    $this->Mmanuales->delete(array('id' => $id));
-  }
+            $response = [
+                'draw' => intval($request->input('draw')),
+                'recordsTotal' => $result['num_filas'],
+                'recordsFiltered' => $result['num_filas'],
+                'data' => $result['datos']
+            ];
 
-
-
-  public function getAll()
-  {
-    echo json_encode($this->Mmanuales->getAll());
-  }
-  public function getOne($id = '')
-  {
-    if ($id != '') {
-      $_POST['id'] = $id;
-    }
-    echo json_encode($this->Mmanuales->getOne($_POST));
-  }
-  public function add()
-  {
-
-    $this->form_validation->set_rules("descripcion", "Descripcion del manual", "is_unique[manuales.descripcion]|required|min_length[4]");
-    $this->form_validation->set_rules("url", "url ingresada", "is_unique[manuales.url]|required|min_length[4]");
-    if ($this->form_validation->run()) {
-      if ($result = $this->Mmanuales->add($_POST)) {
-        echo json_encode(array('result' => $result));
-        return;
-      }
-    } else {
-      echo json_encode(array('error' => validation_errors()));
-      return;
-    }
-  }
-  public function update()
-  {
-
-    if ($this->Mmanuales->getOne($_POST)->url == $_POST["url"]) {
-      $this->form_validation->set_rules("url", "Url valida", "required|min_length[4]");
-    } else {
-      $this->form_validation->set_rules("url", "Url valida", "is_unique[manuales.url]|required|min_length[4]");
+            return response()->json($response);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en servidor: ' . $e->getMessage()], 500);
+        }
     }
 
-    if ($this->form_validation->run()) {
-
-      if ($this->Mmanuales->update($_POST)) {
-      }
-      $vector_respuesta = array(
-        "caso" => 1
-      );
-    } else {
-      $informacion_error = validation_errors();
-      $vector_respuesta = array(
-
-        "caso" => 2,
-        "informacion_error" => $informacion_error
-      );
+    /* Sistema HUV */
+    public function getOne(Request $request): JsonResponse
+    {
+        try {
+            $id = $request->input('id');
+            $item = Mmanuales::getOne($id);
+            return response()->json($item, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al obtener registro: ' . $e->getMessage()], 500);
+        }
     }
-    echo json_encode($vector_respuesta);
-  }
 
-  public function activate()
-  {
-    // $this->Minvimas->activate($_POST);
-  }
-  public function show()
-  {
-    $manuales_activos = $this->Mmanuales->get();
-    $this->load->view("manuales/detalle_consulta", array("manuales_activos" => $manuales_activos));
-  }
+    /* Sistema HUV */
+    public function add(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $data['created_at'] = now();
+            $data['usuario_id'] = Session::get('id');
+
+            $result = Mmanuales::add($data);
+
+            if ($result) {
+                return response()->json(['success' => true, 'message' => 'Registro agregado exitosamente'], 201);
+            } else {
+                return response()->json(['error' => 'No se pudo agregar el registro'], 500);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al agregar: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function update(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $data['updated_at'] = now();
+
+            $result = Mmanuales::edit($data);
+
+            if ($result) {
+                return response()->json(['success' => true, 'message' => 'Registro actualizado exitosamente'], 200);
+            } else {
+                return response()->json(['error' => 'No se pudo actualizar el registro'], 500);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al actualizar: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function delete(Request $request): JsonResponse
+    {
+        try {
+            $id = $request->input('id');
+            $result = Mmanuales::remove($id);
+
+            if ($result) {
+                return response()->json(['success' => true, 'message' => 'Registro eliminado exitosamente'], 200);
+            } else {
+                return response()->json(['error' => 'No se pudo eliminar el registro'], 500);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al eliminar: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function upload(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $result = Mmanuales::upload($data);
+
+            return response()->json($result, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en upload: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function download(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $result = Mmanuales::download($data);
+
+            return response()->json($result, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en download: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function getByCategoria(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $result = Mmanuales::getByCategoria($data);
+
+            return response()->json($result, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en getByCategoria: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function getCategorias(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $result = Mmanuales::getCategorias($data);
+
+            return response()->json($result, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en getCategorias: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function addCategoria(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $result = Mmanuales::addCategoria($data);
+
+            return response()->json($result, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en addCategoria: ' . $e->getMessage()], 500);
+        }
+    }
+
+}
+
 }

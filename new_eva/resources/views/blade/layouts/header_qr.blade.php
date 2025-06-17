@@ -6,33 +6,30 @@
     <meta http-equiv="Expires" content="0">
     <meta http-equiv="Last-Modified" content="0">
     <meta http-equiv="Cache-Control" content="no-cache, mustrevalidate">
-    <meta http-equiv="Pragma" content="no-cache">    
+    <meta http-equiv="Pragma" content="no-cache">
     <title>EVA</title>
     <!-- Tell the browser to be responsive to screen width -->
-    <!-- <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport"> -->
-    <meta name="viewport" content="width=device-width, initial-scale=0.3, user-scalable=si">  
+    <meta name="viewport" content="width=device-width, initial-scale=0.3, user-scalable=si">
     <!-- Bootstrap 3.3.7 -->
-
-    <link rel="stylesheet" href="{{ asset('') }}assets/template/bootstrap/css/bootstrap.min.css?n=<?=time();?>">
+    <link rel="stylesheet" href="{{ asset('assets/template/bootstrap/css/bootstrap.min.css') }}?v={{ time() }}">
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="{{ asset('') }}assets/template/font-awesome/css/font-awesome.min.css?n=<?=time();?>">
+    <link rel="stylesheet" href="{{ asset('assets/template/font-awesome/css/font-awesome.min.css') }}?v={{ time() }}">
     <!-- Theme style -->
-    <link rel="stylesheet" href="{{ asset('') }}assets/template/dist/css/AdminLTE.min.css?n=<?=time();?>">
-    <!-- AdminLTE Skins. Choose a skin from the css/skins
-    folder instead of downloading all of them to reduce the load. -->
-    <link rel="stylesheet" href="{{ asset('') }}assets/template/dist/css/skins/_all-skins.min.css?n=<?=time();?>"> 
-    <!-- DatataTable. -->
-    <link rel="stylesheet" href="{{ asset('') }}assets/template/datatables.net-bs/css/dataTables.bootstrap.min.css?n=<?=time();?>">
-    <!-- Select2. -->
-    <link rel="stylesheet" href="{{ asset('') }}assets/template/select2/dist/css/select2.min.css?n=<?=time();?>">
+    <link rel="stylesheet" href="{{ asset('assets/template/dist/css/AdminLTE.min.css') }}?v={{ time() }}">
+    <!-- AdminLTE Skins -->
+    <link rel="stylesheet" href="{{ asset('assets/template/dist/css/skins/_all-skins.min.css') }}?v={{ time() }}">
+    <!-- DatataTable -->
+    <link rel="stylesheet" href="{{ asset('assets/template/datatables.net-bs/css/dataTables.bootstrap.min.css') }}?v={{ time() }}">
+    <!-- Select2 -->
+    <link rel="stylesheet" href="{{ asset('assets/template/select2/dist/css/select2.min.css') }}?v={{ time() }}">
     <!-- Mis css -->
-    <link rel="stylesheet" href="{{ asset('') }}assets/template/propio/propio.css?n=<?=time();?>">
+    <link rel="stylesheet" href="{{ asset('assets/template/propio/propio.css') }}?v={{ time() }}">
     <!-- Bootstrap file -->
-    <link rel="stylesheet" href="{{ asset('') }}assets/template/bootstrap-file/css/fileinput.min.css?n=<?=time();?>">
-    <!--ligth-box -->
-    <link rel="stylesheet" href="{{ asset('') }}assets/template/lightbox2-master/dist/css/lightbox.min.css?n=<?=time();?>">
-    <!--ligth-box -->
-    <link rel="stylesheet" type="text/css" href="{{ asset('') }}assets/template/Carousel/Carousel-Hero.css?n=<?=time();?>">
-    
+    <link rel="stylesheet" href="{{ asset('assets/template/bootstrap-file/css/fileinput.min.css') }}?v={{ time() }}">
+    <!-- Lightbox -->
+    <link rel="stylesheet" href="{{ asset('assets/template/lightbox2-master/dist/css/lightbox.min.css') }}?v={{ time() }}">
+    <!-- Carousel -->
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/template/Carousel/Carousel-Hero.css') }}?v={{ time() }}">
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
+

@@ -1,21 +1,46 @@
 <?php
 
-defined('BASEPATH') or exit('El acceso directo no esta permitido');
-/**
- * 
- */
-class Mtipos_fallas extends CI_Model
-{
+namespace App\Models;
 
-	function __construct()
-	{
-		parent::__construct();
-	}
-	public function get()
-	{
-		$this->db->where('status', 1);
-		$this->db->order_by("name", "asc");
-		$resultado = $this->db->get("tipos_fallas");
-		return $resultado->result();
-	}
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\DB;
+
+/**
+ * Mtipos_fallas - Sistema HUV (Convertido automáticamente)
+ */
+class Mtipos_fallas extends Model
+{
+    use HasFactory;
+
+    protected $table = 'tipos_fallas';
+    protected $fillable = [];
+
+    // Métodos básicos
+    public static function getAll()
+    {
+        return self::all();
+    }
+
+    public static function getOne($id)
+    {
+        return self::find($id);
+    }
+
+    public static function add($data)
+    {
+        return self::create($data);
+    }
+
+    public static function edit($data)
+    {
+        $id = $data['id'];
+        unset($data['id']);
+        return self::where('id', $id)->update($data);
+    }
+
+    public static function remove($id)
+    {
+        return self::destroy($id);
+    }
 }

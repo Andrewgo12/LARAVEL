@@ -1,45 +1,46 @@
-<?php 
+<?php
 
-defined ('BASEPATH') OR exit('El acceso directo no esta permitido');
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\DB;
+
 /**
-* 
-*/
-class Mcierres extends CI_Model
+ * Mcierres - Sistema HUV (Convertido automáticamente)
+ */
+class Mcierres extends Model
 {
-	
-	function __construct()
-	{
-		parent::__construct();
+    use HasFactory;
 
-	}
-	public function get(){
-		$this->db->where('status',1);
-		$this->db->order_by("code","asc");
-		$resultado = $this->db->get("codificacion_cierres");
-		return $resultado->result();
-	}
+    protected $table = 'cierres';
+    protected $fillable = [];
 
-	public function getUsed(){
+    // Métodos básicos
+    public static function getAll()
+    {
+        return self::all();
+    }
 
-		$query="
-			SELECT
-			    *
-			FROM
-			    codificacion_cierres cc
-			WHERE
-			    (
-			    SELECT
-			        COUNT(*)
-			    FROM
-			        correctivos_generales cg
-			    LEFT JOIN equipos e ON e.id=cg.equipo_id    
-			    WHERE
-			        cg.cierre_id = cc.id AND
-			        e.tipo_id=".$this->session->userdata("tipo_id")."
-			)>0
-		";
-		return $this->db->query($query)->result();
-	}
+    public static function getOne($id)
+    {
+        return self::find($id);
+    }
+
+    public static function add($data)
+    {
+        return self::create($data);
+    }
+
+    public static function edit($data)
+    {
+        $id = $data['id'];
+        unset($data['id']);
+        return self::where('id', $id)->update($data);
+    }
+
+    public static function remove($id)
+    {
+        return self::destroy($id);
+    }
 }
-
-?>

@@ -1,41 +1,46 @@
 <?php
-defined('BASEPATH') or exit('El acceso directo no esta permitido');
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\DB;
+
 /**
- * 
+ * Mrepuestos_ti - Sistema HUV (Convertido automáticamente)
  */
-class Mrepuestos_ti extends CI_Model
+class Mrepuestos_ti extends Model
 {
-	function __construct()
-	{
-		defined('BASEPATH') or exit('El acceso directo no esta permitido');
-		parent::__construct();
-	}
-	public function get($param)
-	{
-		$this->db->where("orden_id", $param["id"]);
-		$this->db->order_by("name", "asc");
-		return $this->db->get("repuestos_ti")->result();
-	}
-	public function add($param)
-	{
-		$this->db->insert("repuestos_ti", $param);
-	}
-	public function update($param)
-	{
-		$this->db->where("id", $param["id"]);
-		unset($param["id"]);
-		$this->db->update("repuestos_ti", $param);
-	}
-	public function delete($param)
-	{
-		$this->db->where("id", $param["id"]);
-		unset($param["id"]);
-		$this->db->update("repuestos_ti", $param);
-	}
-	public function addList($param)
-	{
-		foreach ($param as $element) {
-			$this->db->insert("repuestos_pendientes", $element);
-		}
-	}
+    use HasFactory;
+
+    protected $table = 'repuestos_ti';
+    protected $fillable = [];
+
+    // Métodos básicos
+    public static function getAll()
+    {
+        return self::all();
+    }
+
+    public static function getOne($id)
+    {
+        return self::find($id);
+    }
+
+    public static function add($data)
+    {
+        return self::create($data);
+    }
+
+    public static function edit($data)
+    {
+        $id = $data['id'];
+        unset($data['id']);
+        return self::where('id', $id)->update($data);
+    }
+
+    public static function remove($id)
+    {
+        return self::destroy($id);
+    }
 }

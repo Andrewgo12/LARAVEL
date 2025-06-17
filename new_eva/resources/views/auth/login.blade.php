@@ -65,13 +65,13 @@
         <div class="col-xs-8">
           <div class="checkbox icheck">
             <label>
-            <input type="checkbox"style="left: 120px;">Remember Me
+            <input type="checkbox" style="left: 120px;" name="remember"> Remember Me
             </label>
           </div>
         </div>
         <!-- /.col -->
         <div class="col-xs-4">
-          <button type="submit" class="btn btn-primary btn-block btn-flat"name="ingresar">Sign In</button>
+          <button type="submit" class="btn btn-primary btn-block btn-flat" name="ingresar">Sign In</button>
         </div>
         <!-- /.col -->
       </div>
@@ -86,9 +86,8 @@
     </div>
     <!-- /.social-auth-links -->
 
-    <a href="#">I forgot my password</a><br>
-    <a href="{{ route('huv.login') }}" class="text-center">Register a new membership</a>
-<!--register.html-->
+    <a href="{{ route('password.request') }}">I forgot my password</a><br>
+    <a href="{{ route('register') }}" class="text-center">Register a new membership</a>
   </div>
   <!-- /.login-box-body -->
 </div>
@@ -111,3 +110,4 @@
 </script>
 </body>
 </html>
+

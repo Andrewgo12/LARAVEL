@@ -1,128 +1,217 @@
 <?php
-defined('BASEPATH') or exit('El acceso directo no esta permitido');
+
 
 /**
- *
+ * Controlador Ccontactos - Sistema HUV
+ * Gestiona las funcionalidades del módulo correspondiente
  */
-class Ccontactos extends CI_Controller
+class Ccontactos extends Controller
 {
-  private $servicios;
-  function __construct()
-  {
-    parent::__construct();
-    $this->load->model("Mcontactos");
+    /**
+     * Permisos del controlador
+     */
+    protected $permisos = [];
 
-    // $this->permisos=$this->backend_lib->control();
-
-  }
-  public function index()
-  {
-    if ($this->session->userdata('login')) {
-    } else {
-      redirect(base_url('Cauth'));
+    /**
+     * Constructor del controlador
+     */
+    public function __construct()
+    {
+        $this->permisos = Session::get('permisos', []);
     }
-    $acciones = $this->session->userdata("acciones");
-    $this->session->set_userdata('controlador', $this->uri->segment(2));
 
-    foreach ($acciones as $accion) {
-      if ($accion->modulo == "contactos") {
-        if ($accion->leer != 1) {
-          redirect(base_url('Forbidden'));
+    /**
+namespace App\Http\Controllers\Contacto;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
+use App\Models\Mcontactos;
+
+/* Sistema HUV */
+    public function index()
+    {
+        if (!Session::get('login')) {
+            return redirect()->route('huv.login');
         }
-      }
-    }
-    $this->load->view("layouts/header");
-    $this->load->view("layouts/aside");
-    $this->load->view("contactos/list");
-    $this->load->view("layouts/footer");
-  }
-  public function get_datatable()
-  {
-    echo json_encode($this->Mcontactos->get_datatable());
-  }
-  public function get()
-  {
-    echo json_encode($this->Mcontactos->get());
-  }
-  public function getOne()
-  {
-    echo json_encode($this->Mcontactos->getOne($_POST));
-  }
-  public function getProveedores()
-  {
-    echo json_encode($this->Mcontactos->getProveedores());
-  }
-  public function getTcontactos()
-  {
-    echo json_encode($this->Mcontactos->getTcontactos($_POST));
-  }
 
-  public function update()
-  {
-    $servicio = $this->Mcontactos->getOne($_POST);
-    if ($servicio->name == $_POST["name"]) {
-      $this->form_validation->set_rules("name", "Nombre del contacto", "required|min_length[3]");
-    } else {
-      $this->form_validation->set_rules("name", "Nombre del contacto", "required|min_length[3]|is_unique[servicios.name]");
-    }
-    if ($this->form_validation->run()) {
-      $this->Mcontactos->update($_POST);
-      $vector = array(
-        'respuesta' => 1,
-        'informacion' => ""
-      );
-    } else {
-      $vector = array(
-        'respuesta' => 2,
-        'informacion' => validation_errors()
-      );
-    }
-    echo json_encode($vector);
-  }
-  public function add()
-  {
+        $data = [
+            'permisos' => $this->permisos,
+            'acciones' => Session::get('acciones', [])
+        ];
 
-    if (isset($_POST["id"])) {
-      unset($_POST["id"]);
+        return view('laravel.contactos.list', $data);
     }
-    $this->form_validation->set_rules("name", "Nombre del contacto", "is_unique[contacto.name]|required|min_length[3]");
-    $this->form_validation->set_rules("tcontacto_id", "Tipo de contacto", "required");
 
+    /* Sistema HUV */
+    public function getServerSide(Request $request): JsonResponse
+    {
+        try {
+            $params = $request->all();
+            $result = Mcontactos::getServerSide($params);
 
-    if ($this->form_validation->run()) {
-      $vector = array(
-        'respuesta' => 1,
-        'informacion' => ""
-      );
-      $this->Mcontactos->add($_POST);
-    } else {
-      $vector = array(
-        'respuesta' => 2,
-        'informacion' => validation_errors()
-      );
+            $response = [
+                'draw' => intval($request->input('draw')),
+                'recordsTotal' => $result['num_filas'],
+                'recordsFiltered' => $result['num_filas'],
+                'data' => $result['datos']
+            ];
+
+            return response()->json($response);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en servidor: ' . $e->getMessage()], 500);
+        }
     }
-    echo json_encode($vector);
-  }
-  public function delete()
-  {
-    $_POST["status"] = 2;
-    $this->Mcontactos->delete($_POST);
-  }
 
-  public function getPisos()
-  {
-    echo json_encode($this->Mpisos->get());
-  }
-  public function getZonas()
-  {
-    echo json_encode($this->Mzonas->get());
-  }
-  public function getCentros()
-  {
-    echo json_encode($this->Mcentros->get());
-  }
-  public function getProveedoresMantenimiento()
-  {
-    echo json_encode($this->Mcontactos->getProveedoresMantenimiento());
-  }
+    /* Sistema HUV */
+    public function getOne(Request $request): JsonResponse
+    {
+        try {
+            $id = $request->input('id');
+            $item = Mcontactos::getOne($id);
+            return response()->json($item, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al obtener registro: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function add(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $data['created_at'] = now();
+            $data['usuario_id'] = Session::get('id');
+
+            $result = Mcontactos::add($data);
+
+            if ($result) {
+                return response()->json(['success' => true, 'message' => 'Registro agregado exitosamente'], 201);
+            } else {
+                return response()->json(['error' => 'No se pudo agregar el registro'], 500);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al agregar: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function update(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $data['updated_at'] = now();
+
+            $result = Mcontactos::edit($data);
+
+            if ($result) {
+                return response()->json(['success' => true, 'message' => 'Registro actualizado exitosamente'], 200);
+            } else {
+                return response()->json(['error' => 'No se pudo actualizar el registro'], 500);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al actualizar: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function delete(Request $request): JsonResponse
+    {
+        try {
+            $id = $request->input('id');
+            $result = Mcontactos::remove($id);
+
+            if ($result) {
+                return response()->json(['success' => true, 'message' => 'Registro eliminado exitosamente'], 200);
+            } else {
+                return response()->json(['error' => 'No se pudo eliminar el registro'], 500);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al eliminar: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function getAll(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $result = Mcontactos::getAll($data);
+
+            return response()->json($result, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en getAll: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function getByTipo(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $result = Mcontactos::getByTipo($data);
+
+            return response()->json($result, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en getByTipo: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function getTipos(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $result = Mcontactos::getTipos($data);
+
+            return response()->json($result, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en getTipos: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function addTipo(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $result = Mcontactos::addTipo($data);
+
+            return response()->json($result, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en addTipo: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function updateTipo(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $result = Mcontactos::updateTipo($data);
+
+            return response()->json($result, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en updateTipo: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function deleteTipo(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $result = Mcontactos::deleteTipo($data);
+
+            return response()->json($result, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en deleteTipo: ' . $e->getMessage()], 500);
+        }
+    }
+
+}
+
 }

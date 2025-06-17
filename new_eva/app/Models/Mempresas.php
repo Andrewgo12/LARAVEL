@@ -1,53 +1,46 @@
-<?php 
+<?php
 
-defined ('BASEPATH') OR exit('El acceso directo no esta permitido');
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\DB;
 
 /**
-* 
-*/
-class Mempresas extends CI_Model
+ * Mempresas - Sistema HUV (Convertido automáticamente)
+ */
+class Mempresas extends Model
 {
-	
-	function __construct()
-	{
-		parent::__construct();
-	}
+    use HasFactory;
 
+    protected $table = 'empresas';
+    protected $fillable = [];
 
-	public function getAll(){
-		$this->db->select("empresas.*");
-		$this->db->from("empresas");
-		return $this->db->get()->result();
+    // Métodos básicos
+    public static function getAll()
+    {
+        return self::all();
+    }
 
-	}
-	public function add($param){
-	}
+    public static function getOne($id)
+    {
+        return self::find($id);
+    }
 
-	public function update($param){
+    public static function add($data)
+    {
+        return self::create($data);
+    }
 
-	}
-	public function delete($param,$array){
-	}
-	
-	public function getOne($param){
+    public static function edit($data)
+    {
+        $id = $data['id'];
+        unset($data['id']);
+        return self::where('id', $id)->update($data);
+    }
 
-		$query="SELECT * from empresas WHERE id=".$param["id"];
-		return $this->db->query($query)->result();
-		
-	}	
-	public function getEmailUsuariosEmpresa($param)
-	{
-		$this->db->select("usuarios.email as email");
-		$this->db->from("usuarios");
-		$this->db->where("usuarios.id_empresa",$param["id_empresa"]);
-		$resultado=$this->db->get();
-		$vector=array(
-			"correos_empresa"=>$resultado->result(),
-			"cantidad"=>$resultado->num_rows()
-		);
-		return $vector;
-	}		
-	
+    public static function remove($id)
+    {
+        return self::destroy($id);
+    }
 }
-
- ?>

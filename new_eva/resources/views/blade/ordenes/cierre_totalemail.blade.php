@@ -6,7 +6,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 </head>
 <body style="margin: 0; padding: 0;">
-	<table border="0" cellpadding="0" cellspacing="0" width="100%"> 
+	<table border="0" cellpadding="0" cellspacing="0" width="100%">
 		<tr>
 			<td style="padding: 10px 0 30px 0;">
 				<table align="center" border="0" cellpadding="0" cellspacing="0" width="600" style="border: 1px solid #cccccc; border-collapse: collapse;">
@@ -20,178 +20,160 @@
 							<table border="0" cellpadding="0" cellspacing="0" width="100%">
 								<tr>
 									<td style="color: #153643; font-family: Arial, sans-serif; font-size: 24px;">
-										<b> <h2>Ticket Nro <?php echo $orden->id; ?></h2> </b>
+										<b><h2>Ticket Nro {{ $orden->id }}</h2></b>
 									</td>
 								</tr>
 								<tr>
 									<td style="padding: 20px 0 30px 0; color: #153643; font-family: Arial, sans-serif; font-size: 16px; line-height: 20px;">
 
 
-										<p><h3>Eva Gestiona la tecnologia</h3></p>
+										<p><h3>Eva Gestiona la tecnología</h3></p>
 										<p>
 											<h3 class="text-muted">Cierre de Orden</h3>
 										</p>
-										<h4>Asunto:&nbsp;</h4><?php echo $orden->asunto; ?>
+										<h4>Asunto:&nbsp;</h4>{{ $orden->asunto }}
 										<blockquote>
-											<h4>Descripcion</h4>
-											<p><?php echo $orden->descripcion; ?></p>
-											<footer style="font-size: 10px;"><strong>Fecha de registro</strong>: <?php echo $orden->fecha_inicio; ?></footer>
+											<h4>Descripción</h4>
+											<p>{{ $orden->descripcion }}</p>
+											<footer style="font-size: 10px;"><strong>Fecha de registro</strong>: {{ $orden->fecha_inicio }}</footer>
 										</blockquote>
 
 										<blockquote>
 											<h4>Ubicación de referencia</h4>
-											<p><?php echo $orden->servicio; ?></p>
-											@if($orden->area!=""&&$orden->area!="null")
-												<footer style="font-size: 10px;"><strong>Area</strong>: <?php echo $orden->area; ?></footer>
-											<?php endif ?>
+											<p>{{ $orden->servicio }}</p>
+											@if($orden->area!="" && $orden->area!="null")
+												<footer style="font-size: 10px;"><strong>Área</strong>: {{ $orden->area }}</footer>
+											@endif
 										</blockquote>
 
 										<blockquote>
-											<h4>Informacion del equipo</h4>
+											<h4>Información del equipo</h4>
 										</blockquote>
 
-										<?php if (isset($equipo)): ?>
+										@if(isset($equipo))
 											<ul>
-												<li style="font-size: 15px"><strong>Id del equipo en el sistema </strong>: <?php echo  $equipo->id; ?></li>
-												<li style="font-size: 15px"><strong>Nombre del equipo </strong>: <?php echo  $equipo->name; ?></li>
-												<li style="font-size: 15px"><strong>Marca del equipo </strong>: <?php echo  $equipo->marca; ?></li>
-												<li style="font-size: 15px"><strong>Modelo del equipo </strong>: <?php echo  $equipo->modelo; ?></li>
-												<li style="font-size: 15px"><strong>Activo fijo del equipo </strong>: <?php echo  $equipo->code; ?></li>
-												<li style="font-size: 15px"><strong>Serie del equipo </strong>: <?php echo  $equipo->serial; ?></li>
-												<li style="font-size: 15px"><strong>Prioridad </strong>: <?php echo  $orden->prioridad; ?></li>
+												<li style="font-size: 15px"><strong>Id del equipo en el sistema</strong>: {{ $equipo->id }}</li>
+												<li style="font-size: 15px"><strong>Nombre del equipo</strong>: {{ $equipo->name }}</li>
+												<li style="font-size: 15px"><strong>Marca del equipo</strong>: {{ $equipo->marca }}</li>
+												<li style="font-size: 15px"><strong>Modelo del equipo</strong>: {{ $equipo->modelo }}</li>
+												<li style="font-size: 15px"><strong>Activo fijo del equipo</strong>: {{ $equipo->code }}</li>
+												<li style="font-size: 15px"><strong>Serie del equipo</strong>: {{ $equipo->serial }}</li>
+												<li style="font-size: 15px"><strong>Prioridad</strong>: {{ $orden->prioridad }}</li>
 											</ul>
-											@else
-												<ul>
-													<li style="font-size: 15px"><strong>Nombre del equipo </strong>: <?php echo  $orden->nombre_equipo; ?></li>
-													<li style="font-size: 15px"><strong>Marca del equipo </strong>: <?php echo  $orden->marca_equipo; ?></li>
-													<li style="font-size: 15px"><strong>Modelo del equipo </strong>: <?php echo  $orden->modelo_equipo; ?></li>
-													<li style="font-size: 15px"><strong>Activo fijo del equipo </strong>: <?php echo  $orden->codigo_equipo; ?></li>
-													<li style="font-size: 15px"><strong>Serie del equipo </strong>: <?php echo  $orden->serie_equipo; ?></li>
-													<li style="font-size: 15px"><strong>Prioridad </strong>: <?php echo  $orden->prioridad; ?></li>
-												</ul>
-
-											<?php endif ?>
-
-											<h4>Informacion del Solicitante :</h4>
-
+										@else
 											<ul>
-												<li><strong>Nombre</strong>: <?php echo   $reportante->nombre;?> </li>
-												<li><strong>Apellido</strong>: <?php echo $reportante->apellido;?></li>
-												<li><strong>Telefono</strong>: <?php echo $reportante->telefono;?></li>
-											</ul>											
-											<h4>Asignado a la empresa:</h4><?php echo $empresa[0]->name; ?>
+												<li style="font-size: 15px"><strong>Nombre del equipo</strong>: {{ $orden->nombre_equipo }}</li>
+												<li style="font-size: 15px"><strong>Marca del equipo</strong>: {{ $orden->marca_equipo }}</li>
+												<li style="font-size: 15px"><strong>Modelo del equipo</strong>: {{ $orden->modelo_equipo }}</li>
+												<li style="font-size: 15px"><strong>Activo fijo del equipo</strong>: {{ $orden->codigo_equipo }}</li>
+												<li style="font-size: 15px"><strong>Serie del equipo</strong>: {{ $orden->serie_equipo }}</li>
+												<li style="font-size: 15px"><strong>Prioridad</strong>: {{ $orden->prioridad }}</li>
+											</ul>
+										@endif
 
-											@if($orden->asignado_id!=NULL&&$orden->asignado_id!=""&&$orden->asignado_id!=0)
-												
-												<h4>Información del usuario asignado:</h4>
-												<ul>
-													<li><strong>Nombre</strong>: <?php echo   $asignado->nombre;?> </li>
-													<li><strong>Apellido</strong>: <?php echo $asignado->apellido;?></li>
-													<li><strong>Telefono</strong>: <?php echo $asignado->telefono;?></li>												
-												</ul>
-											<?php endif ?>
+										<h4>Información del Solicitante:</h4>
+										<ul>
+											<li><strong>Nombre</strong>: {{ $reportante->nombre }}</li>
+											<li><strong>Apellido</strong>: {{ $reportante->apellido }}</li>
+											<li><strong>Teléfono</strong>: {{ $reportante->telefono }}</li>
+										</ul>
 
-											<blockquote>
-												<h4>Información del diagnostico</h4>
+										<h4>Asignado a la empresa:</h4>{{ $empresa[0]->name }}
 
-												<h4>Diagnostico:</h4> <p><?php echo $orden->diagnostico; ?></p>
-												<footer style="font-size: 12px;"><strong>Fecha de diagnostico</strong>: <?php echo $orden->fecha_diagnostico; ?></footer>
+										@if($orden->asignado_id!=NULL && $orden->asignado_id!="" && $orden->asignado_id!=0)
+											<h4>Información del usuario asignado:</h4>
+											<ul>
+												<li><strong>Nombre</strong>: {{ $asignado->nombre }}</li>
+												<li><strong>Apellido</strong>: {{ $asignado->apellido }}</li>
+												<li><strong>Teléfono</strong>: {{ $asignado->telefono }}</li>
+											</ul>
+										@endif
 
-												<h4>Codificación del Diagnostico: <?php echo $orden->codigo_diagnostico; ?></h4>
-												<?php echo $orden->descripcion_diagnostico; ?>	
+										<blockquote>
+											<h4>Información del diagnóstico</h4>
+											<h4>Diagnóstico:</h4>
+											<p>{{ $orden->diagnostico }}</p>
+											<footer style="font-size: 12px;"><strong>Fecha de diagnóstico</strong>: {{ $orden->fecha_diagnostico }}</footer>
+											<h4>Codificación del Diagnóstico: {{ $orden->codigo_diagnostico }}</h4>
+											<p>{{ $orden->descripcion_diagnostico }}</p>
+										</blockquote>
 
+										<blockquote>
+											@if($orden->tecnico_diagnostico_text!="" && $orden->tecnico_diagnostico_text!=NULL)
+												<h4>Usuario quien realiza el diagnóstico</h4>
+												<p>{{ $orden->tecnico_diagnostico_text }}</p>
+											@else
+												<h4>Usuario quien registra el diagnóstico</h4>
+												<p>{{ $usuario_diagnostico->nombre }} {{ $usuario_diagnostico->apellido }}</p>
+												<h5>Email cuenta: {{ $usuario_diagnostico->email }}</h5>
+											@endif
+										</blockquote>
 
-											</blockquote>
+										<blockquote>
+											<h4>Información del procedimiento correctivo</h4>
+											<h4>Trabajo realizado:</h4>
+											<p>{{ $orden->reparacion }}</p>
+											<footer style="font-size: 12px;"><strong>Fecha del procedimiento correctivo</strong>: {{ $orden->fecha_asignacion_cierre }}</footer>
+											<h4>Codificación del procedimiento correctivo: {{ $orden->codigo_cierre }}</h4>
+											<p>{{ $orden->descripcion_cierre }}</p>
+										</blockquote>
 
+										<blockquote>
+											@if($orden->tecnico_cierre_text!="" && $orden->tecnico_cierre_text!=NULL)
+												<h4>Usuario quien realiza el procedimiento correctivo</h4>
+												<p>{{ $orden->tecnico_cierre_text }}</p>
+											@else
+												<h4>Usuario quien registra el procedimiento correctivo</h4>
+												<p>{{ $usuario_solicitud_cierre->nombre }} {{ $usuario_solicitud_cierre->apellido }}</p>
+												<h5>Email cuenta: {{ $usuario_solicitud_cierre->email }}</h5>
+											@endif
+										</blockquote>
 
-											<blockquote>
-												@if($orden->tecnico_diagnostico_text!=""&&$orden->tecnico_diagnostico_text!=NULL)
-
-													<h4>Usuario quien realiza el diagnostico</h4>
-													<?php  echo $orden->tecnico_diagnostico_text;?>
-													@else
-
-														<h4>Usuario quien registra el diagnostico</h4>
-														<?php  echo $usuario_diagnostico->nombre." "; echo $usuario_diagnostico->apellido." ";?>
-														<h5><p><?php echo "Email cuenta: ".$usuario_diagnostico->email; ?></p>
-														<?php endif ?>
-
-													</blockquote>
-
-													<blockquote>
-														<h4>Información del procedimiento correctivo</h4>
-
-														<h4>Trabajo realizado:</h4> <p><?php echo $orden->reparacion; ?></p>
-														<footer style="font-size: 12px;"><strong>Fecha del procedimiento correctivo</strong>: <?php echo $orden->fecha_asignacion_cierre; ?></footer>
-
-														<h4>Codificación del procedimiento correctivo: <?php echo $orden->codigo_cierre; ?></h4>
-														<?php echo $orden->descripcion_cierre; ?>	
-
-													</blockquote>													
-													<blockquote>
-														@if($orden->tecnico_cierre_text!=""&&$orden->tecnico_cierre_text!=NULL)
-
-															<h4>Usuario quien realiza el procedimiento correctivo</h4>
-															<?php  echo $orden->tecnico_cierre_text;?>
-															@else
-
-																<h4>Usuario quien registra el procedimiento correctivo</h4>
-																<?php  echo $usuario_solicitud_cierre->nombre." "; echo $usuario_solicitud_cierre->apellido." ";?>
-																<h5><p><?php echo "Email cuenta: ".$usuario_solicitud_cierre->email; ?></p>
-																<?php endif ?>
-
-															</blockquote>
-															<blockquote>
-																<h4>Usuario que cierra la orden</h4>
-																<?php  echo $usuario_actual->nombre." "; echo $usuario_actual->apellido." ";?>
-																<h5><p><?php echo "Email cuenta: ".$usuario_actual->email; ?></p>
-																
-																<h4><strong>Fecha de cierre:</strong></h4>
-																<small class="text-muted"><?php echo $orden->fecha_fin; ?></small>
-																
-															</blockquote>
-
-														</td>
-													</tr>
-												</table>
-											</td>
-										</tr>
-									</table>
-								</td>
-							</tr>
-							<tr>
-								<td bgcolor="#ee4c50" style="padding: 30px 30px 30px 30px;">
-									<table border="0" cellpadding="0" cellspacing="0" width="100%">
-										<tr>
-											<td style="color: #ffffff; font-family: Arial, sans-serif; font-size: 14px;" width="75%">
-												&reg; Electromedicina,  2019<br/>
-												<a href="#" style="color: #ffffff;"><font color="#ffffff"></font></a>Hospital Universitario del valle
-											</td>
-											<td align="right" width="25%">
-												<table border="0" cellpadding="0" cellspacing="0">
-													<tr>
-														<td style="font-family: Arial, sans-serif; font-size: 12px; font-weight: bold;">
-															<a href="http://www.twitter.com/" style="color: #ffffff;">
-																<img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/210284/tw.gif" alt="Twitter" width="38" height="38" style="display: block;" border="0" />
-															</a>
-														</td>
-														<td style="font-size: 0; line-height: 0;" width="20">&nbsp;</td>
-														<td style="font-family: Arial, sans-serif; font-size: 12px; font-weight: bold;">
-															<a href="http://www.fb.com/" style="color: #ffffff;">
-																<img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/210284/fb.gif" alt="Facebook" width="38" height="38" style="display: block;" border="0" />
-															</a>
-														</td>
-													</tr>
-												</table>
-											</td>
-										</tr>
-									</table>
-								</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-			</table>
-		</body>
-		</html>
+										<blockquote>
+											<h4>Usuario que cierra la orden</h4>
+											<p>{{ $usuario_actual->nombre }} {{ $usuario_actual->apellido }}</p>
+											<h5>Email cuenta: {{ $usuario_actual->email }}</h5>
+											<h4><strong>Fecha de cierre:</strong></h4>
+											<small class="text-muted">{{ $orden->fecha_fin }}</small>
+										</blockquote>
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td bgcolor="#ee4c50" style="padding: 30px 30px 30px 30px;">
+				<table border="0" cellpadding="0" cellspacing="0" width="100%">
+					<tr>
+						<td style="color: #ffffff; font-family: Arial, sans-serif; font-size: 14px;" width="75%">
+							&reg; Electromedicina, 2019<br/>
+							<a href="#" style="color: #ffffff;"><font color="#ffffff"></font></a>Hospital Universitario del Valle
+						</td>
+						<td align="right" width="25%">
+							<table border="0" cellpadding="0" cellspacing="0">
+								<tr>
+									<td style="font-family: Arial, sans-serif; font-size: 12px; font-weight: bold;">
+										<a href="http://www.twitter.com/" style="color: #ffffff;">
+											<img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/210284/tw.gif" alt="Twitter" width="38" height="38" style="display: block;" border="0" />
+										</a>
+									</td>
+									<td style="font-size: 0; line-height: 0;" width="20">&nbsp;</td>
+									<td style="font-family: Arial, sans-serif; font-size: 12px; font-weight: bold;">
+										<a href="http://www.fb.com/" style="color: #ffffff;">
+											<img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/210284/fb.gif" alt="Facebook" width="38" height="38" style="display: block;" border="0" />
+										</a>
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+</body>
+</html>
 

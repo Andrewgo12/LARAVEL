@@ -52,7 +52,7 @@
 												<table class="table table-bordered">
 													<tr><td><input class="form-control" type="text" name="asunto" id="asunto"></td></tr>
 												</table>
-												
+
 											</div>
 										</div>
 										<div class="row">
@@ -61,7 +61,7 @@
 												<textarea name="descripcion" id="descripcion" class="form-control"></textarea>
 											</div>
 										</div>
-									</div>	<br>							
+									</div>	<br>
 
 
 									<div class="subproceso_1"><!--subproceso_1 equipos biomedicos-->
@@ -95,7 +95,7 @@
 									</div><!--fin del div subproceso_1-->
 
 
-									
+
 									<div class="subproceso_2"><!--subproceso_2 subproceso de prueba-->
 										<?php if ({{ session('rol_id') }}<=2): ?><!--super admin o admin-->
 
@@ -128,12 +128,12 @@
 
 <!-------            -------->		<div class="contenedor_input_diagnostico" style="display: none;"><!-- información del diagnostico -->
 										<?php if ({{ session('rol_id') }}<=2): ?><!--Puede ingresar fecha de -->
-											
+
 										<div class="row">
 											<div class="col-sm-12">
 												<label for="diagnostico">Fecha del diagnostico </label>
 												<input required="" min="2015-01-01" type="date" name="fecha_diagnostico" id="fecha_diagnostico"  class="form-control"><input type="time" name="hora_diagnostico" id="hora_diagnostico" class="form-control">
-												
+
 											</div>
 										</div><br>
 										<br>
@@ -148,7 +148,7 @@
 												<label for="retro_diagnostico">Retro Diagnostico</label>
 												<input type="text" name="retro_diagnostico" id="retro_diagnostico"><br>
 											</div>
-										</div><br>										
+										</div><br>
 										<?php endif ?>
 										<div class="row">
 											<div class="col-sm-12">
@@ -157,7 +157,7 @@
 												<textarea class="form-control" disabled="" name="diagnostico" id="diagnostico" ></textarea>
 											</div>
 										</div><br>
-										
+
 										<div class="row">
 											<div class="col-sm-12">
 												<label for="">Codigo de diagnostico</label><br>
@@ -167,21 +167,21 @@
 										<div class="row control_repuestos">
 											<div class="col-sm-3">
 												<label for="">Solicitar repuesto(s)</label><br>
-											</div>	
-											<div class="col-sm-1"><span class="glyphicon glyphicon-plus solicitar_repuestos"></span>&nbsp;<span class="glyphicon glyphicon-erase eliminar_repuestos"></div>	
+											</div>
+											<div class="col-sm-1"><span class="glyphicon glyphicon-plus solicitar_repuestos"></span>&nbsp;<span class="glyphicon glyphicon-erase eliminar_repuestos"></div>
 											<div class="col-sm-8">
 												<label for="">Fecha de solicitud &nbsp;
 												</label>
-												<input required="" class="form-control" type="date" id="fecha_solicitud_repuesto" name="fecha_solicitud_repuesto">	
-											</div>									
+												<input required="" class="form-control" type="date" id="fecha_solicitud_repuesto" name="fecha_solicitud_repuesto">
+											</div>
 										</div><br>
 										<div class="row control_repuestos">
 											<div class="col-sm-12">
 
 												<div class="contenedor_repuestos">
-													
+
 													<table class="table table-bordered table-condensed table-hover table-sm">
-														<thead>	
+														<thead>
 															<tr>
 																<th>Repuesto</th>
 															</tr>
@@ -189,25 +189,25 @@
 														<tbody>
 
 														</tbody>
-													</table>													
+													</table>
 
 												</div>
 											</div>
-										</div>											
+										</div>
 									</div>
 <!-------            --------><div class="contenedor_input_cierre" style="display: none;"><!-- información de cierre -->
 
 										<?php if ({{ session('rol_id') }}<=2): ?><!--Puede ingresar fecha de -->
-											
-											
+
+
 										<div class="row">
 											<div class="col-sm-12">
 												<label for="diagnostico">Fecha cierre </label>
 												<input required="" min="2015-01-01" type="date" name="fecha_asignacion_cierre" id="fecha_asignacion_cierre"  class="form-control"><input type="time" name="hora_fin" id="hora_fin" class="form-control">
-												
+
 											</div>
 										</div><br>
-									
+
 										<br>
 										<div class="row">
 											<div class="col-sm-12">
@@ -220,9 +220,9 @@
 												<label for="retro_cierre">Retro Cierre</label>
 												<input type="text" name="retro_cierre" id="retro_cierre"><br>
 											</div>
-										</div><br>										
+										</div><br>
 
-										<?php endif ?>	
+										<?php endif ?>
 										<div class="row">
 											<div class="col-sm-12">
 												<label for="reparacion">Información de cierre</label>
@@ -267,4 +267,4 @@
 			</div>
 		</div>
 	</div>
-</div> 
+</div>

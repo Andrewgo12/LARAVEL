@@ -9,16 +9,16 @@
           <a title="Exportar excel" target="_blank" class="custom-btn-figure" href="{{ asset('') }}equipo/Ccontingencias/Exportar">
             <li class="fa fa-file-excel-o"></li>
           </a>
-          <?php $acciones = {{ session('acciones') }}; ?>
+          @php $acciones = session('acciones'); @endphp
           @foreach($acciones as $accion)
             @if($accion->modulo == "contingencias")
               @if($accion->insertar == 1)
                 <a href="" class="custom-btn-figure" title="Ingresar contingencia" data-toggle="modal" data-target="#modal_add_contingencia">
                   <li class="glyphicon glyphicon-plus"></li>
                 </a>
-              <?php endif ?>
-            <?php endif ?>
-          <?php endforeach ?>
+              @endif
+            @endif
+          @endforeach
         </ul>
         <div class="table-responsive contenedor-contingencias">
           <table class="tblContingencias table table-info container-header" id="tblContingencias" name="tblContingencias">
@@ -44,8 +44,8 @@
   </section>
 </div>
 <script>
-  var base_url = "<?= base_url(); ?>";
-  var eliminar_contingencia = "<?php print_r({{ session('acciones') }}[20]->eliminar); ?>"; //areas
-  var editar_contingencia = "<?php print_r({{ session('acciones') }}[20]->editar); ?>"; //areas
-  var controlador = "<?php echo {{ session('controlador') }}; ?>";
+  var base_url = "{{ url('/') }}/";
+  var eliminar_contingencia = "{{ session('acciones')[20]->eliminar }}"; //areas
+  var editar_contingencia = "{{ session('acciones')[20]->editar }}"; //areas
+  var controlador = "{{ session('controlador') }}";
 </script>

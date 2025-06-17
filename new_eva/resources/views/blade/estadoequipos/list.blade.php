@@ -26,39 +26,39 @@
           </div>
           <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 table-responsive editarServicio">
             <form action="{{ asset('') }}ubicacion/Cestadoequipos/update" id="form_estadoequipo" name="form_estadoequipo" enctype="multipart/form-data" method="post">
-      @csrf
+              @csrf
               <input type="hidden" id="id" name="id" class="form-control">
               <br>
               <div class="row">
-                <div class="col-sm-3 col-sm-3 col-sm-3 col-sm-3 ">
-                  <label for="code" class="">Nombre:</label>
+                <div class="col-sm-3">
+                  <label for="name" class="">Nombre:</label>
                 </div>
-                <div class="col-sm-9 col-sm-9 col-sm-9 col-sm-9 ">
+                <div class="col-sm-9">
                   <input type="text" class="form-control" placeholder="Nombre del estado" name="name" id="name">
                 </div>
               </div>
               <br>
               <div class="row">
-                <div class="col-sm-3 col-sm-3 col-sm-3 col-sm-3 ">
-                  <label for="code" class="">Tipo de estado:</label>
+                <div class="col-sm-3">
+                  <label for="tipoestado_id" class="">Tipo de estado:</label>
                 </div>
-                <div class="col-sm-9 col-sm-9 col-sm-9 col-sm-9 ">
+                <div class="col-sm-9">
                   <select name="tipoestado_id" id="tipoestado_id" class="form-control tipoestado_id"></select>
                 </div>
               </div>
               <br>
               <div class="row">
-                <div class="col-sm-3 col-sm-3 col-sm-3 col-sm-3 ">
-                  <label for="code" class="">Color:</label>
+                <div class="col-sm-3">
+                  <label for="color" class="">Color:</label>
                 </div>
-                <div class="col-sm-9 col-sm-9 col-sm-9 col-sm-9 ">
+                <div class="col-sm-9">
                   <input type="color" id="color" name="color" class="color">
                 </div>
               </div>
               <br>
               <div class="box-footer">
-                <button class="btn btn-primary" id="btn_update_estado_equipo" onclick="aplicar_condicion(1)" disabled="">Actualizar</button>
-                <button class="btn btn-info fa fa-plus btn-flat" id="btn_add_estado_equipo" onclick="aplicar_condicion(2)">Agregar</button>
+                <button type="button" class="btn btn-primary" id="btn_update_estado_equipo" onclick="aplicar_condicion(1)" disabled="">Actualizar</button>
+                <button type="button" class="btn btn-info" id="btn_add_estado_equipo" onclick="aplicar_condicion(2)"><i class="fa fa-plus"></i> Agregar</button>
               </div>
               <div class="errores"></div>
               <input type="hidden" id="condicion">
@@ -71,5 +71,7 @@
 </div>
 <script>
   var base_url = "<?= base_url(); ?>";
-  var controlador = "<?php echo {{ session('controlador') }}; ?>";
+  var controlador = "<?php echo session('controlador'); ?>";
 </script>
+
+

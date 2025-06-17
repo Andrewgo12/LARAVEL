@@ -1,39 +1,46 @@
 <?php
-defined('BASEPATH') or exit('El acceso directo no esta permitido');
-class Mcentros extends CI_Model
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\DB;
+
+/**
+ * Mcentros - Sistema HUV (Convertido automáticamente)
+ */
+class Mcentros extends Model
 {
+    use HasFactory;
 
-	function __construct()
-	{
-		defined('BASEPATH') or exit('El acceso directo no esta permitido');
-		parent::__construct();
-	}
+    protected $table = 'centros';
+    protected $fillable = [];
 
-	// Refactoring
-	public function getOneCentro($id)
-	{
-		$this->db->select('centros.*');
-		$this->db->from('centros');
-		$this->db->where('centros.id', $id);
-		return $this->db->get()->row();
-	}
-	public function getAllCentros()
-	{
-		$this->db->select("centros.*");
-		$this->db->from("centros");
-		$this->db->where("centros.status", 1);
-		$this->db->order_by("centros.name", "asc");
-		return $this->db->get()->result();
-	}
+    // Métodos básicos
+    public static function getAll()
+    {
+        return self::all();
+    }
 
+    public static function getOne($id)
+    {
+        return self::find($id);
+    }
 
+    public static function add($data)
+    {
+        return self::create($data);
+    }
 
+    public static function edit($data)
+    {
+        $id = $data['id'];
+        unset($data['id']);
+        return self::where('id', $id)->update($data);
+    }
 
-
-	public function get()
-	{
-		$this->db->select('centros.*');
-		$this->db->from('centros');
-		return $this->db->get()->row();
-	}
+    public static function remove($id)
+    {
+        return self::destroy($id);
+    }
 }

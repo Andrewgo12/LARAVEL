@@ -1,78 +1,137 @@
 <?php
 
-defined('BASEPATH') or exit('El acceso directo no esta permitido');
+namespace App\Http\Controllers\Administrador;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
+use App\Models\Macciones;
 
 /**
- *
+ * Controlador Cacciones - Sistema HUV
+ * Gestiona las acciones del sistema
  */
-class Cacciones extends CI_Controller
+class Cacciones extends Controller
 {
-  private $permisos;
-  function __construct()
-  {
-    parent::__construct();
-    $this->load->model('Macciones');
-  }
+    /**
+     * Permisos del controlador
+     */
+    protected $permisos = [];
 
-  public function getAll()
-  {
-  }
-  public function getByUser()
-  {
-  }
-  public function edit()
-  {
-    $registro_acciones = $this->Macciones->getOne($_POST);
-
-    if ($_POST["accion"] == 1) {
-      if ($registro_acciones->leer == 1) {
-        $_POST["leer"] = 0;
-      } else {
-        $_POST["leer"] = 1;
-      }
-    } else if ($_POST["accion"] == 2) {
-      if ($registro_acciones->insertar == 1) {
-        $_POST["insertar"] = 0;
-      } else {
-        $_POST["insertar"] = 1;
-      }
-    } else if ($_POST["accion"] == 3) {
-      if ($registro_acciones->editar == 1) {
-        $_POST["editar"] = 0;
-      } else {
-        $_POST["editar"] = 1;
-      }
-    } else if ($_POST["accion"] == 4) {
-      if ($registro_acciones->eliminar == 1) {
-        $_POST["eliminar"] = 0;
-      } else {
-        $_POST["eliminar"] = 1;
-      }
+    /**
+     * Constructor del controlador
+     */
+    public function __construct()
+    {
+        $this->permisos = Session::get('permisos', []);
     }
-    unset($_POST["accion"]);
-    $this->Macciones->edit($_POST);
-    echo json_encode($this->Macciones->getByUser($registro_acciones->usuario_id));
-  }
-  /*
-	public function add(){// Este add no almacena directamente, lo que hace es llamar un formulario
-		$param=array(
-			'roles' => $this->Musuarios->getRoles(),
-			'menus' => $this->Mpermisos->getMenus()
-			
-			);
 
-		$this->load->view('layouts/header');
-		$this->load->view('layouts/aside');
-		$this->load->view('permisos/add',$param);
-		$this->load->view('layouts/footer');
+    /**
+     * Vista principal de acciones
+     */
+    public function index()
+    {
+        if (!Session::get('login')) {
+            return redirect()->route('huv.login');
+        }
 
-	}
-	public function delete($param){
-		if(!$this->Mpermisos->delete($param)){
-			redirect(base_url()."administrador/Cpermisos");
+        $data = [
+            'permisos' => $this->permisos,
+            'acciones' => Session::get('acciones', [])
+        ];
 
-		}
+        return view('laravel.acciones.list', $data);
+    }
 
-	}
-	*/
+    /* Sistema HUV */
+    public function getAll(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $result = Macciones::getAll($data);
+
+            return response()->json($result, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en getAll: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function getByUser(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $result = Macciones::getByUser($data);
+
+            return response()->json($result, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en getByUser: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function edit(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $result = Macciones::edit($data);
+
+            return response()->json($result, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en edit: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function add(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $data['created_at'] = now();
+            $data['usuario_id'] = Session::get('id');
+
+            $result = Macciones::add($data);
+
+            if ($result) {
+                return response()->json(['success' => true, 'message' => 'Registro agregado exitosamente'], 201);
+            } else {
+                return response()->json(['error' => 'No se pudo agregar el registro'], 500);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al agregar: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function delete(Request $request): JsonResponse
+    {
+        try {
+            $id = $request->input('id');
+            $result = Macciones::remove($id);
+
+            if ($result) {
+                return response()->json(['success' => true, 'message' => 'Registro eliminado exitosamente'], 200);
+            } else {
+                return response()->json(['error' => 'No se pudo eliminar el registro'], 500);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al eliminar: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function updatePermisos(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $result = Macciones::updatePermisos($data);
+
+            return response()->json($result, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en updatePermisos: ' . $e->getMessage()], 500);
+        }
+    }
 }

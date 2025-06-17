@@ -1,47 +1,88 @@
 <?php
-// defined ('BASEPATH') OR exit('El acceso directo no esta permitido');
+
+namespace App\Http\Controllers\Aplicacion;
+
+use Illuminate\Support\Facades\Validator;
+
+use Illuminate\Support\Facades\Session;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
 
 /**
- * 
+ * API REST para países - Convertido a Laravel
  */
-require APPPATH . 'libraries/REST_Controller.php';
-
-class Rpaises extends REST_Controller
+class Rpaises extends Controller
 {
-  function __construct()
-  {
-    parent::__construct();
-    $this->load->model('Mpaises');
-  }
-
-  public function comunicacion_get($id = 0)
-  {
-    if ($id != 0) {
-      $data = $this->db->get_where("paises", ['id' => $id])->row_array();
-    } else {
-      $data = $this->db->get("paises")->result();
+    public function __construct()
+    {
+        // Constructor Laravel
     }
 
-    $this->response($data, REST_Controller::HTTP_OK);
-  }
-  public function comunicacion_post()
-  {
-    $input = $this->input->post();
-    $this->db->insert('paises', $input);
+    /**
+     * Obtener países (GET)
+     */
+    public function comunicacion(Request $request, $id = null): JsonResponse
+    {
+        try {
+            if ($id && $id != 0) {
+                $data = DB::table('paises')->where('id', $id)->first();
+                if (!$data) {
+                    return response()->json(['error' => 'País no encontrado'], 404);
+                }
+            } else {
+                $data = DB::table('paises')->get();
+            }
 
-    $this->response(['Pais insertado exitosamente.'], REST_Controller::HTTP_OK);
-  }
-  public function comunicacion_put($id)
-  {
-    $input = $this->put();
-    $this->db->update('paises', $input, array('id' => $id));
+            return response()->json($data, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al obtener países: ' . $e->getMessage()], 500);
+        }
+    }
 
-    $this->response(['Pais actualizado exitosamente.'], REST_Controller::HTTP_OK);
-  }
-  public function comunicacion_delete($id)
-  {
-    $this->db->delete('paises', array('id' => $id));
+    /**
+     * Crear país (POST)
+     */
+    public function store(Request $request): JsonResponse
+    {
+        try {
+            $input = $request->all();
+            DB::table('paises')->insert($input);
 
-    $this->response(['pais eliminado exitosamente.'], REST_Controller::HTTP_OK);
-  }
+            return response()->json(['message' => 'País insertado exitosamente'], 201);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al crear país: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /**
+     * Actualizar país (PUT)
+     */
+    public function update(Request $request, $id): JsonResponse
+    {
+        try {
+            $input = $request->all();
+            DB::table('paises')->where('id', $id)->update($input);
+
+            return response()->json(['message' => 'País actualizado exitosamente'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al actualizar país: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /**
+     * Eliminar país (DELETE)
+     */
+    public function destroy($id): JsonResponse
+    {
+        try {
+            DB::table('paises')->where('id', $id)->delete();
+
+            return response()->json(['message' => 'País eliminado exitosamente'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al eliminar país: ' . $e->getMessage()], 500);
+        }
+    }
 }

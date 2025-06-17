@@ -10,23 +10,18 @@
 					<div class="col-md-12">
 						<div class="box box-info">
 							<div class="box-header with-border">
-								<h3 class="box-title">Consolidado
-								</h3>
+								<h3 class="box-title">Consolidado</h3>
 							</div>
-
 							<div class="box-body form-horizontal">
 								<div class="contenido"></div>
 							</div>
-
 						</div>
 					</div>
 				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-					<!-- <button type="button" class="btn btn-success" id="actualizar">Agregar</button> -->
-				</div>
-
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
 			</div>
 		</div>
 	</div>
-</div> 
+</div>

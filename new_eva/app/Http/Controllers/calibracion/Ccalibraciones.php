@@ -1,183 +1,399 @@
 <?php
-defined('BASEPATH') or exit('El acceso directo no esta permitido');
+
 
 /**
- *
+ * Controlador Ccalibraciones - Sistema HUV
+ * Gestiona las funcionalidades del módulo correspondiente
  */
-class Ccalibraciones extends CI_Controller
+class Ccalibraciones extends Controller
 {
-  function __construct()
-  {
-    parent::__construct();
-    $this->load->model('Mequipos');
-    $this->load->model('Mcalibraciones');
-    $this->load->model('Mcambios_hdv');
-  }
-  public function index()
-  {
-  }
-  public function get()
-  {
-    echo json_encode($this->Mcalibraciones->get($_POST));
-  }
-  public function getAll()
-  {
-  }
-  public function getOne()
-  {
-    echo json_encode($this->Mcalibraciones->getOne($_POST));
-  }
-  public function getLast()
-  {
-    echo json_encode($this->Mpreventivos->getLast($_POST));
-  }
+    /**
+     * Permisos del controlador
+     */
+    protected $permisos = [];
 
-  public function add()
-  {
-
-    $config['upload_path'] = "./assets/upload_calibraciones";
-    $config['allowed_types'] = '*';
-    $config['max_size']  = 1000000;
-    $config['encrypt_name'] = TRUE;
-    $this->load->library('upload', $config, 'uploadCalibracion');
-    $this->uploadCalibracion->initialize($config);
-    if (!empty($_FILES["file"]["name"])) {
-      $this->uploadCalibracion->do_upload("file"); //Esto sube el archivo
-      $data = "";
-      $data = $this->uploadCalibracion->data();
-      $_POST["file"] = $data["file_name"];
+    /**
+     * Constructor del controlador
+     */
+    public function __construct()
+    {
+        $this->permisos = Session::get('permisos', []);
     }
-    $ultimo_id = $this->Mcalibraciones->add($_POST);
-    ////////////////////////////////////////////////////////////////////////////////
-    $descripcion_historial = "Se agrega calibracion con codigo = " . $this->Mcalibraciones->getOne(array("id" => $ultimo_id))->description;
-    $vector_cambios_hdv = array(
-      "descripcion" => $descripcion_historial,
-      "usuario_id" => $this->session->userdata("id"),
-      "equipo_id" => $_POST["equipo_id"]
-    );
-    $this->Mcambios_hdv->add($vector_cambios_hdv); // Se inserta el registro de cambio de HDV
-    ////////////////////////////////////////////////////////////////////////////////    
-    echo json_encode($_POST["equipo_id"]);
-  }
-  public function update()
-  {
 
-    if (isset($_POST)) {
-      # code...
-      $calibracion = $this->Mcalibraciones->getOne($_POST);
-      $file_anterior = $calibracion->file;
+    /**
+namespace App\Http\Controllers\Calibracion;
 
-      $config['upload_path'] = "./assets/upload_calibraciones";
-      $config['allowed_types'] = '*';
-      $config['encrypt_name'] = TRUE;
-      $this->load->library('upload', $config, 'uploadCalibracion');
-      $this->uploadCalibracion->initialize($config);
-      if (!empty($_FILES["file"]["name"])) {
-        $this->uploadCalibracion->do_upload("file"); //Esto sube el archivo
-        $data = "";
-        $data = $this->uploadCalibracion->data();
-        $_POST["file"] = $data["file_name"];
-      }
-      if ($this->Mcalibraciones->update($_POST)) {
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
+use App\Models\Mcalibraciones;
 
-        ////////////////////////////////////////////////////////////////////////////////
-        $descripcion_historial = "Se actualiza calibracion con codigo = " . $calibracion->description;
-        $vector_cambios_hdv = array(
-          "descripcion" => $descripcion_historial,
-          "usuario_id" => $this->session->userdata("id"),
-          "equipo_id" => $calibracion->equipo_id
-        );
-        $this->Mcambios_hdv->add($vector_cambios_hdv); // Se inserta el registro de cambio de HDV
-        ////////////////////////////////////////////////////////////////////////////////   	    	
-        if (isset($_POST["file"])) {
-          if ($_POST["file"] != $file_anterior) {
-            $this->load->helper("file");
-            unlink("./assets/upload_calibraciones/" . $file_anterior);
-          }
+/* Sistema HUV */
+    public function index()
+    {
+        if (!Session::get('login')) {
+            return redirect()->route('huv.login');
         }
-        echo json_encode($_POST["equipo_id"]);
-      } else {
-        if (isset($_POST["file"])) {
-          $this->load->helper("file");
-          unlink("./assets/upload_calibraciones/" . $_POST["file"]);
+
+        $data = [
+            'permisos' => $this->permisos,
+            'acciones' => Session::get('acciones', [])
+        ];
+
+        return view('laravel.calibraciones.list', $data);
+    }
+
+    /* Sistema HUV */
+    public function getServerSide(Request $request): JsonResponse
+    {
+        try {
+            $params = $request->all();
+            $result = Mcalibraciones::getServerSide($params);
+
+            $response = [
+                'draw' => intval($request->input('draw')),
+                'recordsTotal' => $result['num_filas'],
+                'recordsFiltered' => $result['num_filas'],
+                'data' => $result['datos']
+            ];
+
+            return response()->json($response);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en servidor: ' . $e->getMessage()], 500);
         }
-      }
     }
-  }
 
-  public function delete()
-  {
-
-    $vector = array(
-      "id" => $_POST["id"]
-    );
-    $calibracion = $this->Mcalibraciones->getOne($vector);
-    $file = $calibracion->file;
-    if ($this->Mcalibraciones->delete($_POST)) {
-      ////////////////////////////////////////////////////////////////////////////////
-      $descripcion_historial = "Se elimina calibracion con codigo = " . $calibracion->description;
-      $vector_cambios_hdv = array(
-        "descripcion" => $descripcion_historial,
-        "usuario_id" => $this->session->userdata("id"),
-        "equipo_id" => $calibracion->equipo_id
-      );
-      $this->Mcambios_hdv->add($vector_cambios_hdv); // Se inserta el registro de cambio de HDV
-      ////////////////////////////////////////////////////////////////////////////////   		
-      if ($file != "" && $file != null) {
-        $this->load->helper("file");
-        unlink("./assets/upload_calibraciones/" . $file);
-      }
+    /* Sistema HUV */
+    public function getOne(Request $request): JsonResponse
+    {
+        try {
+            $id = $request->input('id');
+            $item = Mcalibraciones::getOne($id);
+            return response()->json($item, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al obtener registro: ' . $e->getMessage()], 500);
+        }
     }
-  }
 
-  public function show()
-  {
-    $vector = array(
-      'calibraciones' => $this->Mcalibraciones->getCalibracionesModal()
-    );
-    $this->load->view("calibraciones/detail", $vector);
-  }
+    /* Sistema HUV */
+    public function add(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $data['created_at'] = now();
+            $data['usuario_id'] = Session::get('id');
 
-  public function ExportarExcel()
-  {
-    header("Content-Type: application/vnd.ms-excel charset=iso-8859-1");
-    header('Content-Disposition: attachment;filename=CalibracionesEB.xls');
-    $calibraciones = $this->Mcalibraciones->getCalibracionesAll();
+            $result = Mcalibraciones::add($data);
 
-?>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <table border="1">
-      <thead>
-        <tr>
-          <th>Codigo calibracion</th>
-          <th>Fecha de ejecucion</th>
-          <th>Marca</th>
-          <th>Codigo</th>
-          <th>Serie</th>
-          <th>Nombre equipo</th>
-          <th>Id equipo</th>
-          <th>Archivo</th>
-          <th>Ubicación</th>
-        </tr>
-      </thead>
-      <tbody>
-        <?php foreach ($calibraciones as $calibracion) : ?>
-          <tr>
-            <td><?php echo $calibracion->codigo; ?></td>
-            <td><?php echo $calibracion->fecha_ejecucion; ?></td>
-            <td><?php echo $calibracion->marca; ?></td>
-            <td><?php echo $calibracion->code; ?></td>
-            <td>SN:&nbsp;<?php echo $calibracion->serial; ?></td>
-            <td><?php echo $calibracion->name; ?></td>
-            <td><?php echo $calibracion->id; ?></td>
-            <td><?php echo $calibracion->archivocalibracion; ?></td>
-            <td><?php echo $calibracion->ubicacion; ?></td>
-          </tr>
-        <?php endforeach ?>
+            if ($result) {
+                return response()->json(['success' => true, 'message' => 'Registro agregado exitosamente'], 201);
+            } else {
+                return response()->json(['error' => 'No se pudo agregar el registro'], 500);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al agregar: ' . $e->getMessage()], 500);
+        }
+    }
 
-      </tbody>
-    </table>
-<?php
+    /* Sistema HUV */
+    public function update(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $data['updated_at'] = now();
 
-  }
+            $result = Mcalibraciones::edit($data);
+
+            if ($result) {
+                return response()->json(['success' => true, 'message' => 'Registro actualizado exitosamente'], 200);
+            } else {
+                return response()->json(['error' => 'No se pudo actualizar el registro'], 500);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al actualizar: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function delete(Request $request): JsonResponse
+    {
+        try {
+            $id = $request->input('id');
+            $result = Mcalibraciones::remove($id);
+
+            if ($result) {
+                return response()->json(['success' => true, 'message' => 'Registro eliminado exitosamente'], 200);
+            } else {
+                return response()->json(['error' => 'No se pudo eliminar el registro'], 500);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al eliminar: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function ejecutar(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $result = Mcalibraciones::ejecutar($data);
+
+            return response()->json($result, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en ejecutar: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function getCalendario(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $result = Mcalibraciones::getCalendario($data);
+
+            return response()->json($result, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en getCalendario: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function getProgramacion(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $result = Mcalibraciones::getProgramacion($data);
+
+            return response()->json($result, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en getProgramacion: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function addProgramacion(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $result = Mcalibraciones::addProgramacion($data);
+
+            return response()->json($result, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en addProgramacion: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function updateProgramacion(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $result = Mcalibraciones::updateProgramacion($data);
+
+            return response()->json($result, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en updateProgramacion: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function deleteProgramacion(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $result = Mcalibraciones::deleteProgramacion($data);
+
+            return response()->json($result, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en deleteProgramacion: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function getHistorial(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $result = Mcalibraciones::getHistorial($data);
+
+            return response()->json($result, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en getHistorial: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function addEjecucion(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $result = Mcalibraciones::addEjecucion($data);
+
+            return response()->json($result, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en addEjecucion: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function updateEjecucion(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $result = Mcalibraciones::updateEjecucion($data);
+
+            return response()->json($result, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en updateEjecucion: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function uploadCertificado(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $result = Mcalibraciones::uploadCertificado($data);
+
+            return response()->json($result, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en uploadCertificado: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function deleteCertificado(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $result = Mcalibraciones::deleteCertificado($data);
+
+            return response()->json($result, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en deleteCertificado: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function getReportes(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $result = Mcalibraciones::getReportes($data);
+
+            return response()->json($result, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en getReportes: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function exportPDF(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $result = Mcalibraciones::exportPDF($data);
+
+            return response()->json($result, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en exportPDF: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function exportExcel(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $result = Mcalibraciones::exportExcel($data);
+
+            return response()->json($result, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en exportExcel: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function getEstadisticas(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $result = Mcalibraciones::getEstadisticas($data);
+
+            return response()->json($result, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en getEstadisticas: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function addObservacion(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $result = Mcalibraciones::addObservacion($data);
+
+            return response()->json($result, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en addObservacion: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function getObservaciones(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $result = Mcalibraciones::getObservaciones($data);
+
+            return response()->json($result, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en getObservaciones: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function getProveedores(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $result = Mcalibraciones::getProveedores($data);
+
+            return response()->json($result, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en getProveedores: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function addProveedor(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $result = Mcalibraciones::addProveedor($data);
+
+            return response()->json($result, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en addProveedor: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function updateProveedor(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $result = Mcalibraciones::updateProveedor($data);
+
+            return response()->json($result, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en updateProveedor: ' . $e->getMessage()], 500);
+        }
+    }
+
+}
+
 }

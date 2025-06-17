@@ -1,62 +1,91 @@
 <div id="modal_close_orden" class="modal fade" role="dialog">
-	<div class="modal-dialog" style="width: 30%;">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title">Cierre del Ticket</h4>
-			</div>
-			<div class="modal-body">
-				<div class="row">
-					<div class="col-md-12">
-						<div class="box box-info">
-							<div class="box-header with-border">
-								<h3 class="box-title">Informe tecnico
-								</h3>
-							</div>
+  <div class="modal-dialog" style="width: 30%;">
+    <div class="modal-content">
 
-							<div class="box-body form-horizontal">
+      {{-- Encabezado --}}
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Cierre del Ticket</h4>
+      </div>
 
-								<!--  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+      {{-- Cuerpo del modal --}}
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="box box-info">
+              <div class="box-header with-border">
+                <h3 class="box-title">Informe Técnico</h3>
+              </div>
 
-								<form action="{{ asset('') }}orden/Cordenes/update" id="form_orden" name="form_orden" class="form_orden" enctype="multipart/form-data" method="post">
-      @csrf
+              <div class="box-body form-horizontal">
 
-									<input type="hidden" name="id" id="id">
+                {{-- Formulario --}}
+                <form action="{{ url('orden/Cordenes/update') }}"
+                      id="form_orden"
+                      name="form_orden"
+                      class="form_orden"
+                      method="POST"
+                      enctype="multipart/form-data">
+                  @csrf
 
-									<ul class="list-inline">
-										<li class="list-inline-item"><span style="font-weight: 900;">Codigo del informe tecnico:</span></li>
-										<li class="list-inline-item"><input required="" class="form-control" type="text" name="retro_cierre" id="retro_cierre" placeholder="Ingrese codigo"></li>
-										<li class="list-inline-item"><span style="font-weight: 900;">Fecha del reporte:</span></li>
-										<li class="list-inline-item"><input required="" class="form-control" type="date" id="fecha_retro_cierre" name="fecha_retro_cierre"></li>
-									</ul>
+                  {{-- ID oculto --}}
+                  <input type="hidden" name="id" id="id">
 
-									<div class="row">
-										<div class="col col-sm-12">
-											<label for="" class="badge">Archivo del retro</label>
-											<input style="height: 50%;" type="file" class="file" data-browse-on-zone-click="true" id="file_cierre" name="file_cierre">
-										</div>
-									</div>									
+                  {{-- Datos del informe --}}
+                  <div class="form-group">
+                    <label for="retro_cierre" class="control-label col-sm-5">Código del informe técnico:</label>
+                    <div class="col-sm-7">
+                      <input required type="text"
+                             class="form-control"
+                             name="retro_cierre"
+                             id="retro_cierre"
+                             placeholder="Ingrese código">
+                    </div>
+                  </div>
 
-									<div class="box-footer">
-										<button class="btn btn-primary" id="btn_edit_orden">Actualizar</button>
-									</div>
+                  <div class="form-group">
+                    <label for="fecha_retro_cierre" class="control-label col-sm-5">Fecha del reporte:</label>
+                    <div class="col-sm-7">
+                      <input required type="date"
+                             class="form-control"
+                             name="fecha_retro_cierre"
+                             id="fecha_retro_cierre">
+                    </div>
+                  </div>
 
-								</form>
-								<span id="errores"></span>
+                  {{-- Archivo adjunto --}}
+                  <div class="form-group">
+                    <label for="file_cierre" class="control-label col-sm-5">Archivo del retro:</label>
+                    <div class="col-sm-7">
+                      <input type="file"
+                             class="file"
+                             id="file_cierre"
+                             name="file_cierre"
+                             data-browse-on-zone-click="true">
+                    </div>
+                  </div>
 
-								<!--  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
-							</div>
-							<br>
+                  {{-- Botón de acción --}}
+                  <div class="box-footer">
+                    <button type="submit" class="btn btn-primary" id="btn_edit_orden">Actualizar</button>
+                  </div>
 
-						</div>
-					</div>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-					<!-- <button type="button" class="btn btn-success" id="actualizar">Agregar</button> -->
-				</div>
+                </form>
 
-			</div>
-		</div>
-	</div>
-</div> 
+                {{-- Área de errores --}}
+                <span id="errores"></span>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {{-- Footer --}}
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+      </div>
+
+    </div>
+  </div>
+</div>

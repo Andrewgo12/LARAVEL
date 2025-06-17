@@ -437,7 +437,7 @@ if (!empty($cambios_hdv)) {
             <?php endforeach ?>
           </ul>
         <?php endif ?>
-        
+
         <?php if (isset($archivo)) : ?>
           <ul>
             @foreach($archivo as $archivo_row)

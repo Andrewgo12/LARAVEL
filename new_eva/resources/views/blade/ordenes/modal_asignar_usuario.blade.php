@@ -36,8 +36,8 @@
 										<button class="btn btn-primary" id="btn_asignar_orden">Asignar</button>
 									</div>
 
-    
-                                   
+
+
 
 
 								</form>
@@ -57,7 +57,7 @@
 			</div>
 		</div>
 	</div>
-</div> 
+</div>
 
 
 

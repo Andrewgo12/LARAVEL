@@ -1,40 +1,46 @@
-<?php 
+<?php
 
-defined ('BASEPATH') OR exit('El acceso directo no esta permitido');
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\DB;
+
 /**
-* 
-*/
-class Mestados extends CI_Model
+ * Mestados - Sistema HUV (Convertido automáticamente)
+ */
+class Mestados extends Model
 {
-	
-	function __construct()
-	{
-		parent::__construct();
+    use HasFactory;
 
-	}
-	public function getAll(){
-		$this->db->order_by("descripcion","asc");
-		return $this->db->get("estados")->result();
-	}
-	public function getUsed(){
-		$query="
-			SELECT
-			    *
-			FROM
-			    `estados`
-			WHERE
-			    (
-			    SELECT
-			        COUNT(*)
-			    FROM
-			        ordenes o
-			    LEFT JOIN equipos e ON e.id=o.equipo_id   
-			    WHERE
-			        o.estado_id = estados.id 
-			)
-		";
-		return $this->db->query($query)->result();
-	}
+    protected $table = 'estados';
+    protected $fillable = [];
+
+    // Métodos básicos
+    public static function getAll()
+    {
+        return self::all();
+    }
+
+    public static function getOne($id)
+    {
+        return self::find($id);
+    }
+
+    public static function add($data)
+    {
+        return self::create($data);
+    }
+
+    public static function edit($data)
+    {
+        $id = $data['id'];
+        unset($data['id']);
+        return self::where('id', $id)->update($data);
+    }
+
+    public static function remove($id)
+    {
+        return self::destroy($id);
+    }
 }
-
-?>

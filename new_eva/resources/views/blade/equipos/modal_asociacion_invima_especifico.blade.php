@@ -12,7 +12,7 @@
         </div>
       </form>
       <div class="modal-footer">
-        <button type="button" class="btn btn-danger pull-left close" data-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cerrar</button>
       </div>
     </div>
   </div>

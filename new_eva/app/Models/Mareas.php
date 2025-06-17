@@ -1,88 +1,46 @@
 <?php
-defined('BASEPATH') or exit('El acceso directo no esta permitido');
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\DB;
+
 /**
- * 
+ * Mareas - Sistema HUV (Convertido automáticamente)
  */
-class Mareas extends CI_Model
+class Mareas extends Model
 {
+    use HasFactory;
 
-	function __construct()
-	{
-		defined('BASEPATH') or exit('El acceso directo no esta permitido');
-		parent::__construct();
-	}
+    protected $table = 'areas';
+    protected $fillable = [];
 
+    // Métodos básicos
+    public static function getAll()
+    {
+        return self::all();
+    }
 
-	// Refactoring
-	public function getOneArea($id)
-	{
-		$this->db->select('areas.*');
-		$this->db->from('areas');
-		$this->db->where('areas.id', $id);
-		return $this->db->get()->row();
-	}
-	public function getAllAreas()
-	{
-		$this->db->select("areas.*,servicios.name as servicio,sedes.name as sede,pisos.name as piso");
-		$this->db->from("areas");
-		$this->db->join("servicios", "servicios.id=areas.servicio_id", "left");
-		$this->db->join("sedes", "sedes.id=servicios.sede_id", "left");
-		$this->db->join("pisos", "pisos.id=areas.piso_id", "left");
-		$this->db->order_by("areas.name", "asc");
-		return $this->db->get()->result();
-	}
-	public function getByService($id)
-	{
-		$this->db->select("areas.*,servicios.name as servicio,sedes.name as sede,pisos.name as piso");
-		$this->db->from("areas");
-		$this->db->join("servicios", "servicios.id=areas.servicio_id", "left");
-		$this->db->join("sedes", "sedes.id=servicios.sede_id", "left");
-		$this->db->join("pisos", "pisos.id=areas.piso_id", "left");
-		$this->db->where('areas.servicio_id', $id);
-		$this->db->order_by("areas.name", "asc");
-		return $this->db->get()->result();
-	}
-	public function add($param)
-	{
-		return ($this->db->insert("areas", $param));
-	}
-	public function update($param)
-	{
-		$this->db->where("id", $param["id"]);
-		unset($param["id"]);
-		return ($this->db->update("areas", $param));
-	}
-	public function delete($param)
-	{
-		$this->db->where('id', $param['id']);
-		$this->db->delete('areas');
-	}
+    public static function getOne($id)
+    {
+        return self::find($id);
+    }
 
+    public static function add($data)
+    {
+        return self::create($data);
+    }
 
+    public static function edit($data)
+    {
+        $id = $data['id'];
+        unset($data['id']);
+        return self::where('id', $id)->update($data);
+    }
 
-
-	public function getAll()
-	{
-		$this->db->select("areas.*,servicios.name as servicio,sedes.name as sede,pisos.name as piso");
-		$this->db->from("areas");
-		$this->db->join("servicios", "servicios.id=areas.servicio_id", "left");
-		$this->db->join("sedes", "sedes.id=servicios.sede_id", "left");
-		$this->db->join("pisos", "pisos.id=areas.piso_id", "left");
-		$this->db->order_by("areas.name", "asc");
-		return $this->db->get()->result();
-	}
-	public function getOne($param)
-	{
-		$this->db->select("areas.*,servicios.name as servicio");
-		$this->db->from("areas");
-		$this->db->join("servicios", "servicios.id=areas.servicio_id", "left");
-		$this->db->where("areas.id", $param["id"]);
-		return $this->db->get()->row();
-	}
-	public function getAreaByservicio($param)
-	{
-		$this->db->where("servicio_id", $param["servicio_id"]);
-		$this->db->order_by("name", "asc");
-		return $this->db->get("areas")->result();
-	}
+    public static function remove($id)
+    {
+        return self::destroy($id);
+    }
 }

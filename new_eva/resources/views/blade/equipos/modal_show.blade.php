@@ -3,17 +3,18 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">×</span></button>
-          <div class="modal-title text-center" style="background-color: #888888;color: white;font-family: 'calibri';font-size: 30px;"></div>
-        </div>
-        <div class="modal-body " style="overflow-x: auto;">
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cerrar</button>
-          <button onmouseenter="esconder()" onmouseleave="revelar()" type="buton" class="btn btn-primary btn-print"><span class="fa fa-print">Imprimir</span></button>
-        </div>
+          <span aria-hidden="true">×</span>
+        </button>
+        <div class="modal-title text-center" style="background-color: #888888;color: white;font-family: 'calibri';font-size: 30px;"></div>
       </div>
-      <!-- /.modal-content -->
+      <div class="modal-body" style="overflow-x: auto;">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cerrar</button>
+        <button onmouseenter="esconder()" onmouseleave="revelar()" type="button" class="btn btn-primary btn-print"><span class="fa fa-print"></span> Imprimir</button>
+      </div>
     </div>
-    <!-- /.modal-dialog -->
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
   </div>

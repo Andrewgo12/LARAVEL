@@ -12,29 +12,20 @@
 		<!-- Default box -->
 		<div class="box box-solid">
 			<div class="box-body">
-				<?php
-
-				$rol = {{ session('rol_id') }};
-				$sede_id = {{ session('sede_id') }};
-
-				?>
+				@php
+				$rol = session('rol_id');
+				$sede_id = session('sede_id');
+				@endphp
 				<div class="navbar">
 					<a href="#" data-toggle="modal" data-target="#modal_filter_equipo" class=""><i class=" glyphicon glyphicon-filter"></i>Filtrar</a>
-					<?php
-					foreach ($acciones as $accion) {
-						if ($accion->modulo == "equipos industriales") {
-							if ($accion->insertar == 1) {
-					?>
-								<a href="#" data-toggle="modal" data-target="#modal_add_equipo" class=""><i class="fa fa-plus">Insertar</i></a>
-					<?php
-							}
-						}
-					}
-					?>
+					@foreach ($acciones as $accion)
+						@if ($accion->modulo == "equipos industriales" && $accion->insertar == 1)
+							<a href="#" data-toggle="modal" data-target="#modal_add_equipo" class=""><i class="fa fa-plus">Insertar</i></a>
+						@endif
+					@endforeach
 					@if($rol <= 2)
 						<a data-toggle='modal' href="#" data-target='#modal_multiple'><i class="fa fa-random"></i>Multiple</a>
-					<?php endif ?>
-
+					@endif
 				</div>
 				<div class="row">
 					<div>
@@ -44,15 +35,14 @@
 						<div class="panel panel-default">
 							<div class="panel-body">
 								<ul class="list-inline section-filter-navbar">
-
 									<li class="list-inline-item custom-btn"><button onclick="funcion_modal_preventivos(event)" type="button" class="btn btn-default" data-toggle='modal' data-target='#modal_preventivos'>Preventivos</button></li>
 									<li class="list-inline-item custom-btn"><button onclick="funcion_modal_calibraciones(event)" type="button" class="btn btn-default" data-toggle='modal' data-target='#modal_calibraciones'>Calibraciones</button></li>
-									<li class="list-inline-item custom-btn"><button onclick="funcion_modal_obsoletos(event)" type="button" class="btn btn-default" data-toggle='modal' data-target='#modal_obsoletos'>Obsoletos por vida util</button></li>
+									<li class="list-inline-item custom-btn"><button onclick="funcion_modal_obsoletos(event)" type="button" class="btn btn-default" data-toggle='modal' data-target='#modal_obsoletos'>Obsoletos por vida útil</button></li>
 									<li class="list-inline-item custom-btn"><button onclick="funcion_modal_correctivos(event)" type="button" class="btn btn-default" data-toggle='modal' data-target='#modal_correctivos'>Correctivos</button>
 									</li>
-									<!-- 										<li class="list-inline-item">
-											<button onclick="funcion_modal_correctivos_generales_abiertos(event)" data-toggle="modal" data-target="#modal_correctivos" href="" class="btn btn-warning">Ordenes abiertas</button>
-										</li> -->
+									<!-- <li class="list-inline-item">
+										<button onclick="funcion_modal_correctivos_generales_abiertos(event)" data-toggle="modal" data-target="#modal_correctivos" href="" class="btn btn-warning">Ordenes abiertas</button>
+									</li> -->
 								</ul>
 							</div>
 						</div>
@@ -67,18 +57,17 @@
 										<option selected="" value="1">Sede principal</option>
 										<option value="2">Sede Norte</option>
 										<option value="">Todos</option>
-									<?php endif ?>
+									@endif
 									@if($sede_id == 2)
 										<option value="1">Sede principal</option>
 										<option selected="" value="2">Sede Norte</option>
 										<option value="">Todos</option>
-									<?php endif ?>
+									@endif
 									@if($sede_id == "")
 										<option value="1">Sede principal</option>
 										<option value="2">Sede Norte</option>
 										<option selected="" value="">Todos</option>
-
-									<?php endif ?>
+									@endif
 								</select>
 							</div>
 							<div class="col-md-3">
@@ -106,7 +95,7 @@
 										<br><span class="alert-danger mensaje-adquisicion"></span>
 									</li>
 									<li>
-										<a href="" onclick="mostrar_instalacion_equipos(event,2)" class="">consultar instalaciones de equipos</a>
+										<a href="" onclick="mostrar_instalacion_equipos(event,2)" class="">Consultar instalaciones de equipos</a>
 										<a href="" data-toggle="modal" data-target="#modal_show_instalacion" class="auxiliar_instalacion"></a>
 									</li>
 								</ul>
@@ -125,7 +114,7 @@
 										<select name="servicio_id_auxiliar" id="servicio_id_auxiliar" class="form-control servicio_id_auxiliar" onchange="funcion_seleccion_area_desde_equipos()"></select>
 									</div>
 									<div class="col-xs-3">
-										<label for="area_id">Area:</label>
+										<label for="area_id">Área:</label>
 										<select style="width: 100%" name="area_id_auxiliar" id="area_id_auxiliar" class="form-control area_id_auxiliar"></select>
 									</div>
 									<div class="col-sm-3 contenedor_estados_from_equipos">
@@ -165,39 +154,41 @@
 <!-- /.content-wrapper -->
 <script>
 	var base_url = "<?= base_url(); ?>";
-	var rol_id = "<?php echo {{ session('rol_id') }}; ?>";
-	var controlador = "<?php print_r({{ session('controlador') }}); ?>";
+	var rol_id = "<?php echo session('rol_id'); ?>";
+	var controlador = "<?php echo session('controlador'); ?>";
+
+	var insertar_equipo = "<?php echo session('acciones')[3]->insertar; ?>"; //equipos
+	var editar_equipo = "<?php echo session('acciones')[3]->editar; ?>"; //equipos
+
+	var insertar_equipo_archivo = "<?php echo session('acciones')[13]->insertar; ?>"; //equipo archivos
+	var leer_equipo_archivo = "<?php echo session('acciones')[13]->leer; ?>"; //equipo archivos
+
+	var insertar_baja = "<?php echo session('acciones')[4]->insertar; ?>"; //bajas
+
+	var insertar_contingencia = "<?php echo session('acciones')[19]->insertar; ?>"; //contingencias
+	var eliminar_contingencia = "<?php echo session('acciones')[19]->eliminar; ?>"; //contingencias
+	var editar_contingencia = "<?php echo session('acciones')[19]->editar; ?>"; //contingencias
+
+	var insertar_observacion = "<?php echo session('acciones')[17]->insertar; ?>"; //observaciones
+	var eliminar_observacion = "<?php echo session('acciones')[17]->eliminar; ?>"; //observaciones
+	var editar_observacion = "<?php echo session('acciones')[17]->editar; ?>"; //observaciones
 
 
-	var insertar_equipo = "<?php print_r({{ session('acciones') }}[3]->insertar); ?>"; //equipos
-	var editar_equipo = "<?php print_r({{ session('acciones') }}[3]->editar); ?>"; //equipos
+	var insertar_servicio = "<?php echo session('acciones')[2]->insertar; ?>"; //servicios
 
-	var insertar_equipo_archivo = "<?php print_r({{ session('acciones') }}[13]->insertar); ?>"; //equipo archivos
-	var leer_equipo_archivo = "<?php print_r({{ session('acciones') }}[13]->leer); ?>"; //equipo archivos
+	var insertar_area = "<?php echo session('acciones')[18]->insertar; ?>"; //areas
+	var editar_area = "<?php echo session('acciones')[18]->editar; ?>"; //areas
+	var eliminar_area = "<?php echo session('acciones')[18]->eliminar; ?>"; //areas
 
-	var insertar_baja = "<?php print_r({{ session('acciones') }}[4]->insertar); ?>"; //bajas
-
-	var insertar_contingencia = "<?php print_r({{ session('acciones') }}[19]->insertar); ?>"; //contingencias
-	var eliminar_contingencia = "<?php print_r({{ session('acciones') }}[19]->eliminar); ?>"; //contingencias
-	var editar_contingencia = "<?php print_r({{ session('acciones') }}[19]->editar); ?>"; //contingencias	
-
-	var insertar_observacion = "<?php print_r({{ session('acciones') }}[17]->insertar); ?>"; //observaciones
-	var eliminar_observacion = "<?php print_r({{ session('acciones') }}[17]->eliminar); ?>"; //observaciones
-	var editar_observacion = "<?php print_r({{ session('acciones') }}[17]->editar); ?>"; //observaciones
+	var insertar_soporte_compra = "<?php echo session('acciones')[6]->insertar; ?>"; //soportes compra
 
 
-	var insertar_servicio = "<?php print_r({{ session('acciones') }}[2]->insertar); ?>"; //servicios
-
-	var insertar_area = "<?php print_r({{ session('acciones') }}[18]->insertar); ?>"; //areas
-	var editar_area = "<?php print_r({{ session('acciones') }}[18]->editar); ?>"; //areas
-	var eliminar_area = "<?php print_r({{ session('acciones') }}[18]->eliminar); ?>"; //areas
-
-	var insertar_soporte_compra = "<?php print_r({{ session('acciones') }}[6]->insertar); ?>"; //soportes compra
-
-
-	var sede_id = "<?php print_r({{ session('sede_id') }}); ?>";
-	var anio_plan = "<?php print_r({{ session('anio_plan') }}); ?>";
+	var sede_id = "<?php echo session('sede_id'); ?>";
+	var anio_plan = "<?php echo session('anio_plan'); ?>";
 
 
 	var tipo_id = 2;
 </script>
+
+
+

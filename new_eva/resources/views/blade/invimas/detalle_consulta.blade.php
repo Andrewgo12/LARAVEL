@@ -14,18 +14,18 @@
 			@foreach($invimas as $invima)
 			<tr>
 				<td>
-					<span class="btn btn-info" onclick="asociar_registro('<?php echo $invima->id;?>')">Seleccionar</span>
-					<?php echo $invima->invima; ?>
-					@if($invima->file!=null&$invima->file!="")
-							<a target="__blank" class="glyphicon glyphicon-file" href="{{ asset('') }}assets/upload_registros_sanitarios/<?php echo $invima->file;?>"></a>
-						<?php endif ?>	
-
+					<span class="btn btn-info" onclick="asociar_registro('{{ $invima->id }}')">Seleccionar</span>
+					{{ $invima->invima }}
+					@if($invima->file != null && $invima->file != "")
+						<a target="__blank" class="glyphicon glyphicon-file" href="{{ asset('assets/upload_registros_sanitarios/' . $invima->file) }}"></a>
+					@endif
 				</td>
-				<td><?php echo $invima->description; ?></td>
-				<td><?php echo $invima->titulo; ?></td>
-				<td><?php echo $invima->marcas; ?></td>
-			</tr>	
-			<?php endforeach ?>
+				<td>{{ $invima->description }}</td>
+				<td>{{ $invima->titulo }}</td>
+				<td>{{ $invima->marcas }}</td>
+			</tr>
+			@endforeach
 		</tbody>
 	</table>
 </html>
+

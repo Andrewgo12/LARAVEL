@@ -1,41 +1,165 @@
 <?php
-defined('BASEPATH') or exit('El acceso directo no esta permitido');
 
-class Cpisos extends CI_Controller
+
+/**
+ * Controlador Cpisos - Sistema HUV
+ * Gestiona las funcionalidades del módulo correspondiente
+ */
+class Cpisos extends Controller
 {
-	private $pisos;
-	function __construct()
-	{
-		parent::__construct();
-		$this->load->model("Mpisos");
-	}
-	public function index()
-	{
-		/* 		if ($this->session->userdata('login')) {
-		} else {
-			redirect(base_url('Cauth'));
-		} */
-		/* 
-		$acciones = $this->session->userdata("acciones");
-		$this->session->set_userdata('controlador', $this->uri->segment(2));
+    /**
+     * Permisos del controlador
+     */
+    protected $permisos = [];
 
-		foreach ($acciones as $accion) {
-			if ($accion->modulo == "contactos") {
-				if ($accion->leer != 1) {
-					redirect(base_url('Forbidden'));
-				}
-			}
-		} */
+    /**
+     * Constructor del controlador
+     */
+    public function __construct()
+    {
+        $this->permisos = Session::get('permisos', []);
+    }
 
-		/* 		$this->load->view("layouts/header");
-		$this->load->view("layouts/aside");
-		$this->load->view("areas/list");
-		$this->load->view("areas/modal_add");
-		$this->load->view("areas/modal_edit");
-		$this->load->view("layouts/footer"); */
-	}
-	public function ServiceGetAll()
-	{
-		echo json_encode($this->Mpisos->getAllPisos());
-	}
+    /**
+namespace App\Http\Controllers\Ubicacion;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
+use App\Models\Mpisos;
+
+/* Sistema HUV */
+    public function index()
+    {
+        if (!Session::get('login')) {
+            return redirect()->route('huv.login');
+        }
+
+        $data = [
+            'permisos' => $this->permisos,
+            'acciones' => Session::get('acciones', [])
+        ];
+
+        return view('laravel.pisos.list', $data);
+    }
+
+    /* Sistema HUV */
+    public function getServerSide(Request $request): JsonResponse
+    {
+        try {
+            $params = $request->all();
+            $result = Mpisos::getServerSide($params);
+
+            $response = [
+                'draw' => intval($request->input('draw')),
+                'recordsTotal' => $result['num_filas'],
+                'recordsFiltered' => $result['num_filas'],
+                'data' => $result['datos']
+            ];
+
+            return response()->json($response);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en servidor: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function getOne(Request $request): JsonResponse
+    {
+        try {
+            $id = $request->input('id');
+            $item = Mpisos::getOne($id);
+            return response()->json($item, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al obtener registro: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function add(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $data['created_at'] = now();
+            $data['usuario_id'] = Session::get('id');
+
+            $result = Mpisos::add($data);
+
+            if ($result) {
+                return response()->json(['success' => true, 'message' => 'Registro agregado exitosamente'], 201);
+            } else {
+                return response()->json(['error' => 'No se pudo agregar el registro'], 500);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al agregar: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function update(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $data['updated_at'] = now();
+
+            $result = Mpisos::edit($data);
+
+            if ($result) {
+                return response()->json(['success' => true, 'message' => 'Registro actualizado exitosamente'], 200);
+            } else {
+                return response()->json(['error' => 'No se pudo actualizar el registro'], 500);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al actualizar: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function delete(Request $request): JsonResponse
+    {
+        try {
+            $id = $request->input('id');
+            $result = Mpisos::remove($id);
+
+            if ($result) {
+                return response()->json(['success' => true, 'message' => 'Registro eliminado exitosamente'], 200);
+            } else {
+                return response()->json(['error' => 'No se pudo eliminar el registro'], 500);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al eliminar: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function getAll(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $result = Mpisos::getAll($data);
+
+            return response()->json($result, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en getAll: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function getByServicio(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $result = Mpisos::getByServicio($data);
+
+            return response()->json($result, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en getByServicio: ' . $e->getMessage()], 500);
+        }
+    }
+
+}
+
 }

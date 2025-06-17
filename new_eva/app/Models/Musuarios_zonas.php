@@ -1,29 +1,46 @@
-<?php 
+<?php
 
-defined ('BASEPATH') OR exit('El acceso directo no esta permitido');
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\DB;
+
 /**
-* 
-*/
-class Musuarios_zonas extends CI_Model
+ * Musuarios_zonas - Sistema HUV (Convertido automáticamente)
+ */
+class Musuarios_zonas extends Model
 {
-	
-	function __construct()
-	{
-		parent::__construct();
+    use HasFactory;
 
-	}
-	public function get(){
-	}
-	public function getOne($param){
+    protected $table = 'usuarios_zonas';
+    protected $fillable = [];
 
-	}
-	public function add($param){
-		$this->db->insert("usuarios_zonas",$param);
-	}
-	public function update($param){
-	}
-	public function delete($param){
-	}	
+    // Métodos básicos
+    public static function getAll()
+    {
+        return self::all();
+    }
+
+    public static function getOne($id)
+    {
+        return self::find($id);
+    }
+
+    public static function add($data)
+    {
+        return self::create($data);
+    }
+
+    public static function edit($data)
+    {
+        $id = $data['id'];
+        unset($data['id']);
+        return self::where('id', $id)->update($data);
+    }
+
+    public static function remove($id)
+    {
+        return self::destroy($id);
+    }
 }
-
-?>

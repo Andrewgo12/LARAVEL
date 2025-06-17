@@ -1,49 +1,204 @@
 <?php
-defined('BASEPATH') or exit('El acceso directo no esta permitido');
+
 
 /**
- *
+ * Controlador Ccapacitaciones - Sistema HUV
+ * Gestiona las funcionalidades del módulo correspondiente
  */
-class Ccapacitaciones extends CI_Controller
+class Ccapacitaciones extends Controller
 {
-  //private $capacitaciones;
-  function __construct()
-  {
-    parent::__construct();
-    $this->load->model("Mcapacitaciones");
-    //$this->load->model("Mequipo_repuestos");
-    // $this->load->model("Mmovimientos");
-    // $this->permisos=$this->backend_lib->control();
+    /**
+     * Permisos del controlador
+     */
+    protected $permisos = [];
 
-  }
-  public function index()
-  {
-    if ($this->session->userdata('login')) {
-    } else {
-      redirect(base_url('Cauth'));
+    /**
+     * Constructor del controlador
+     */
+    public function __construct()
+    {
+        $this->permisos = Session::get('permisos', []);
     }
-    $acciones = $this->session->userdata("acciones");
 
-    foreach ($acciones as $accion) {
-      if ($accion->modulo == "capacitaciones") {
-        if ($accion->leer != 1) {
-          redirect(base_url('Forbidden'));
+    /**
+namespace App\Http\Controllers\Capacitacion;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
+use App\Models\Mcapacitaciones;
+
+/* Sistema HUV */
+    public function index()
+    {
+        if (!Session::get('login')) {
+            return redirect()->route('huv.login');
         }
-      }
+
+        $data = [
+            'permisos' => $this->permisos,
+            'acciones' => Session::get('acciones', [])
+        ];
+
+        return view('laravel.capacitaciones.list', $data);
     }
-    $capacitaciones_realizadas = $this->Mcapacitaciones->getAll();
-    $capacitaciones_archivo = $this->Mcapacitaciones->getCapacitacionesArchivo();
-    $capacitaciones_equipo = $this->Mcapacitaciones->getCapacitacionesEquipo();
-    $capacitaciones_mes = $this->Mcapacitaciones->getCapacitacionesMes();
-    $vector_capacitaciones = array(
-      "capacitaciones_realizadas" => $capacitaciones_realizadas,
-      "capacitaciones_archivo" => $capacitaciones_archivo,
-      "capacitaciones_equipo" => $capacitaciones_equipo,
-      "capacitaciones_mes" => $capacitaciones_mes
-    );
-    $this->load->view("layouts/header");
-    $this->load->view("layouts/aside");
-    $this->load->view("capacitaciones/list", $vector_capacitaciones);
-    $this->load->view("layouts/footer");
-  }
+
+    /* Sistema HUV */
+    public function getServerSide(Request $request): JsonResponse
+    {
+        try {
+            $params = $request->all();
+            $result = Mcapacitaciones::getServerSide($params);
+
+            $response = [
+                'draw' => intval($request->input('draw')),
+                'recordsTotal' => $result['num_filas'],
+                'recordsFiltered' => $result['num_filas'],
+                'data' => $result['datos']
+            ];
+
+            return response()->json($response);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en servidor: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function getOne(Request $request): JsonResponse
+    {
+        try {
+            $id = $request->input('id');
+            $item = Mcapacitaciones::getOne($id);
+            return response()->json($item, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al obtener registro: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function add(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $data['created_at'] = now();
+            $data['usuario_id'] = Session::get('id');
+
+            $result = Mcapacitaciones::add($data);
+
+            if ($result) {
+                return response()->json(['success' => true, 'message' => 'Registro agregado exitosamente'], 201);
+            } else {
+                return response()->json(['error' => 'No se pudo agregar el registro'], 500);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al agregar: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function update(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $data['updated_at'] = now();
+
+            $result = Mcapacitaciones::edit($data);
+
+            if ($result) {
+                return response()->json(['success' => true, 'message' => 'Registro actualizado exitosamente'], 200);
+            } else {
+                return response()->json(['error' => 'No se pudo actualizar el registro'], 500);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al actualizar: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function delete(Request $request): JsonResponse
+    {
+        try {
+            $id = $request->input('id');
+            $result = Mcapacitaciones::remove($id);
+
+            if ($result) {
+                return response()->json(['success' => true, 'message' => 'Registro eliminado exitosamente'], 200);
+            } else {
+                return response()->json(['error' => 'No se pudo eliminar el registro'], 500);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al eliminar: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function ejecutar(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $result = Mcapacitaciones::ejecutar($data);
+
+            return response()->json($result, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en ejecutar: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function getCalendario(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $result = Mcapacitaciones::getCalendario($data);
+
+            return response()->json($result, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en getCalendario: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function getProgramacion(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $result = Mcapacitaciones::getProgramacion($data);
+
+            return response()->json($result, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en getProgramacion: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function getHistorial(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $result = Mcapacitaciones::getHistorial($data);
+
+            return response()->json($result, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en getHistorial: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function uploadCertificado(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $result = Mcapacitaciones::uploadCertificado($data);
+
+            return response()->json($result, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en uploadCertificado: ' . $e->getMessage()], 500);
+        }
+    }
+
+}
+
 }

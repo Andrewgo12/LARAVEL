@@ -1,0 +1,22 @@
+{
+    "sistema": "HUV - Hospital Management System",
+    "version": "2.0.0",
+    "framework": "Laravel 10+",
+    "estado": "Limpio y Sincronizado",
+    "estadisticas": {
+        "controladores": 111,
+        "modelos": 111,
+        "rutas": 555,
+        "duplicados_eliminados": 19
+    },
+    "modulos_principales": {
+        "administrador": "Gesti\u00f3n de usuarios, roles y permisos",
+        "equipos": "Gesti\u00f3n de equipos biom\u00e9dicos e industriales",
+        "ordenes": "\u00d3rdenes de trabajo y mantenimientos",
+        "reportes": "Reportes y estad\u00edsticas avanzadas",
+        "api": "Servicios web RESTful",
+        "mobile": "Aplicaci\u00f3n m\u00f3vil integrada"
+    },
+    "fecha_limpieza": "2025-06-13 09:19:32",
+    "proporcion_rutas_controladores": "5:1"
+}

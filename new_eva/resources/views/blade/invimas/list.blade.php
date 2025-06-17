@@ -6,7 +6,7 @@
     <div class="box box-solid">
       <div class="box-body">
         <hr>
-        <?php if (!empty($invimas)) : ?>
+        @if (!empty($invimas))
           <div class="row">
             <div class="col-sm-10">
               <div class="table-responsive">
@@ -34,13 +34,12 @@
                 </table>
               </div>
             </div>
-
           </div>
+        @else
+          <span style="font-size: 50px;">No existen registros!</span>
+        @endif
       </div>
-    @else
-      <span style="font-size: 50px;">No existen registros!</span>
-    <?php endif ?>
-    <!-- /.box-body -->
+      <!-- /.box-body -->
     </div>
     <!-- /.box -->
   </section>
@@ -48,6 +47,6 @@
 </div>
 <!-- /.content-wrapper -->
 <script>
-  var base_url = "<?= base_url(); ?>";
-  var controlador = "<?php echo {{ session('controlador') }}; ?>";
+  var base_url = "{{ url('/') }}/";
+  var controlador = "{{ session('controlador') }}";
 </script>

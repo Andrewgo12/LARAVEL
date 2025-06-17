@@ -1,28 +1,46 @@
-<?php 
+<?php
 
-defined ('BASEPATH') OR exit('El acceso directo no esta permitido');
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\DB;
+
 /**
-* 
-*/
-class Mfrecuencias extends CI_Model
+ * Mfrecuencias - Sistema HUV (Convertido automáticamente)
+ */
+class Mfrecuencias extends Model
 {
-	
-	function __construct()
-	{
-		parent::__construct();
+    use HasFactory;
 
-	}
-	public function get(){
-		$this->db->where('status !=',0);
-		$this->db->order_by("name","asc");
-		$resultado = $this->db->get("frecuenciam");
-		return $resultado->result();
-	}
-	public function getOne($param){
-		$this->db->where("id",$param["id"]);
-		return $this->db->get("frecuenciam")->row();
-	}	
+    protected $table = 'frecuencias';
+    protected $fillable = [];
 
+    // Métodos básicos
+    public static function getAll()
+    {
+        return self::all();
+    }
+
+    public static function getOne($id)
+    {
+        return self::find($id);
+    }
+
+    public static function add($data)
+    {
+        return self::create($data);
+    }
+
+    public static function edit($data)
+    {
+        $id = $data['id'];
+        unset($data['id']);
+        return self::where('id', $id)->update($data);
+    }
+
+    public static function remove($id)
+    {
+        return self::destroy($id);
+    }
 }
-
-?>

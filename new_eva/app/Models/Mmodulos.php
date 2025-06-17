@@ -1,61 +1,46 @@
-<?php 
-defined ('BASEPATH') OR exit('El acceso directo no esta permitido');
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\DB;
+
 /**
-* 
-*/
-class Mmodulos extends CI_Model
+ * Mmodulos - Sistema HUV (Convertido automáticamente)
+ */
+class Mmodulos extends Model
 {
-	
-	function __construct()
-	{
-		defined ('BASEPATH') OR exit('El acceso directo no esta permitido');
-		parent::__construct();
-	}
-	public function getAll(){
-		$this->db->select("*");
-		$this->db->from("modulos");
-		$this->db->order_by("modulos.id","asc");
-		return $this->db->get()->result();
-	}
-	public function getWithAccount(){
-		$query="
-			SELECT
-			    m.*,
-			    (
-			    SELECT
-			        COUNT(*)
-			    FROM
-			        acciones a
-			    WHERE
-			        a.modulo_id = m.id
-			) AS cantidad
-			FROM
-			    modulos m			
-		";
-		return $this->db->query($query)->result();
-	}
-	public function getOne($param){
-		// $this->db->select("areas.*,servicios.name as servicio");
-		// $this->db->from("areas");
-		// $this->db->join("servicios","servicios.id=areas.servicio_id","left");
-		// $this->db->where("areas.id",$param["id"]);
-		// return $this->db->get()->row();
-	}
+    use HasFactory;
 
-	public function add($param){
-		// return($this->db->insert("areas",$param));
-	}
-	public function update($param){
-		// $this->db->where("id",$param["id"]);
-		// unset($param["id"]);
-		// return($this->db->update("areas",$param));
-	}
+    protected $table = 'modulos';
+    protected $fillable = [];
 
-	public function delete($param){
-		// $this->db->where("id",$param["id"]);
-		// $this->db->delete("areas");
-	}	
+    // Métodos básicos
+    public static function getAll()
+    {
+        return self::all();
+    }
 
+    public static function getOne($id)
+    {
+        return self::find($id);
+    }
 
+    public static function add($data)
+    {
+        return self::create($data);
+    }
+
+    public static function edit($data)
+    {
+        $id = $data['id'];
+        unset($data['id']);
+        return self::where('id', $id)->update($data);
+    }
+
+    public static function remove($id)
+    {
+        return self::destroy($id);
+    }
 }
-?>

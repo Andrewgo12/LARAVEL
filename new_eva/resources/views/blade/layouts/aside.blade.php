@@ -3,10 +3,9 @@
         <ul class="sidebar-menu" data-widget="tree">
             <li class="header">NAVEGACIÓN PRINCIPAL</li>
             <li>
-                <a href="<?= base_url(); ?>Home">
+                <a href="{{ url('Home') }}">
                     <i class="fa fa-home"></i> <span>Inicio</span>
                 </a>
-                <div></div>
             </li>
             <li class="treeview">
                 <a class="nav-item" href="#">
@@ -29,7 +28,7 @@
 
             <li class="treeview">
                 <a class="nav-item" href="#">
-                    <i class="fa fa-ticket"></i> <span>ordenes</span>
+                    <i class="fa fa-ticket"></i> <span>Órdenes</span>
                     <span class="pull-right-container">
                         <i class="fa fa-angle-left pull-right"></i>
                     </span>
@@ -89,3 +88,4 @@
         </ul>
     </section>
 </aside>
+

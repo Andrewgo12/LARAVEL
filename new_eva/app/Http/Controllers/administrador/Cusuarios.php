@@ -1,206 +1,243 @@
 <?php
 
-defined('BASEPATH') or exit('El acceso directo no esta permitido');
-class Cusuarios extends CI_Controller
+
+/**
+ * Controlador Cusuarios - Sistema HUV
+ * Gestiona las funcionalidades del módulo correspondiente
+ */
+class Cusuarios extends Controller
 {
-  function __construct()
-  {
-    parent::__construct();
-    $this->load->model('Musuarios');
-    $this->load->model('Musuarios_zonas');
-    $this->load->model('Mcentros');
-    $this->load->model('Macciones');
-    $this->load->model('Mmodulos');
-  }
-  public function index()
-  {
-    if ($this->session->userdata('login')) {
-    } else {
-      redirect(base_url('Cauth'));
-    }
-    $this->session->set_userdata('controlador', $this->uri->segment(2));
-    $this->load->view("layouts/header");
-    $this->load->view("layouts/aside");
-    $this->load->view('usuarios/list', array("modulos" => $this->Mmodulos->getWithAccount()));
-    $this->load->view('usuarios/modal_add');
-    $this->load->view('usuarios/modal_edit');
-    $this->load->view('usuarios/modal_show');
-    $this->load->view('usuarios/modal_add_usuario_zona');
-    $this->load->view('layouts/footer');
-  }
-  public function ServiceGetAll()
-  {
-    echo json_encode($this->Musuarios->getAllUsers());
-  }
-  public function ServiceGetOne($id)
-  {
-    echo json_encode($this->Musuarios->getOneUser($id));
-  }
+    /**
+     * Permisos del controlador
+     */
+    protected $permisos = [];
 
-  public function getAll()
-  {
-    echo json_encode($this->Musuarios->getAll());
-  }
-  public function get_server_side()
-  {
-    $vector = $this->Musuarios->get_server_side($_POST);
-    $respuesta = array(
-      'draw' => intval($this->input->post('draw')),
-      'recordsTotal' => $vector['num_filas_limit'],
-      'recordsFiltered' => $vector['num_filas'],
-      'data' => $vector['datos']
-    );
-    echo json_encode($respuesta);
-  }
-  public function getRoles()
-  {
-    echo json_encode($this->Musuarios->getRoles());
-  }
-  public function add()
-  {
-    $this->form_validation->set_rules("username", "Nombre de usuario", "required|is_unique[usuarios.username]");
-    $this->form_validation->set_rules("email", "Correo electronico", "required|is_unique[usuarios.email]|valid_email");
-    $this->form_validation->set_rules("password", "Contraseña", "required|min_length[4]");
-    if ($this->form_validation->run()) {
-      echo json_encode(1);
-      $_POST["password"] = sha1(md5($_POST["password"]));
-      $this->Musuarios->add($_POST);
-    } else {
-      $error = array(
-        'username' => form_error('username'),
-        'email' => form_error('email'),
-        'password' => form_error('password'),
-      );
-      echo json_encode($error);
+    /**
+     * Constructor del controlador
+     */
+    public function __construct()
+    {
+        $this->permisos = Session::get('permisos', []);
     }
-  }
-  public function update()
-  {
-    $usuarioActual = $this->Musuarios->getOne($_POST['id']);
-    if ($usuarioActual->username == $_POST["username"]) { //username unico
-      $username_is_unique = "";
-    } else {
-      $username_is_unique = "|is_unique[usuarios.username]";
-    }
-    if ($usuarioActual->email == $_POST['email']) {
-      $email_is_unique = "";
-    } else {
-      $email_is_unique = "|is_unique[usuarios.email]";
-    }
-    if ($_POST['password'] == '') { // Si usuario no escribe un password
-      unset($_POST['password']);
-      $this->form_validation->set_rules("username", "username", "required" . $username_is_unique);
-      $this->form_validation->set_rules("email", "Correo electronico", "required" . $email_is_unique . "|valid_email");
-      if ($this->form_validation->run()) {
-        echo json_encode(1);
-        $this->Musuarios->update($_POST);
-      } else {
-        $error = array(
-          'username' => form_error('username'),
-          'email' => form_error('email'),
-        );
-        echo json_encode($error);
-      }
-    } else {
-      $this->form_validation->set_rules('password', 'Constraseña', 'min_length[4]');
-      $this->form_validation->set_rules("username", "username", "required" . $username_is_unique);
-      $this->form_validation->set_rules("email", "Correo electronico", "required" . $email_is_unique . "|valid_email");
-      if ($this->form_validation->run()) {
-        echo json_encode(1);
-        $_POST['password'] = sha1(md5($_POST["password"]));
-        $this->Musuarios->update($_POST);
-      } else {
-        $error = array(
-          'username' => form_error('username'),
-          'email' => form_error('email'),
-          'password' => form_error('password'),
-        );
-        echo json_encode($error);
-      }
-    }
-  }
-  public function delete()
-  {
-    $array = array('estado' => 0);
-    $this->Musuarios->delete($_POST, $array);
-  }
-  public function show()
-  {
-    $result = $this->Musuarios->getOne($_POST['id']);
-    $param = array(
-      'usuario' => $result
-    );
-    $this->load->view('usuarios/detail', $param);
-  }
-  public function getOne()
-  {
-    echo json_encode($this->Musuarios->getOne($_POST["id"]));
-  }
-  public function getOneWithActions()
-  {
-    $usuario = $this->Musuarios->getOne($_POST["id"]);
-    $acciones = $this->Macciones->getByUser($_POST["id"]);
-    $vector = array(
-      "usuario" => $usuario,
-      "acciones" => $acciones
-    );
-    echo json_encode($vector);
-  }
-  public function getCentros()
-  {
-    echo json_encode($this->Mcentros->get());
-  }
-  public function CambiarSede()
-  {
-    $usuario = $this->Musuarios->getOne($_POST["id"]);
-    if ($usuario->sede_id == 1) {
-      $param = array(
-        "id" => $_POST["id"],
-        "caso" => 1
-      );
-    } else {
-      $param = array(
-        "id" => $_POST["id"],
-        "caso" => 2
-      );
-    }
-    $this->Musuarios->CambiarSede($param);
-    $usuario = "";
-    $usuario = $this->Musuarios->getOne($_POST["id"]);
-    $this->session->set_userdata('sede_id', $usuario->sede_id);
-    echo json_encode($usuario->sede);
-  }
-  public function cambiar_sede_general()
-  {
-    $this->Musuarios->update(array("id" => $_POST["usuario_id"], "sede_id" => $_POST["sede_id"]));
-    $this->session->set_userdata("sede_id", $_POST["sede_id"]);
-    echo json_encode("");
-  }
 
-  public function getUsuarios_zonas()
-  {
-    echo json_encode($this->Musuarios->getUsuarios_zonas());
-  }
-  public function delete_usuario_zona()
-  {
-    echo json_encode($this->Musuarios->delete_usuario_zona($_POST));
-  }
-  public function add_usuario_zona()
-  {
-    echo json_encode($this->Musuarios_zonas->add($_POST));
-  }
-  public function getUsuariosFromEmpresa()
-  {
-    echo json_encode($this->Musuarios->getUsuariosFromEmpresa($_POST));
-  }
-  public function CambiarAnio()
-  {
-    $usuario_id = $_POST["id"];
-    $usuario = $this->Musuarios->getOne($usuario_id);
-    $this->Musuarios->CambiarAnio(array("id" => $usuario->id, "anio_plan" => $_POST["anio"]));
-    $usuario = "";
-    $usuario = $this->Musuarios->getOne($usuario_id);
-    $this->session->set_userdata('anio_plan', $usuario->anio_plan);
-    echo json_encode($usuario->anio_plan);
-  }
+    /**
+namespace App\Http\Controllers\Administrador;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
+use App\Models\Musuarios;
+
+/* Sistema HUV */
+    public function index()
+    {
+        if (!Session::get('login')) {
+            return redirect()->route('huv.login');
+        }
+
+        $data = [
+            'permisos' => $this->permisos,
+            'acciones' => Session::get('acciones', [])
+        ];
+
+        return view('laravel.usuarios.list', $data);
+    }
+
+    /* Sistema HUV */
+    public function getServerSide(Request $request): JsonResponse
+    {
+        try {
+            $params = $request->all();
+            $result = Musuarios::getServerSide($params);
+
+            $response = [
+                'draw' => intval($request->input('draw')),
+                'recordsTotal' => $result['num_filas'],
+                'recordsFiltered' => $result['num_filas'],
+                'data' => $result['datos']
+            ];
+
+            return response()->json($response);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en servidor: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function getOne(Request $request): JsonResponse
+    {
+        try {
+            $id = $request->input('id');
+            $item = Musuarios::getOne($id);
+            return response()->json($item, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al obtener registro: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function add(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $data['created_at'] = now();
+            $data['usuario_id'] = Session::get('id');
+
+            $result = Musuarios::add($data);
+
+            if ($result) {
+                return response()->json(['success' => true, 'message' => 'Registro agregado exitosamente'], 201);
+            } else {
+                return response()->json(['error' => 'No se pudo agregar el registro'], 500);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al agregar: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function update(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $data['updated_at'] = now();
+
+            $result = Musuarios::edit($data);
+
+            if ($result) {
+                return response()->json(['success' => true, 'message' => 'Registro actualizado exitosamente'], 200);
+            } else {
+                return response()->json(['error' => 'No se pudo actualizar el registro'], 500);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al actualizar: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function delete(Request $request): JsonResponse
+    {
+        try {
+            $id = $request->input('id');
+            $result = Musuarios::remove($id);
+
+            if ($result) {
+                return response()->json(['success' => true, 'message' => 'Registro eliminado exitosamente'], 200);
+            } else {
+                return response()->json(['error' => 'No se pudo eliminar el registro'], 500);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al eliminar: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function activate(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $result = Musuarios::activate($data);
+
+            return response()->json($result, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en activate: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function cambiarSede(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $result = Musuarios::cambiarSede($data);
+
+            return response()->json($result, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en cambiarSede: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function cambiarAnio(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $result = Musuarios::cambiarAnio($data);
+
+            return response()->json($result, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en cambiarAnio: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function getUsuariosPorEmpresa(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $result = Musuarios::getUsuariosPorEmpresa($data);
+
+            return response()->json($result, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en getUsuariosPorEmpresa: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function getRoles(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $result = Musuarios::getRoles($data);
+
+            return response()->json($result, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en getRoles: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function resetPassword(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $result = Musuarios::resetPassword($data);
+
+            return response()->json($result, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en resetPassword: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function getUsuariosZonas(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $result = Musuarios::getUsuariosZonas($data);
+
+            return response()->json($result, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en getUsuariosZonas: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /* Sistema HUV */
+    public function deleteUsuarioZona(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $result = Musuarios::deleteUsuarioZona($data);
+
+            return response()->json($result, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en deleteUsuarioZona: ' . $e->getMessage()], 500);
+        }
+    }
+
+}
+
 }

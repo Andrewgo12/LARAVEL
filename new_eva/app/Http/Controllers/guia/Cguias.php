@@ -1,375 +1,204 @@
 <?php
-defined('BASEPATH') or exit('El acceso directo no esta permitido');
+
 
 /**
- * 
+ * Controlador Cguias - Sistema HUV
+ * Gestiona las funcionalidades del módulo correspondiente
  */
-class Cguias extends CI_Controller
+class Cguias extends Controller
 {
-  private $permisos;
-  function __construct()
-  {
-    parent::__construct();
-    $this->load->model('Mguias');
-  }
-  public function index()
-  {
-    if ($this->session->userdata('login')) {
-    } else {
-      redirect(base_url('Cauth'));
-    }
-    $this->session->set_userdata("controlador", "Cguias");
+    /**
+     * Permisos del controlador
+     */
+    protected $permisos = [];
 
-    $acciones = $this->session->userdata("acciones");
-    $this->session->set_userdata('controlador', $this->uri->segment(2));
-    foreach ($acciones as $accion) {
-      if ($accion->modulo == "guias rapidas") {
-        if ($accion->leer != 1) {
-          redirect(base_url('Forbidden'));
+    /**
+     * Constructor del controlador
+     */
+    public function __construct()
+    {
+        $this->permisos = Session::get('permisos', []);
+    }
+
+    /**
+namespace App\Http\Controllers\Guia;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
+use App\Models\Mguias;
+
+/* Sistema HUV */
+    public function index()
+    {
+        if (!Session::get('login')) {
+            return redirect()->route('huv.login');
         }
-      }
+
+        $data = [
+            'permisos' => $this->permisos,
+            'acciones' => Session::get('acciones', [])
+        ];
+
+        return view('laravel.guias.list', $data);
     }
 
+    /* Sistema HUV */
+    public function getServerSide(Request $request): JsonResponse
+    {
+        try {
+            $params = $request->all();
+            $result = Mguias::getServerSide($params);
 
-    $data = array(
-      "guias" => $this->Mguias->getAll(),
-      "acciones" => $acciones,
-      "cantidad_cumple_criterios" => $this->Mguias->countAll(),
-      "cantidad_cumple_criterios_con_guia" => $this->Mguias->countWithGuia(),
-      "cobertura_biomedicos" => $this->Mguias->getCoberturaBiomedicos(),
-      "cobertura_industriales" => $this->Mguias->getCoberturaIndustriales()
-    );
-    $this->load->view("layouts/header");
-    $this->load->view("layouts/aside");
-    $this->load->view("guias/list", $data);
-    $this->load->view("guias/modal_add");
-    $this->load->view("guias/modal_link");
-    $this->load->view("guias/modal_edit_guia");
-    $this->load->view("guias/modal_show_relacionar_guia");
-    $this->load->view("guias/modal_show_relacionar_guia_equipos");
-    $this->load->view("layouts/footer");
-  }
-  public function getCoberturaBiomedicos()
-  {
+            $response = [
+                'draw' => intval($request->input('draw')),
+                'recordsTotal' => $result['num_filas'],
+                'recordsFiltered' => $result['num_filas'],
+                'data' => $result['datos']
+            ];
 
-    echo json_encode($this->Mguias->getCoberturaBiomedicos());
-  }
-  public function getCoberturaIndustriales()
-  {
-
-    echo json_encode($this->Mguias->getCoberturaIndustriales());
-  }
-  public function get()
-  {
-    echo json_encode($this->Mguias->get());
-  }
-  public function getWithQuery()
-  {
-    echo json_encode($this->Mguias->getWithQuery());
-  }
-  public function getOne()
-  {
-
-    echo json_encode($this->Mguias->getOne($_POST));
-  }
-  public function getAll()
-  {
-
-    echo json_encode($this->Mguias->getAll());
-  }
-  public function get_indicador_por_guia()
-  {
-
-    echo json_encode($this->Mguias->get_indicador_por_guia());
-  }
-  public function add()
-  {
-
-    $config['upload_path'] = "./assets/upload_guias";
-    $config['allowed_types'] = '*';
-    $config['max_size']  = 1000000;
-    $config['encrypt_name'] = TRUE;
-    $this->load->library('upload', $config, 'uploadGuia');
-    $this->uploadGuia->initialize($config);
-
-    $this->form_validation->set_rules("name", "Nombre del archivo", "required|is_unique[guias_rapidas.name]|min_length[5]");
-    if ($this->form_validation->run()) {
-      $coincidencias = $this->Mguias->getByFile($_FILES["file"]["name"]);
-      if (!empty($_FILES["file"]["name"])) {
-        $this->uploadGuia->do_upload("file"); //Esto sube el archivo
-        $data = "";
-        $data = $this->uploadGuia->data();
-        $_POST["file"] = $data["file_name"];
-        $this->Mguias->add($_POST);
-        $respuesta = array("caso" => 1);
-      } else {
-        $respuesta = array("caso" => 2, "informacion" => "Falta ingresar archivo");
-      }
-    } else {
-      $respuesta = array("caso" => 2, "informacion" => validation_errors());
-    }
-    echo json_encode($respuesta);
-  }
-  public function update()
-  {
-
-    $guia = $this->Mguias->getOne($_POST);
-    $config['upload_path'] = "./assets/upload_guias";
-    $config['allowed_types'] = '*';
-    $config['encrypt_name'] = TRUE;
-    $this->load->library('upload', $config, 'uploadGuia');
-    $this->uploadGuia->initialize($config);
-
-    $this->form_validation->set_rules("estado", "Estado", "required");
-    if ($guia->name != $_POST["name"]) {
-      $this->form_validation->set_rules("name", "Nombre del archivo", "required|is_unique[guias_rapidas.name]|min_length[5]");
-    }
-    if (!empty($_FILES["file"]["name"])) {
-      $_POST["file"] = $_FILES["file"]["name"];
-    }
-
-    if ($this->form_validation->run()) { // Pasa todas las validaciones
-
-      if (!empty($_FILES["file"]["name"])) {
-        if ($guia->file != "" && $guia->file != null) {
-          $this->load->helper("file");
-          unlink("./assets/upload_guias/" . $guia->file);
+            return response()->json($response);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en servidor: ' . $e->getMessage()], 500);
         }
-        $this->uploadGuia->do_upload("file"); //Esto sube el archivo
-        $data = "";
-        $data = $this->uploadGuia->data();
-        $_POST["file"] = $data["file_name"];
-      }
-      $this->Mguias->update($_POST);
-      echo json_encode(array("caso" => 1, "informacion" => "Guia rapida editada exitosamente"));
-    } else {
-      echo json_encode(array("caso" => 2, "informacion" => validation_errors()));
     }
-  }
-  public function delete()
-  {
 
-    $_POST["estado"] = 0;
-    $this->Mguias->update($_POST);
-    // $this->Mguias->delete($_POST);
-    // echo json_encode($_POST['id']);
-  }
-  public function show()
-  {
-    $guias_activas = $this->Mguias->get();
-    $this->load->view("guias/detalle_consulta", array("guias_activas" => $guias_activas));
-  }
-  public function detail_relacionar()
-  {
-    $relaciones = $this->Mguias->get_relaciones();
-    $this->load->view('guias/modal_link_detail', array("relaciones" => $relaciones));
-  }
-  public function cantidad_relacionar_con_equipos()
-  {
+    /* Sistema HUV */
+    public function getOne(Request $request): JsonResponse
+    {
+        try {
+            $id = $request->input('id');
+            $item = Mguias::getOne($id);
+            return response()->json($item, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al obtener registro: ' . $e->getMessage()], 500);
+        }
+    }
 
-    echo json_encode($this->Mguias->cantidad_relacionar_con_equipos($_POST));
-  }
-  public function relacionar_con_equipos()
-  {
-    $this->Mguias->relacionar_con_equipos($_POST);
-    echo 1;
-  }
-  public function relacionar_guia_con_equipos()
-  {
-    $this->Mguias->relacionar_guia_con_equipos($_POST);
+    /* Sistema HUV */
+    public function add(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $data['created_at'] = now();
+            $data['usuario_id'] = Session::get('id');
 
-    echo json_encode($this->Mguias->cantidad_equipos_asociados(array("id" => $_POST["id"])));
-  }
-  public function show_combinaciones()
-  {
-    $guia = $this->Mguias->getOne(array("id" => $_POST["id"]));
-    $this->load->view("guias/modal_show_relacionar_guia_equipos_detail", array("guia" => $guia, "id" => $_POST["id"], "combinaciones" => $this->Mguias->get_relaciones()));
-  }
-  public function getRiesgosIncluidos()
-  {
+            $result = Mguias::add($data);
 
-    echo json_encode($this->Mguias->getRiesgosIncluidos());
-  }
-  public function getEstadosExcluidos()
-  {
-    echo json_encode($this->Mguias->getEstadosExcluidos());
-  }
-  public function  exportarPriorizados()
-  {
-    header('Content-Type:application/xls;charset=utf-8');
-    header("Content-Type: application/vnd.ms-excel charset=iso-8859-1");
-    header('Content-Disposition: attachment;filename=EquiposPriorizados.xls');
-    $equipos = $this->Mguias->getPriorizados();
-?>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <table border="1">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Nombre</th>
-          <th>Codigo</th>
-          <th>Serie</th>
-          <th>Marca</th>
-          <th>Modelo</th>
-        </tr>
-      </thead>
-      <tbody>
-        <?php foreach ($equipos as $equipo) : ?>
-          <tr>
-            <td><?php echo $equipo->id; ?></td>
-            <td><?php echo $equipo->name; ?></td>
-            <td><?php echo $equipo->code; ?></td>
-            <td><?php echo $equipo->serial; ?></td>
-            <td><?php echo $equipo->marca; ?></td>
-            <td><?php echo $equipo->modelo; ?></td>
-          </tr>
-        <?php endforeach ?>
-      </tbody>
-    </table>
-  <?php
-  }
-  public function  exportarPriorizadosGuia()
-  {
+            if ($result) {
+                return response()->json(['success' => true, 'message' => 'Registro agregado exitosamente'], 201);
+            } else {
+                return response()->json(['error' => 'No se pudo agregar el registro'], 500);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al agregar: ' . $e->getMessage()], 500);
+        }
+    }
 
-    header('Content-Type:application/xls;charset=utf-8');
-    header("Content-Type: application/vnd.ms-excel charset=iso-8859-1");
-    header('Content-Disposition: attachment;filename=EquiposPriorizadosConGuia.xls');
+    /* Sistema HUV */
+    public function update(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $data['updated_at'] = now();
 
-    $equipos = $this->Mguias->getPriorizadosGuia();
-  ?>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+            $result = Mguias::edit($data);
 
-    <table border="1">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Nombre</th>
-          <th>Codigo</th>
-          <th>Serie</th>
-          <th>Marca</th>
-          <th>Modelo</th>
-          <th>Sede</th>
-          <th>Nombre de la Guia</th>
-          <th>Estado del equipo</th>
-        </tr>
-      </thead>
-      <tbody>
-        <?php foreach ($equipos as $equipo) : ?>
-          <tr>
-            <td><?php echo $equipo->id; ?></td>
-            <td><?php echo $equipo->name; ?></td>
-            <td><?php echo $equipo->code; ?></td>
-            <td><?php echo $equipo->serial; ?></td>
-            <td><?php echo $equipo->marca; ?></td>
-            <td><?php echo $equipo->modelo; ?></td>
-            <td><?php echo $equipo->sede; ?></td>
-            <td><?php echo $equipo->guia; ?></td>
-            <td><?php echo $equipo->estado; ?></td>
-          </tr>
-        <?php endforeach ?>
-      </tbody>
-    </table>
-  <?php
-  }
-  public function  exportPrioritizedWithoutGuide()
-  {
-    header('Content-Type:application/xls;charset=utf-8');
-    header("Content-Type: application/vnd.ms-excel charset=iso-8859-1");
-    header('Content-Disposition: attachment;filename=EquiposPriorizadosSinGuia.xls');
+            if ($result) {
+                return response()->json(['success' => true, 'message' => 'Registro actualizado exitosamente'], 200);
+            } else {
+                return response()->json(['error' => 'No se pudo actualizar el registro'], 500);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al actualizar: ' . $e->getMessage()], 500);
+        }
+    }
 
-    $equipos = $this->Mguias->getPrioritizedWithoutGuide();
-  ?>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    /* Sistema HUV */
+    public function delete(Request $request): JsonResponse
+    {
+        try {
+            $id = $request->input('id');
+            $result = Mguias::remove($id);
 
-    <table border="1">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Nombre</th>
-          <th>Codigo</th>
-          <th>Serie</th>
-          <th>Marca</th>
-          <th>Modelo</th>
-          <th>sede</th>
-          <th>Nombre de la Guia</th>
-          <th>Estado del equipo</th>
-        </tr>
-      </thead>
-      <tbody>
-        <?php foreach ($equipos as $equipo) : ?>
-          <tr>
-            <td><?php echo $equipo->id; ?></td>
-            <td><?php echo $equipo->name; ?></td>
-            <td><?php echo $equipo->code; ?></td>
-            <td><?php echo $equipo->serial; ?></td>
-            <td><?php echo $equipo->marca; ?></td>
-            <td><?php echo $equipo->modelo; ?></td>
-            <td><?php echo $equipo->sede; ?></td>
-            <td><?php echo $equipo->guia; ?></td>
-            <td><?php echo $equipo->estado; ?></td>
-          </tr>
-        <?php endforeach ?>
+            if ($result) {
+                return response()->json(['success' => true, 'message' => 'Registro eliminado exitosamente'], 200);
+            } else {
+                return response()->json(['error' => 'No se pudo eliminar el registro'], 500);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al eliminar: ' . $e->getMessage()], 500);
+        }
+    }
 
-      </tbody>
+    /* Sistema HUV */
+    public function upload(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $result = Mguias::upload($data);
 
-    </table>
+            return response()->json($result, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en upload: ' . $e->getMessage()], 500);
+        }
+    }
 
-  <?php
+    /* Sistema HUV */
+    public function download(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $result = Mguias::download($data);
 
+            return response()->json($result, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en download: ' . $e->getMessage()], 500);
+        }
+    }
 
-  }
-  public function  exportarPriorizadosGrupo()
-  {
+    /* Sistema HUV */
+    public function getByCategoria(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $result = Mguias::getByCategoria($data);
 
-    //header('Content-Type:application/xls;charset=utf-8');
-    //header("Content-Type: application/vnd.ms-excel charset=iso-8859-1");
-    //header('Content-Disposition: attachment;filename=EquiposPriorizadosPorGrupo.xls');		
+            return response()->json($result, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en getByCategoria: ' . $e->getMessage()], 500);
+        }
+    }
 
-    $equipos = $this->Mguias->getPriorizadosGrupo();
-  ?>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    /* Sistema HUV */
+    public function getCategorias(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $result = Mguias::getCategorias($data);
 
-    <table border="1">
-      <thead>
-        <tr>
-          <th>Nombre</th>
-          <th>Cantidad total</th>
-          <th>Cantidad con guia</th>
-          <th>%</th>
+            return response()->json($result, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en getCategorias: ' . $e->getMessage()], 500);
+        }
+    }
 
-        </tr>
-      </thead>
-      <tbody>
-        <?php foreach ($equipos as $equipo) : ?>
-          <tr>
-            <td><?php echo $equipo->name; ?></td>
-            <td><?php echo $equipo->cantidad_total; ?></td>
-            <td><?php echo $equipo->cantidad_con_guia; ?></td>
-            <td><?php echo $equipo->porcentaje; ?></td>
+    /* Sistema HUV */
+    public function addCategoria(Request $request): JsonResponse
+    {
+        try {
+            $data = $request->all();
+            $result = Mguias::addCategoria($data);
 
-          </tr>
-        <?php endforeach ?>
+            return response()->json($result, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en addCategoria: ' . $e->getMessage()], 500);
+        }
+    }
 
-      </tbody>
-
-    </table>
-
-<?php
-  }
-  public function countWithGuia()
-  {
-
-    echo $this->Mguias->countWithGuia()->cantidad;
-  }
-  public function countAll()
-  {
-
-    echo $this->Mguias->countAll()->cantidad;
-  }
-
-  public function updateGuideQueryQuantity()
-  {
-    echo $this->Mguias->updateGuideQueryQuantity($_POST);
-  }
 }
-?>
+
+}

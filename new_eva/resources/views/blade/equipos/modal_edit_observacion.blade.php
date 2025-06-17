@@ -10,76 +10,64 @@
 					<div class="col-md-12">
 						<div class="box box-info">
 							<div class="box-header with-border">
-								<h3 class="box-title">Observacion
-								</h3>
+								<h3 class="box-title">Observación</h3>
 							</div>
 
 							<div class="box-body form-horizontal">
-
-								<!--  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
-
 								<form action="{{ asset('') }}equipo/Cequipos/updateObservacion" id="form_update_observacion" name="form_update_observacion" enctype="multipart/form-data" method="post">
-      @csrf
+									@csrf
 									<br>
 									<input type="hidden" name="id" id="id">
 									<input type="hidden" name="equipo_id" id="equipo_id">
 
 									<div class="row">
 										<div class="col-sm-2">
-											<label for="description">Descripcion</label>
+											<label for="description">Descripción</label>
 										</div>
 										<div class="col-sm-10">
-										<textarea class="form-control" name="description" id="description" rows="10" placeholder="Ingrese la observacion a consignar"></textarea>
+											<textarea class="form-control" name="description" id="description" rows="10" placeholder="Ingrese la observación a consignar"></textarea>
 										</div>
 									</div><br>
 
 									<div class="row">
-										<div class="row">
-											<div class="col col-sm-12">
-												<label for="" class="badge">Archivo asociado</label>
-												<input style="height: 50%;" type="file" class="file" data-browse-on-zone-click="true" id="file" name="file">
-											</div>
+										<div class="col-sm-12">
+											<label for="file" class="badge">Archivo asociado</label>
+											<input style="height: 50%;" type="file" class="file" data-browse-on-zone-click="true" id="file" name="file">
 										</div>
-									</div>	
+									</div>
+
 									<div class="panel panel-warning">
 										<div class="panel-heading">Repuesto pendiente</div>
 										<div class="panel-body">
 											<div class="row">
-												<div class="col col-sm-12">
+												<div class="col-sm-12">
 													<br>
-													<label for="" class="badge">Repuesto pendiente</label>
-
-													<input  type="checkbox" id="repuesto_pendiente" name="repuesto_pendiente" class="repuesto_pendiente"> Al seleccionar se guarda automaticamente que el equipo tiene un repuesto pendiente.
+													<label for="repuesto_pendiente" class="badge">Repuesto pendiente</label>
+													<input type="checkbox" id="repuesto_pendiente" name="repuesto_pendiente" class="repuesto_pendiente">
+													<span>Al seleccionar se guarda automáticamente que el equipo tiene un repuesto pendiente.</span>
 													<hr>
-													<!--<select class="form-control repuesto_id" id="repuesto_id" name="repuesto_id"></select>-->
-													<input class="form-control" type="repuesto_id" name="repuesto_id" id="repuesto_id" placeholder="Repuesto pendiente">
-													Para que se guarde cual es el repuesto pendiente hay que actualizar !!!!!												
-
+													<input class="form-control" type="text" name="repuesto_id" id="repuesto_id" placeholder="Repuesto pendiente">
+													<small class="text-muted">Para que se guarde cuál es el repuesto pendiente hay que actualizar.</small>
 												</div>
-											</div>  	
-
+											</div>
 										</div>
-									</div>										
+									</div>
+
 									<div class="box-footer">
-										<button class="btn btn-primary" id="btn_update_observacion">Ingresar</button>
+										<button type="submit" class="btn btn-primary" id="btn_update_observacion">Ingresar</button>
 									</div>
 									<div class="errores"></div>
 								</form>
-
-
-
-								<!--  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
 							</div>
 							<br>
-
 						</div>
 					</div>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
 				</div>
-
 			</div>
 		</div>
 	</div>
-</div> 
+</div>
+

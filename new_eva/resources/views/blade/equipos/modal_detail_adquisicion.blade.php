@@ -1,11 +1,11 @@
 <ul class="list-inline">
 	<li class="list-inline-item">
 		<span style="text-transform: uppercase;font-weight: 900">Fecha incial:</span>
-		<span style="color: red;font-weight: 800;"><?php echo $vector["inicial"]; ?></span>
+		<span style="color: red;font-weight: 800;">{{ $vector["inicial"] }}</span>
 	</li>
 	<li class="list-inline-item">
 		<span style="text-transform: uppercase;font-weight: 900">Fecha final:</span>
-		<span style="color: red;font-weight: 800;"><?php echo $vector["final"]; ?></span>
+		<span style="color: red;font-weight: 800;">{{ $vector["final"] }}</span>
 	</li>
 </ul>
 <div class="row">
@@ -16,36 +16,36 @@
 		<strong style="text-transform: uppercase;">Inversion:</strong>&nbsp;<span style="color: red;font-weight: 800;">{{ $inversion }}</span>
 	</div>
 	<div class="col-md-6">
-		<?php if ({{ session('sede_id') }}==1): ?>
+		@if(session('sede_id') == 1)
 			<strong style="text-transform: uppercase;">Sede:</strong>&nbsp;<span style="color: red;">PRINCIPAL</span>
-		<?php endif ?>
-		<?php if ({{ session('sede_id') }}==2): ?>
+		@endif
+		@if(session('sede_id') == 2)
 			<strong style="text-transform: uppercase;">Sede:</strong>&nbsp;<span style="color: red;">NORTE</span>
-		<?php endif ?>
-		<?php if ({{ session('sede_id') }}==""): ?>
+		@endif
+		@if(session('sede_id') == "")
 			<strong style="text-transform: uppercase;">Sede:</strong>&nbsp;<span style="color: red;">TODAS</span>
-		<?php endif ?>
+		@endif
 	</div>
 </div>
 <br>
-@if($cantidad>0)
+@if($cantidad > 0)
 
 
 	<ul class="nav nav-tabs">
 		<li class="active"><a href="#nav_adquisicion_equipos">Equipos adquiridos</a></li>
 		<li><a href="#nav_adquisicion_distribucion_nombres">Distribución por nombre</a></li>
 		<li><a href="#nav_adquisicion_distribucion_tipo_adquisicion">Distribución por nombre y tipo adquisicion</a></li>
-		@if($vector["tipo"]==1)
+		@if($vector["tipo"] == 1)
 			<li><a href="#nav_adquisicion_distribucion_riesgo">Distribución por riesgo</a></li>
 			<li><a href="#nav_adquisicion_distribucion_clasificacion_biomedica">Distribución por clasificación biomedica</a></li>
-		<?php endif ?>
+		@endif
 		<li><a href="#nav_adquisicion_distribucion_alimentación">Distribución por fuente de alimentación</a></li>
 	</ul>
 
 	<div class="tab-content">
 		<div id="nav_adquisicion_equipos" class="tab-pane fade in active">
-			
-			<?php if (!empty($equipos)): ?>
+
+			@if(!empty($equipos))
 				<div class="table-responsive">
 					<table class="table table-bordered table-stripped tblAdquisicion">
 						<thead>
@@ -66,34 +66,35 @@
 						<tbody>
 							@foreach($equipos as $equipo)
 								<tr>
-									<td><?php echo $equipo->name; ?> (<strong>Estado:</strong> <?php echo $equipo->estado; ?>)</td>
-									<td><span class="costo-personalizado"><?php echo $equipo->costo; ?></span></td>
-									<td><?php echo $equipo->tadquisicion; ?></td>
-									<td><?php echo $equipo->code; ?></td>
-									<td><?php echo $equipo->serial; ?></td>
-									<td><?php echo $equipo->marca; ?></td>
-									<td><?php echo $equipo->modelo; ?></td>
-									<td><?php echo $equipo->fecha_ad; ?></td>
-									<td><?php echo $equipo->servicio; ?></td>
-									<td><?php echo $equipo->area; ?></td>
-									<td><a title="Visualizar hoja de vida" href="#" class="btn btn-info glyphicon glyphicon-search" data-toggle="modal" data-target="#modal_show_equipo" onclick="show_equipo(<?php echo $equipo->id;?>,'<?php echo $equipo->fecha_mantenimiento;?>','<?php echo $equipo->v1;?>','<?php echo $equipo->v2;?>','<?php echo $equipo->v3;?>','<?php echo $equipo->costo;?>')">
-									</a>
-								</td>
-							</tr>
-						<?php endforeach ?>
-
-					</tbody>
-				</table>
-			</div>
+									<td>{{ $equipo->name }} (<strong>Estado:</strong> {{ $equipo->estado }})</td>
+									<td><span class="costo-personalizado">{{ $equipo->costo }}</span></td>
+									<td>{{ $equipo->tadquisicion }}</td>
+									<td>{{ $equipo->code }}</td>
+									<td>{{ $equipo->serial }}</td>
+									<td>{{ $equipo->marca }}</td>
+									<td>{{ $equipo->modelo }}</td>
+									<td>{{ $equipo->fecha_ad }}</td>
+									<td>{{ $equipo->servicio }}</td>
+									<td>{{ $equipo->area }}</td>
+									<td>
+										<a title="Visualizar hoja de vida" href="#" class="btn btn-info glyphicon glyphicon-search"
+										   data-toggle="modal" data-target="#modal_show_equipo"
+										   onclick="show_equipo({{ $equipo->id }},'{{ $equipo->fecha_mantenimiento }}','{{ $equipo->v1 }}','{{ $equipo->v2 }}','{{ $equipo->v3 }}','{{ $equipo->costo }}')">
+										</a>
+									</td>
+								</tr>
+							@endforeach
+						</tbody>
+					</table>
+				</div>
 			@else
 				<h2>No se encontraron registros</h2>
-
-			<?php endif ?>			
+			@endif
 		</div>
 		<div id="nav_adquisicion_distribucion_nombres" class="tab-pane fade">
 			<div class="">
 				<span style="color: #15c39a;"><strong style="text-transform: uppercase;">DISTRIBUCION POR NOMBRE</strong></span>
-				<table border="0" class=" table">
+				<table border="0" class="table">
 					<thead>
 					</thead>
 					<tbody>
@@ -101,15 +102,15 @@
 							<tr>
 								<td>
 									<div class="notification">
-										<span><?php echo $registro->nombre; ?></span>
-										<span class="badge"><?php echo $registro->cantidad; ?></span>
-									</div>							
+										<span>{{ $registro->nombre }}</span>
+										<span class="badge">{{ $registro->cantidad }}</span>
+									</div>
 								</td>
 							</tr>
-						<?php endforeach ?>
+						@endforeach
 					</tbody>
 				</table>
-			</div>			
+			</div>
 		</div>
 		<div id="nav_adquisicion_distribucion_tipo_adquisicion" class="tab-pane fade">
 			<div class="">
@@ -122,16 +123,16 @@
 							<tr>
 								<td>
 									<div class="notification">
-										<span><?php echo $tipo_adquisicion->nombre; ?></span>
-										<span class="badge"><?php echo $tipo_adquisicion->cantidad; ?></span>
-									</div>							
+										<span>{{ $tipo_adquisicion->nombre }}</span>
+										<span class="badge">{{ $tipo_adquisicion->cantidad }}</span>
+									</div>
 								</td>
-								<td><?php echo $tipo_adquisicion->tipoa; ?></td>
+								<td>{{ $tipo_adquisicion->tipoa }}</td>
 							</tr>
-						<?php endforeach ?>
+						@endforeach
 					</tbody>
 				</table>
-			</div>			
+			</div>
 		</div>
 		<div id="nav_adquisicion_distribucion_riesgo" class="tab-pane fade">
 			<div class="">
@@ -144,15 +145,15 @@
 							<tr>
 								<td>
 									<div class="notification">
-										<span><?php echo $riesgo->riesgo; ?></span>
-										<span class="badge"><?php echo $riesgo->cantidad; ?></span>
-									</div>							
+										<span>{{ $riesgo->riesgo }}</span>
+										<span class="badge">{{ $riesgo->cantidad }}</span>
+									</div>
 								</td>
 							</tr>
-						<?php endforeach ?>
+						@endforeach
 					</tbody>
 				</table>
-			</div>			
+			</div>
 		</div>
 		<div id="nav_adquisicion_distribucion_clasificacion_biomedica" class="tab-pane fade">
 			<div class="">
@@ -165,15 +166,15 @@
 							<tr>
 								<td>
 									<div class="notification">
-										<span><?php echo $clasificacion->clasificacion; ?></span>
-										<span class="badge"><?php echo $clasificacion->cantidad; ?></span>
-									</div>							
+										<span>{{ $clasificacion->clasificacion }}</span>
+										<span class="badge">{{ $clasificacion->cantidad }}</span>
+									</div>
 								</td>
 							</tr>
-						<?php endforeach ?>
+						@endforeach
 					</tbody>
 				</table>
-			</div>			
+			</div>
 		</div>
 		<div id="nav_adquisicion_distribucion_alimentación" class="tab-pane fade">
 			<div class="">
@@ -186,15 +187,15 @@
 							<tr>
 								<td>
 									<div class="notification">
-										<span><?php echo $fuente->fuente; ?></span>
-										<span class="badge"><?php echo $clasificacion->cantidad; ?></span>
-									</div>							
+										<span>{{ $fuente->fuente }}</span>
+										<span class="badge">{{ $fuente->cantidad }}</span>
+									</div>
 								</td>
 							</tr>
-						<?php endforeach ?>
+						@endforeach
 					</tbody>
 				</table>
-			</div>			
+			</div>
 		</div>
 	</div>
 
